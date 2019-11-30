@@ -1,189 +1,189 @@
-# MariaDB±Ê¼Ç
+ï»¿# MariaDBç¬”è®°
 
-## Ä¬ÈÏÉè¶¨
+## é»˜è®¤è®¾å®š
 
-Ä¬ÈÏÏµÍ³Êý¾Ý¿âºÍÓÃ»§Êý¾Ý¿â
+é»˜è®¤ç³»ç»Ÿæ•°æ®åº“å’Œç”¨æˆ·æ•°æ®åº“
 
 - information_schema
 - performance_schema
 - mysql
 - test..
 
-Ä¬ÈÏ×Ö·û¼¯
+é»˜è®¤å­—ç¬¦é›†
 
-- ×Ö·û¼¯latin1£¨Î÷Å·ÓïÑÔ£©
-- ±È½ÏÊÇlatin1_swedish_ci£»¿É¸ü¸ÄÎªutf8, utf8_general_ci¡£
+- å­—ç¬¦é›†latin1ï¼ˆè¥¿æ¬§è¯­è¨€ï¼‰
+- æ¯”è¾ƒæ˜¯latin1_swedish_ciï¼›å¯æ›´æ”¹ä¸ºutf8, utf8_general_ciã€‚
 
-## Êý¾ÝÀàÐÍºÍÔËËã·û
+## æ•°æ®ç±»åž‹å’Œè¿ç®—ç¬¦
 
-### ÔËËã·û
+### è¿ç®—ç¬¦
 
-- `=` ¹ØÏµ±È½ÏÏàµÈ
-- `<>`, `!=` ²»µÈÓÚ
+- `=` å…³ç³»æ¯”è¾ƒç›¸ç­‰
+- `<>`, `!=` ä¸ç­‰äºŽ
 
-×¢Òâ¹ØÏµ±È½ÏÏàµÈÊÇÒ»¸ö`=`¡£
+æ³¨æ„å…³ç³»æ¯”è¾ƒç›¸ç­‰æ˜¯ä¸€ä¸ª`=`ã€‚
 
-### [Êý¾ÝÀàÐÍ](https://mariadb.com/kb/en/library/data-types/)
+### [æ•°æ®ç±»åž‹](https://mariadb.com/kb/en/library/data-types/)
 
-#### ÊýÖµÀàÐÍÊý¾Ý
+#### æ•°å€¼ç±»åž‹æ•°æ®
 
-- `[TINY | SMALL | MEDIUM]INT[(M)]` ·Ö±ðÕ¼ÓÃ1¡¢2¡¢3ºÍ4×Ö½Ú´¢´æ£¬ÆäÖÐM±íÊ¾ÏÔÊ¾¿í¶È£¬ÓëÊµ¼ÊÕ¼ÓÃµÄ¿Õ¼ä´óÐ¡ÎÞ¹Ø¡£
-  - INT [SIGNED | UNSIGNED | ZEROFILL] Ä¬ÈÏÎªÓÐ·ûºÅ£¬Èç¹ûÊÇ`ZEROFILL`£¬µÈ¼ÛÓÚ`UNSIGNED ZEROFILL`¡£
-  - `ZEROFILL`Ê¹µÃÊýÖµÔÚÏÔÊ¾Ê±Î´´ïµ½`M`µÄÖ¸¶¨Î»Êý»áÔÚÇ°²¿Ìî³äÁã£»µ±³¬¹ýÖ¸¶¨µÄÏÔÊ¾¿í¶ÈÊ±£¬»á°´ÕÕÔ­ÑùÊä³ö£¨¼´²»»á½Ø¶Ï£©¡£
+- `[TINY | SMALL | MEDIUM]INT[(M)]` åˆ†åˆ«å ç”¨1ã€2ã€3å’Œ4å­—èŠ‚å‚¨å­˜ï¼Œå…¶ä¸­Mè¡¨ç¤ºæ˜¾ç¤ºå®½åº¦ï¼Œä¸Žå®žé™…å ç”¨çš„ç©ºé—´å¤§å°æ— å…³ã€‚
+  - INT [SIGNED | UNSIGNED | ZEROFILL] é»˜è®¤ä¸ºæœ‰ç¬¦å·ï¼Œå¦‚æžœæ˜¯`ZEROFILL`ï¼Œç­‰ä»·äºŽ`UNSIGNED ZEROFILL`ã€‚
+  - `ZEROFILL`ä½¿å¾—æ•°å€¼åœ¨æ˜¾ç¤ºæ—¶æœªè¾¾åˆ°`M`çš„æŒ‡å®šä½æ•°ä¼šåœ¨å‰éƒ¨å¡«å……é›¶ï¼›å½“è¶…è¿‡æŒ‡å®šçš„æ˜¾ç¤ºå®½åº¦æ—¶ï¼Œä¼šæŒ‰ç…§åŽŸæ ·è¾“å‡ºï¼ˆå³ä¸ä¼šæˆªæ–­ï¼‰ã€‚
 
-- [`DECIMAL(M, D)`](https://mariadb.com/kb/en/library/decimal/) ¶¨µãÊý£¬MÎª×ÜÎ»Êý£¬DÎªÐ¡ÊýÎ»Êý¡£
-- `FLOAT[(M, D)]`, `DOUBLE[(M, D)]` µ¥¾«¶È¸¡µãÊýºÍË«¾«¶È¸¡µãÊý¡£
+- [`DECIMAL(M, D)`](https://mariadb.com/kb/en/library/decimal/) å®šç‚¹æ•°ï¼ŒMä¸ºæ€»ä½æ•°ï¼ŒDä¸ºå°æ•°ä½æ•°ã€‚
+- `FLOAT[(M, D)]`, `DOUBLE[(M, D)]` å•ç²¾åº¦æµ®ç‚¹æ•°å’ŒåŒç²¾åº¦æµ®ç‚¹æ•°ã€‚
 
-#### ·ÇÊýÖµÀàÐÍÊý¾Ý
+#### éžæ•°å€¼ç±»åž‹æ•°æ®
 
 - `CHAR(M)`, `VARCHAR(M)`, `TINYTEXT`, `TEXT`
 - `DATE`, `DATETIME`, `TIME`, `TIMESTAMP`, `YEAR`
 
-Èç¹û²»Ö¸¶¨CHARµÄ¿í¶È£¬Ä¬ÈÏÖµÊÇÔÖÄÑÐÔµÄ1¡£
+å¦‚æžœä¸æŒ‡å®šCHARçš„å®½åº¦ï¼Œé»˜è®¤å€¼æ˜¯ç¾éš¾æ€§çš„1ã€‚
 
-### ³£ÓÃº¯ÊýµÄÀàÐÍ
+### å¸¸ç”¨å‡½æ•°çš„ç±»åž‹
 
 - `NOW()`, `DATETIME`
 - `CURRENT_TIMESTAMP`, `TIMESTAMP`
 
-## ÓÃ»§¹ÜÀí
+## ç”¨æˆ·ç®¡ç†
 
-- ´´½¨ÓÃ»§ `CREATE USER 'user' IDENTIFIED BY 'password';`
-- ¸³ÓèÈ¨ÏÞ `GRANT ALL PRIVILEGES ON dbname.* TO uesr;`, `GRANT SELCET, INSERT, UPDATE, DELETE, GRANT OPTION on dbname TO user;`
+- åˆ›å»ºç”¨æˆ· `CREATE USER 'user' IDENTIFIED BY 'password';`
+- èµ‹äºˆæƒé™ `GRANT ALL PRIVILEGES ON dbname.* TO uesr;`, `GRANT SELCET, INSERT, UPDATE, DELETE, GRANT OPTION on dbname TO user;`
 
-`GRANT OPTION`Ê¹µÃ»ñÈ¡µÄÈ¨ÏÞ¿ÉÒÔ´«µÝ¡£
+`GRANT OPTION`ä½¿å¾—èŽ·å–çš„æƒé™å¯ä»¥ä¼ é€’ã€‚
 
 ## DDL
 
-- µ¥ÐÐ×¢ÊÍ `//`
-- ¶àÐÐ×¢ÊÍ `/* ... */`
+- å•è¡Œæ³¨é‡Š `//`
+- å¤šè¡Œæ³¨é‡Š `/* ... */`
 
-### ²Ù×÷Êý¾Ý¿â
+### æ“ä½œæ•°æ®åº“
 
 - `SHOW DATABASES;`
-- `USE Êý¾Ý¿âÃû;`
-- `CREATE DATABASE Êý¾Ý¿âÃû;`
-- `DROP DATABASE Êý¾Ý¿âÃû;`
+- `USE æ•°æ®åº“å;`
+- `CREATE DATABASE æ•°æ®åº“å;`
+- `DROP DATABASE æ•°æ®åº“å;`
 
-### ²Ù×÷Êý¾Ý±í
+### æ“ä½œæ•°æ®è¡¨
 
-#### ´´½¨±í
+#### åˆ›å»ºè¡¨
 
 ```sql
 CREATE TABLE [IF NOT EXISTS] 'tbname' (
-    'colName' INT(4) PRIMARY KEY COMMENT 'ÕâÀïÇ°ÃæÃ»ÓÐµÈºÅ',
-    ×Ö¶ÎÃû Êý¾ÝÀàÐÍ [×Ö¶ÎÊôÐÔ | Ô¼Êø] [Ë÷Òý] [×¢ÊÍ],
+    'colName' INT(4) PRIMARY KEY COMMENT 'è¿™é‡Œå‰é¢æ²¡æœ‰ç­‰å·',
+    å­—æ®µå æ•°æ®ç±»åž‹ [å­—æ®µå±žæ€§ | çº¦æŸ] [ç´¢å¼•] [æ³¨é‡Š],
     ...,
-) [COMMENT='ÕâÀïÇ°ÃæÓÐµÈºÅ'] [CHARSET=...];
+) [COMMENT='è¿™é‡Œå‰é¢æœ‰ç­‰å·'] [CHARSET=...];
 ```
 
-×¢ÒâCREATE TABLEÃüÁîµÄ×îºóÒ»¸ö²ÎÊý£¨¼´×îºóÒ»ÐÐ£©²»Òª¸½¼Ó¶ººÅ¡£
+æ³¨æ„CREATE TABLEå‘½ä»¤çš„æœ€åŽä¸€ä¸ªå‚æ•°ï¼ˆå³æœ€åŽä¸€è¡Œï¼‰ä¸è¦é™„åŠ é€—å·ã€‚
 
-`SHOW CREATE TABLE ±íÃû[\G]` ²é¿´´´½¨±íµÄÓï¾ä
+`SHOW CREATE TABLE è¡¨å[\G]` æŸ¥çœ‹åˆ›å»ºè¡¨çš„è¯­å¥
 
-¶ÔÓÚ¶à×Ö¶ÎÖ÷¼ü£¬¿ÉÒÔÏÈ¶¨ÒåÍê×Ö¶Î£¬ÔÙ¶¨ÒåÖ÷¼ü`PRIMARY KEY(id, name)`
+å¯¹äºŽå¤šå­—æ®µä¸»é”®ï¼Œå¯ä»¥å…ˆå®šä¹‰å®Œå­—æ®µï¼Œå†å®šä¹‰ä¸»é”®`PRIMARY KEY(id, name)`
 
-¶¨ÒåÍâ¼ü `FOREIGN KEY(col1, col2) REFERENCES Ö÷±íÃû (col1, col2)`
+å®šä¹‰å¤–é”® `FOREIGN KEY(col1, col2) REFERENCES ä¸»è¡¨å (col1, col2)`
 
-`ALTER TABLE DROP FOREIGN KEY Íâ¼üÔ¼ÊøÃû³Æ`
+`ALTER TABLE DROP FOREIGN KEY å¤–é”®çº¦æŸåç§°`
 
-#### Î¬»¤±í
+#### ç»´æŠ¤è¡¨
 
 - `SHOW TABLES`
-- `DESCRIBE ±íÃû` `DESC ±íÃû` ²é¿´±íµÄ¶¨Òå£¨±íÖÐ¶¨ÒåµÄ×Ö¶Î£©£¬²»ÄÜ²é¿´Êý¾Ý¿âµÄ¡°¶¨Òå¡±
-- `DROPE TABLE [IF EXISTS] ±íÃû`
+- `DESCRIBE è¡¨å` `DESC è¡¨å` æŸ¥çœ‹è¡¨çš„å®šä¹‰ï¼ˆè¡¨ä¸­å®šä¹‰çš„å­—æ®µï¼‰ï¼Œä¸èƒ½æŸ¥çœ‹æ•°æ®åº“çš„â€œå®šä¹‰â€
+- `DROPE TABLE [IF EXISTS] è¡¨å`
 
-±íµÄÖØÃüÃûºÍ×Ö¶ÎµÄÐÞ¸Ä
+è¡¨çš„é‡å‘½åå’Œå­—æ®µçš„ä¿®æ”¹
 
-- `ALTER TABLE ¾É±íÃû RENAME [TO] ÐÂ±íÃû;` [TO]¿ÉÊ¡ÂÔÎÞÓ°Ïì
-- `ALTER TABLE ±íÃû ADD ×Ö¶ÎÃû Êý¾ÝÀàÐÍ [ÊôÐÔ]`
-- `ALTER TABLE ±íÃû MODIFY ×Ö¶ÎÃû Êý¾ÝÀàÐÍ` ¸Ä±ä×Ö¶ÎÊý¾ÝÀàÐÍ
-- `ALTER TABLE ±íÃû MODIFY ×Ö¶ÎÃû Êý¾ÝÀàÐÍ FIRST | AFTER ×Ö¶ÎÃû` ¸Ä±ä×Ö¶ÎµÄÅÅÁÐË³Ðò
-- `ALTER TABLE ±íÃû CHANGE Ô­×Ö¶ÎÃû ÐÂ×Ö¶ÎÃû Êý¾ÝÀàÐÍ£¨²»ÄÜÎª¿Õ£© [ÊôÐÔ]` ¸Ä±ä×Ö¶ÎÃû»ò×Ö¶ÎÊý¾ÝÀàÐÍ
-- `ALTER TABLE ±íÃû DROP ×Ö¶ÎÃû`
+- `ALTER TABLE æ—§è¡¨å RENAME [TO] æ–°è¡¨å;` [TO]å¯çœç•¥æ— å½±å“
+- `ALTER TABLE è¡¨å ADD å­—æ®µå æ•°æ®ç±»åž‹ [å±žæ€§]`
+- `ALTER TABLE è¡¨å MODIFY å­—æ®µå æ•°æ®ç±»åž‹` æ”¹å˜å­—æ®µæ•°æ®ç±»åž‹
+- `ALTER TABLE è¡¨å MODIFY å­—æ®µå æ•°æ®ç±»åž‹ FIRST | AFTER å­—æ®µå` æ”¹å˜å­—æ®µçš„æŽ’åˆ—é¡ºåº
+- `ALTER TABLE è¡¨å CHANGE åŽŸå­—æ®µå æ–°å­—æ®µå æ•°æ®ç±»åž‹ï¼ˆä¸èƒ½ä¸ºç©ºï¼‰ [å±žæ€§]` æ”¹å˜å­—æ®µåæˆ–å­—æ®µæ•°æ®ç±»åž‹
+- `ALTER TABLE è¡¨å DROP å­—æ®µå`
 
-Ìí¼ÓÖ÷¼üÔ¼Êø `ALTER TABLE ±íÃû ADD CONSTRAINT ×Ö¶ÎÃû£¨ÐÎÈç£¬pk_±íÃû£© PRIMARY KEY ±íÃû(×Ö¶ÎÃû)`
+æ·»åŠ ä¸»é”®çº¦æŸ `ALTER TABLE è¡¨å ADD CONSTRAINT å­—æ®µåï¼ˆå½¢å¦‚ï¼Œpk_è¡¨åï¼‰ PRIMARY KEY è¡¨å(å­—æ®µå)`
 
-Ìí¼Ó×Ö¶ÎÔ¼Êø `ALTER TABLE ±íÃû ADD CONSTRAINT ×Ö¶ÎÃû£¨ÐÎÈÝ£¬fk_´Ó±íÃû_Ö÷±íÃû£© FOREIGN KEY(Íâ¼ü×Ö¶Î) REFERENCES Ö÷±êÃû£¨Ö÷±í×Ö¶Î£©`
+æ·»åŠ å­—æ®µçº¦æŸ `ALTER TABLE è¡¨å ADD CONSTRAINT å­—æ®µåï¼ˆå½¢å®¹ï¼Œfk_ä»Žè¡¨å_ä¸»è¡¨åï¼‰ FOREIGN KEY(å¤–é”®å­—æ®µ) REFERENCES ä¸»æ ‡åï¼ˆä¸»è¡¨å­—æ®µï¼‰`
 
-### ×Ö¶ÎÔ¼Êø
+### å­—æ®µçº¦æŸ
 
-- ·Ç¿ÕÔ¼Êø NOT NULL
-- Ä¬ÈÏÔ¼Êø DEFAULT Èç£ºDEFAULT 'ÄÐ'
-- Î¨Ò»Ô¼Êø UNIQUE KEY
-- Ö÷¼üÔ¼Êø PRIMARY KEY
-- Íâ¼üÔ¼Êø FOREIGN KEY ´Ó±íÄ³Êý¾ÝÏîÔÚÖ÷±íÖÐ±ØÐë´æÔÚ
-- ×Ô¶¯Ôö³¤ AUTO_INCREMENT
+- éžç©ºçº¦æŸ NOT NULL
+- é»˜è®¤çº¦æŸ DEFAULT å¦‚ï¼šDEFAULT 'ç”·'
+- å”¯ä¸€çº¦æŸ UNIQUE KEY
+- ä¸»é”®çº¦æŸ PRIMARY KEY
+- å¤–é”®çº¦æŸ FOREIGN KEY ä»Žè¡¨æŸæ•°æ®é¡¹åœ¨ä¸»è¡¨ä¸­å¿…é¡»å­˜åœ¨
+- è‡ªåŠ¨å¢žé•¿ AUTO_INCREMENT
 
-InnoDBÖ§³ÖÍâ¼ü£¬MyISAM²»Ö§³ÖÍâ¼ü£»Íâ¼ü¹ØÁªµÄ±íÒªÇó¶¼ÊÇInnoDB¡£
+InnoDBæ”¯æŒå¤–é”®ï¼ŒMyISAMä¸æ”¯æŒå¤–é”®ï¼›å¤–é”®å…³è”çš„è¡¨è¦æ±‚éƒ½æ˜¯InnoDBã€‚
 
-UNSIGNEDÒ²ÊÇÒ»ÖÖÔ¼Êø
+UNSIGNEDä¹Ÿæ˜¯ä¸€ç§çº¦æŸ
 
 ## DML
 
-### ±íµÄ´¢´æÒýÇæ
+### è¡¨çš„å‚¨å­˜å¼•æ“Ž
 
 InnoDB, MyISAM, Memory, Archive
 
 ```sql
 CREATE TABLE tbname (
-    # Ê¡ÂÔ´úÂë
+    # çœç•¥ä»£ç 
 ) ENGINE=InnoDB;
 ```
 
-`ALTER TABLE ±íÃû ENGINE=<ÒýÇæÃû>`
+`ALTER TABLE è¡¨å ENGINE=<å¼•æ“Žå>`
 
 ### INSERT
 
-- `INSERT INTO ±íÃû [×Ö¶ÎÃûÁÐ±í] VALUES (ÖµÁÐ±í);`
-- `INSERT INTO ±íÃû [×Ö¶ÎÃûÁÐ±í] VALUES (ÖµÁÐ±í1), (ÖµÁÐ±í2), ...;`
+- `INSERT INTO è¡¨å [å­—æ®µååˆ—è¡¨] VALUES (å€¼åˆ—è¡¨);`
+- `INSERT INTO è¡¨å [å­—æ®µååˆ—è¡¨] VALUES (å€¼åˆ—è¡¨1), (å€¼åˆ—è¡¨2), ...;`
 
-½«²éÑ¯½á¹û²åÈëµ½ÐÂ±í
+å°†æŸ¥è¯¢ç»“æžœæ’å…¥åˆ°æ–°è¡¨
 
 ```sql
-CREATE TABLE ÐÂ±í (
-    SELECT ×Ö¶Î1, ×Ö¶Î2, ... FROM Ô­±í
+CREATE TABLE æ–°è¡¨ (
+    SELECT å­—æ®µ1, å­—æ®µ2, ... FROM åŽŸè¡¨
 );
 ```
 
 ### UPDATE
 
-- `UPDATE ±íÃû SET ×Ö¶ÎÃû = ¸üÐÂÖµ`
+- `UPDATE è¡¨å SET å­—æ®µå = æ›´æ–°å€¼`
 
 ### DELETE
 
-- `DELETE FROM ±íÃû [WHRER ... ]`
-- `TRUNCATE TABLE ±íÃû` ±êÖ¾ÁÐ»áÖØÐÂ¿ªÊ¼±àºÅ
+- `DELETE FROM è¡¨å [WHRER ... ]`
+- `TRUNCATE TABLE è¡¨å` æ ‡å¿—åˆ—ä¼šé‡æ–°å¼€å§‹ç¼–å·
 
 ## Chapter 6 DQL
 
 ```sql
-SELECT <×Ö¶ÎÃû | ±í´ïÊ½ | º¯Êý | ³£Á¿>
-FROM ±íÃû
-[WHERE <²éÑ¯Ìõ¼þ>]
-[ORDER BY <ÅÅÐòµÄÁÐÃû> [ASC(Ä¬ÈÏ) | DESC]]
+SELECT <å­—æ®µå | è¡¨è¾¾å¼ | å‡½æ•° | å¸¸é‡>
+FROM è¡¨å
+[WHERE <æŸ¥è¯¢æ¡ä»¶>]
+[ORDER BY <æŽ’åºçš„åˆ—å> [ASC(é»˜è®¤) | DESC]]
 ```
 
 ### SELECT
 
-- `SELECT ×Ö¶ÎÃû AS ±ðÃû`
-- `SELECT ×Ö¶Î1+×Ö¶Î2 AS ±ðÃû`
-- `WHERE ×Ö¶ÎÃû IS NULL` ²éÑ¯¿ÕÖµ
-- `SELECT ³£Á¿ AS ×Ö¶ÎÃû`
+- `SELECT å­—æ®µå AS åˆ«å`
+- `SELECT å­—æ®µ1+å­—æ®µ2 AS åˆ«å`
+- `WHERE å­—æ®µå IS NULL` æŸ¥è¯¢ç©ºå€¼
+- `SELECT å¸¸é‡ AS å­—æ®µå`
 
 ### ORDER BY
 
-`ORDER BY ×Ö¶Î1 [ÅÅÐò], ×Ö¶Î2[ÅÅÐò]`
+`ORDER BY å­—æ®µ1 [æŽ’åº], å­—æ®µ2[æŽ’åº]`
 
 ### LIMIT
 
-`LIMIT [[Î»ÖÃÆ«ÒÆÁ¿offset], ÐÐÊýrow_count]`
+`LIMIT [[ä½ç½®åç§»é‡offset], è¡Œæ•°row_count]`
 
-µÚ1Ìõ¼ÇÂ¼µÄÎ»ÖÃÆ«ÒÆÁ¿ÊÇ0¡£
+ç¬¬1æ¡è®°å½•çš„ä½ç½®åç§»é‡æ˜¯0ã€‚
 
-### ×Ó²éÑ¯
+### å­æŸ¥è¯¢
 
-Ê¹ÓÃµÈºÅµÄ×Ó²éÑ¯×÷ÎªWHEREÓï¾äµÄÒ»²¿·Ö£¬ÐèÒª±£Ö¤×Ó²éÑ¯·µ»ØµÄÖµÎª¿Õ»òÕßÖ»ÓÐÒ»¸ö
+ä½¿ç”¨ç­‰å·çš„å­æŸ¥è¯¢ä½œä¸ºWHEREè¯­å¥çš„ä¸€éƒ¨åˆ†ï¼Œéœ€è¦ä¿è¯å­æŸ¥è¯¢è¿”å›žçš„å€¼ä¸ºç©ºæˆ–è€…åªæœ‰ä¸€ä¸ª
 
 ```sql
 SELECT 'studentName' FROM 'student' WHERE 'studentNo' = (
@@ -195,7 +195,7 @@ SELECT 'studentName' FROM 'student' WHERE 'studentNo' = (
 
 ### IN
 
-Èç¹û×Ó²éÑ¯·µ»ØµÄÖµ¶àÓÚÒ»¸ö£¬¿ÉÒÔÊ¹ÓÃ`IN`
+å¦‚æžœå­æŸ¥è¯¢è¿”å›žçš„å€¼å¤šäºŽä¸€ä¸ªï¼Œå¯ä»¥ä½¿ç”¨`IN`
 
 ```sql
 SELECT 'studentName' FROM 'student' WHERE 'studentNo' IN (
@@ -205,77 +205,77 @@ SELECT 'studentName' FROM 'student' WHERE 'studentNo' IN (
 );
 ```
 
-»¹ÓÐ`NOT IN`¡£
+è¿˜æœ‰`NOT IN`ã€‚
 
 ### BETWEEN AND
 
 `SELECT name FROM student WHERE id BETWEEN 1706300001 AND 1806300001`
 
-»¹ÓÐ`NOT BETWEEN AND`
+è¿˜æœ‰`NOT BETWEEN AND`
 
 ### LIKE
 
-Æ¥Åä²éÑ¯£¬`%`ÈÎÒâ¶à¸ö×Ö·û£¨°üÀ¨0¸ö£©£¬`_`ÈÎÒâÒ»¸ö×Ö·û
+åŒ¹é…æŸ¥è¯¢ï¼Œ`%`ä»»æ„å¤šä¸ªå­—ç¬¦ï¼ˆåŒ…æ‹¬0ä¸ªï¼‰ï¼Œ`_`ä»»æ„ä¸€ä¸ªå­—ç¬¦
 
-`SELECT * FROM books WHRER name LIKE '%´óÈ«'`
+`SELECT * FROM books WHRER name LIKE '%å¤§å…¨'`
 
 ### DISTINCT
 
-`DISTINCT`±ØÐë·ÅÔÚ²éÑ¯Óï¾äµÄ¿ªÍ·£¬¿ÉÒÔÓë`COUNT()`½áºÏÊ¹ÓÃ£¬·µ»Ø²»ÖØ¸´µÄ×Ö¶Î£»·´Òå´ÊÊÇ`ALL`
+`DISTINCT`å¿…é¡»æ”¾åœ¨æŸ¥è¯¢è¯­å¥çš„å¼€å¤´ï¼Œå¯ä»¥ä¸Ž`COUNT()`ç»“åˆä½¿ç”¨ï¼Œè¿”å›žä¸é‡å¤çš„å­—æ®µï¼›åä¹‰è¯æ˜¯`ALL`
 
-`SELECT DISTINCT author FROM books WHRER name LIKE '%´óÈ«'`
+`SELECT DISTINCT author FROM books WHRER name LIKE '%å¤§å…¨'`
 
 ### SOME
 
-`SOME`Òà×÷`ANY`£¬±íÊ¾ÎªÂú×ãÈÎÒâÒ»¸öÌõ¼þ
+`SOME`äº¦ä½œ`ANY`ï¼Œè¡¨ç¤ºä¸ºæ»¡è¶³ä»»æ„ä¸€ä¸ªæ¡ä»¶
 
-`SELECT * FROM books WHRER price > SOME(5, 15, 20)` ±íÊ¾²éÑ¯¼Û¸ñ´óÓÚ5µÄÊý¾Ý
+`SELECT * FROM books WHRER price > SOME(5, 15, 20)` è¡¨ç¤ºæŸ¥è¯¢ä»·æ ¼å¤§äºŽ5çš„æ•°æ®
 
 ### EXISTS
 
-`SELECT FROM ±íÃû WHRER EXISTS(×Ó²éÑ¯)`
+`SELECT FROM è¡¨å WHRER EXISTS(å­æŸ¥è¯¢)`
 
-Èç¹û×Ó²éÑ¯µÄ½á¹û¾ßÓÐ·µ»ØÐÐ£¬ÔòÖ´ÐÐ¸¸²éÑ¯
+å¦‚æžœå­æŸ¥è¯¢çš„ç»“æžœå…·æœ‰è¿”å›žè¡Œï¼Œåˆ™æ‰§è¡Œçˆ¶æŸ¥è¯¢
 
-#### ³£¼û´íÎó
+#### å¸¸è§é”™è¯¯
 
-Ç¶Ì×ÔÚFROM×Ó¾äÖÐµÄSELECTÓï¾äÐèÒªÎªderived tableÖ¸¶¨±ðÃû `(×Ó²éÑ¯) AS ±ðÃû`
+åµŒå¥—åœ¨FROMå­å¥ä¸­çš„SELECTè¯­å¥éœ€è¦ä¸ºderived tableæŒ‡å®šåˆ«å `(å­æŸ¥è¯¢) AS åˆ«å`
 
-- ´íÎó£º`SELCET * FROM (SELECT * FORM ±íÃû)`
-- ÕýÈ·£º`SELCET * FROM (SELECT * FORM ±íÃû) AS ±ðÃû`
+- é”™è¯¯ï¼š`SELCET * FROM (SELECT * FORM è¡¨å)`
+- æ­£ç¡®ï¼š`SELCET * FROM (SELECT * FORM è¡¨å) AS åˆ«å`
 
 ### GROUP BY
 
-·Ö×é²éÑ¯£º¸ù¾Ý×Ö¶Î·Ö×é²éÑ¯ºóºÏ²¢½á¹û
+åˆ†ç»„æŸ¥è¯¢ï¼šæ ¹æ®å­—æ®µåˆ†ç»„æŸ¥è¯¢åŽåˆå¹¶ç»“æžœ
 
 - `SELECT subjectNo, AVG(studentResult) from result group by subjectNo`
 - `SELECT COUNT(*), gradeId FROM student GROUP BY gradeId;`
 
-Ê¹ÓÃ`HAVING`¶Ô·Ö×éºóµÄÊý¾Ý½øÐÐÉ¸Ñ¡£¬ÎÞ·¨Ê¹ÓÃ`WHERE`¶Ô·Ö×éºóµÄÊý¾Ý½øÐÐÉ¸Ñ¡
+ä½¿ç”¨`HAVING`å¯¹åˆ†ç»„åŽçš„æ•°æ®è¿›è¡Œç­›é€‰ï¼Œæ— æ³•ä½¿ç”¨`WHERE`å¯¹åˆ†ç»„åŽçš„æ•°æ®è¿›è¡Œç­›é€‰
 
 ```sql
-SELECT COUNT(*) 'ÈËÊý', gradeId 'Äê¼¶', sex 'ÐÔ±ð'
+SELECT COUNT(*) 'äººæ•°', gradeId 'å¹´çº§', sex 'æ€§åˆ«'
 FROM student
 GROUP BY gradeId
 HAVING COUNT(*) > 2;
 ```
 
-Ö´ÐÐË³Ðò£º`WHERE` -\> `GROUP BY` -\> ¾ÛºÏº¯Êý -\> `HAVING`
+æ‰§è¡Œé¡ºåºï¼š`WHERE` -\> `GROUP BY` -\> èšåˆå‡½æ•° -\> `HAVING`
 
 ### UNION
 
-`UNION`ºÏ²¢¶à¸ö²éÑ¯µÄ½á¹û²¢È¥³ýÖØ¸´ÏîÄ¿£¬ºÏ²¢Ê±±í¶ÔÓ¦µÄ×Ö¶ÎºÍÊý¾ÝÀàÐÍ±ØÐëÏàÍ¬
+`UNION`åˆå¹¶å¤šä¸ªæŸ¥è¯¢çš„ç»“æžœå¹¶åŽ»é™¤é‡å¤é¡¹ç›®ï¼Œåˆå¹¶æ—¶è¡¨å¯¹åº”çš„å­—æ®µå’Œæ•°æ®ç±»åž‹å¿…é¡»ç›¸åŒ
 
-`UNION ALL`²»È¥³ýÖØ¸´
+`UNION ALL`ä¸åŽ»é™¤é‡å¤
 
-### Á¬½Ó²éÑ¯
+### è¿žæŽ¥æŸ¥è¯¢
 
-- **ÄÚÁ¬½Ó** ¸ù¾Ý±íÖÐ¹²Í¬µÄÁÐÀ´½øÐÐÆ¥Åä
-- **ÍâÁ¬½Ó** ÖÁÉÙ·µ»ØÒ»¸ö±íÖÐµÄËùÓÐ¼ÇÂ¼£¬¸ù¾ÝÆ¥ÅäÌõ¼þÓÐÑ¡ÔñµØ´ÓÁíÒ»¸ö±íÖÐ·µ»Ø¼ÇÂ¼
+- **å†…è¿žæŽ¥** æ ¹æ®è¡¨ä¸­å…±åŒçš„åˆ—æ¥è¿›è¡ŒåŒ¹é…
+- **å¤–è¿žæŽ¥** è‡³å°‘è¿”å›žä¸€ä¸ªè¡¨ä¸­çš„æ‰€æœ‰è®°å½•ï¼Œæ ¹æ®åŒ¹é…æ¡ä»¶æœ‰é€‰æ‹©åœ°ä»Žå¦ä¸€ä¸ªè¡¨ä¸­è¿”å›žè®°å½•
 
-#### ÄÚÁ¬½Ó
+#### å†…è¿žæŽ¥
 
-Ê¹ÓÃ`WHERE`µÄÄÚÁ¬½Ó
+ä½¿ç”¨`WHERE`çš„å†…è¿žæŽ¥
 
 ```sql
 SELECT student.studentName, result.subjectNo, result.studentResult
@@ -283,7 +283,7 @@ FROM student, result
 WHERE student.studentNo = result.studentNo;  
 ```
 
-Ê¹ÓÃ`[INNER] JOIN ... ON ..`µÄÄÚÁ¬½Ó
+ä½¿ç”¨`[INNER] JOIN ... ON ..`çš„å†…è¿žæŽ¥
 
 ```sql
 SELECT studentName, subjectNo, studentResult
@@ -291,7 +291,7 @@ FROM student
 INNER JOIN result ON student.studentNo = result.studentNo;
 ```
 
-»òÊ¹ÓÃ±ðÃû£¬ÆäÖÐÈôÁ¬½ÓÖÐµÄÁ½¸ö±í»ò¶à¸ö±íÖÐ²éÑ¯µÄ×Ö¶Î²»ÖØ¸´Ôò²»ÐèÒª¶ÔÕâÒ»ÁÐ²»ÐèÒªÖ¸¶¨±ðÃû¡£
+æˆ–ä½¿ç”¨åˆ«åï¼Œå…¶ä¸­è‹¥è¿žæŽ¥ä¸­çš„ä¸¤ä¸ªè¡¨æˆ–å¤šä¸ªè¡¨ä¸­æŸ¥è¯¢çš„å­—æ®µä¸é‡å¤åˆ™ä¸éœ€è¦å¯¹è¿™ä¸€åˆ—ä¸éœ€è¦æŒ‡å®šåˆ«åã€‚
 
 ```sql
 SELECT S.studentName, R.subjectNo, R.studentResult
@@ -299,7 +299,7 @@ FROM student as S
 INNER JOIN result as R ON S.studentNo = R.studentNo;
 ```
 
-¿ÉÒÔ¶Ô¶à¸ö±íÊ¹ÓÃÄÚÁ¬½Ó
+å¯ä»¥å¯¹å¤šä¸ªè¡¨ä½¿ç”¨å†…è¿žæŽ¥
 
 ```sql
 SELECT S.studentName, SU.subjectName, R.studentResult
@@ -308,7 +308,7 @@ INNER JOIN result AS R ON S.studentNo = R.studentNo
 INNER JOIN subject AS SU ON SU.subjectNo = R.subjectNo;
 ```
 
-### ÍâÁ¬½Ó
+### å¤–è¿žæŽ¥
 
 `<LEFT | RIGHT> OUTER JOIN ... ON`
 
@@ -319,108 +319,108 @@ LEFT OUTER
 JOIN result AS R ON S.studentNo = R.studentNo;
 ```
 
-LEFT OUTTER JOIN·µ»Ø½á¹û°üº¬×ó±íµÄËùÓÐÐÐ
+LEFT OUTTER JOINè¿”å›žç»“æžœåŒ…å«å·¦è¡¨çš„æ‰€æœ‰è¡Œ
 
-## º¯Êý
+## å‡½æ•°
 
-¾ÛºÏº¯Êý
+èšåˆå‡½æ•°
 
 - `AVG()`
 - `COUNT()`
 - `MAX()`, `MIN()`
 - `SUM()`
 
-×Ö·û´®º¯Êý£¬×¢ÒâÏÂ±ê´Ó1¿ªÊ¼
+å­—ç¬¦ä¸²å‡½æ•°ï¼Œæ³¨æ„ä¸‹æ ‡ä»Ž1å¼€å§‹
 
 - `CONCAT(str1, str2, ...)`
 - `INSERT(str, pos, len, newstr)`
 - `LOWER(str)`, `UPPER(str)`
 - `SUBSTRING(str, pos, len)`
 
-Ê±¼äÈÕÆÚº¯Êý
+æ—¶é—´æ—¥æœŸå‡½æ•°
 
-- `CURDATE()` µ±Ç°ÈÕÆÚ
-- `CURTIME()` µ±Ç°Ê±¼ä
-- `NOW()` µ±Ç°ÈÕÆÚºÍÊ±¼ä
+- `CURDATE()` å½“å‰æ—¥æœŸ
+- `CURTIME()` å½“å‰æ—¶é—´
+- `NOW()` å½“å‰æ—¥æœŸå’Œæ—¶é—´
 - `WEEK(date)`, `YEAR(date)`, `HOUR(date)`, `MINUTE(date)`
-- `DATEDIFF(date1, date2)` ·µ»ØÈÕÆÚÏà¸ôµÄÌìÊý
-- `ADDDATE(date, n)` ·µ»Ødate
+- `DATEDIFF(date1, date2)` è¿”å›žæ—¥æœŸç›¸éš”çš„å¤©æ•°
+- `ADDDATE(date, n)` è¿”å›ždate
 
-ÊýÑ§º¯Êý
+æ•°å­¦å‡½æ•°
 
 - `CEIL(x)`, `FLOOR(x)`
 - `RAND()`
 
-## Chapter 8 ÊÂÎñ Transaction
+## Chapter 8 äº‹åŠ¡ Transaction
 
-½«Ò»ÏµÁÐÊý¾Ý²Ù×÷×óÎªÕûÌå´¦Àí£¬Èç¹ûÄ³Ò»ÊÂÎñÌá½»³É¹¦Ôò¸ÃÊÂÎñµÄËùÓÐÊý¾Ý¸ü¸Ä¾ù»áÌá½»£¬³ÉÎªÊý¾Ý¿âÖÐµÄÓÀ¾Ã×é³É²¿·Ö£»Èç¹ûÊÂÎñÖ´ÐÐÊ±Óöµ½´íÎóÇÒ±ØÐëÈ¥È¡Ïû»ò»Ø¹ö£¬ÔòÊý¾Ý½«È«²¿»Ö¸´µ½²Ù×÷Ç°µÄ×´Ì¬£¬ËùÓÐÊý¾ÝµÄ¸ü¸Ä¾ù±»Çå³ý¡£
+å°†ä¸€ç³»åˆ—æ•°æ®æ“ä½œå·¦ä¸ºæ•´ä½“å¤„ç†ï¼Œå¦‚æžœæŸä¸€äº‹åŠ¡æäº¤æˆåŠŸåˆ™è¯¥äº‹åŠ¡çš„æ‰€æœ‰æ•°æ®æ›´æ”¹å‡ä¼šæäº¤ï¼Œæˆä¸ºæ•°æ®åº“ä¸­çš„æ°¸ä¹…ç»„æˆéƒ¨åˆ†ï¼›å¦‚æžœäº‹åŠ¡æ‰§è¡Œæ—¶é‡åˆ°é”™è¯¯ä¸”å¿…é¡»åŽ»å–æ¶ˆæˆ–å›žæ»šï¼Œåˆ™æ•°æ®å°†å…¨éƒ¨æ¢å¤åˆ°æ“ä½œå‰çš„çŠ¶æ€ï¼Œæ‰€æœ‰æ•°æ®çš„æ›´æ”¹å‡è¢«æ¸…é™¤ã€‚
 
-- Ô­×ÓÐÔ ÊÂÎñµÄ¸÷¸öÔªËØÊÇ²»¿É·Ö¸îµÄ
-- Ò»ÖÂÐÔ ÊÂÎñÍê³ÉÊ±Êý¾Ý´¦ÓÚÒ»ÖÂ×´Ì¬£¬ÊÂÎñ²»ÄÜÊ¹Êý¾Ý´¢´æ´¦ÓÚ²»ÎÈ¶¨µÄ×´Ì¬
-- ¸ôÀëÐÔ ËùÓÐ²¢·¢ÊÂÎñ±Ë´Ë¸ôÀë£»ÊÂÎñ²»Ó¦¸ÃÒÔÈÎºÎ·½Ê½ÒÀÀµ»òÓ°ÏìÆäËûÊÂÎñ
-- ³Ö¾ÃÐÔ Ò»µ©ÊÂÎñÌá½»£¬¶ÔÊý¾Ý¿âµÄÓ°ÏìÊÇÓÀ¾ÃµÄ
+- åŽŸå­æ€§ äº‹åŠ¡çš„å„ä¸ªå…ƒç´ æ˜¯ä¸å¯åˆ†å‰²çš„
+- ä¸€è‡´æ€§ äº‹åŠ¡å®Œæˆæ—¶æ•°æ®å¤„äºŽä¸€è‡´çŠ¶æ€ï¼Œäº‹åŠ¡ä¸èƒ½ä½¿æ•°æ®å‚¨å­˜å¤„äºŽä¸ç¨³å®šçš„çŠ¶æ€
+- éš”ç¦»æ€§ æ‰€æœ‰å¹¶å‘äº‹åŠ¡å½¼æ­¤éš”ç¦»ï¼›äº‹åŠ¡ä¸åº”è¯¥ä»¥ä»»ä½•æ–¹å¼ä¾èµ–æˆ–å½±å“å…¶ä»–äº‹åŠ¡
+- æŒä¹…æ€§ ä¸€æ—¦äº‹åŠ¡æäº¤ï¼Œå¯¹æ•°æ®åº“çš„å½±å“æ˜¯æ°¸ä¹…çš„
 
-InnoDB¶ÔÊÂÎïµÄÖ§³Ö£ºREDOÈÕÖ¾¡¢UNDOÈÕÖ¾
+InnoDBå¯¹äº‹ç‰©çš„æ”¯æŒï¼šREDOæ—¥å¿—ã€UNDOæ—¥å¿—
 
 ```sql
-BEGIN;  // »ò START TRANSACTION;
+BEGIN;  // æˆ– START TRANSACTION;
 
 COMMIT;
 ROLLBACK;
 ```
 
-Î´ÏÔÊ½¿ªÆôÊÂÎñÊ±£¬Ã¿ÌõSQLÓï¾ä¶¼×÷Îªµ¥¶ÀµÄÊÂÎñÖ´ÐÐÍê±Ï×Ô¶¯Ìá½»¡£
+æœªæ˜¾å¼å¼€å¯äº‹åŠ¡æ—¶ï¼Œæ¯æ¡SQLè¯­å¥éƒ½ä½œä¸ºå•ç‹¬çš„äº‹åŠ¡æ‰§è¡Œå®Œæ¯•è‡ªåŠ¨æäº¤ã€‚
 
-MySQLÉèÖÃ×Ô¶¯Ìá½» `SET autocommit = 0 | 1;`
+MySQLè®¾ç½®è‡ªåŠ¨æäº¤ `SET autocommit = 0 | 1;`
 
-## ÊÓÍ¼
+## è§†å›¾
 
-- ´´½¨ÊÓÍ¼ `CREATE VIEW ÊÓÍ¼Ãû£¨ÐÎÈçview_xxx»òv_xxx£©AS <SELECT Óï¾ä>`
-- É¾³ýÊÓÍ¼ `DROP VIEW [IF EXISTS] ÊÓÍ¼Ãû`
-- ²é¿´ÊÓÍ¼ `SELECT * FROM ÊÓÍ¼Ãû`
+- åˆ›å»ºè§†å›¾ `CREATE VIEW è§†å›¾åï¼ˆå½¢å¦‚view_xxxæˆ–v_xxxï¼‰AS <SELECT è¯­å¥>`
+- åˆ é™¤è§†å›¾ `DROP VIEW [IF EXISTS] è§†å›¾å`
+- æŸ¥çœ‹è§†å›¾ `SELECT * FROM è§†å›¾å`
 
-ÊÓÍ¼¿ÉÒÔÇ¶Ì×ÁíÒ»¸öÊÓÍ¼£¬¶ÔÊÓÍ¼Êý¾ÝµÄÌí¼ÓÐÞ¸ÄºÍ²éÑ¯Ö±½ÓÓ°Ïì±íÖÐµÄÊý¾Ý¡£
+è§†å›¾å¯ä»¥åµŒå¥—å¦ä¸€ä¸ªè§†å›¾ï¼Œå¯¹è§†å›¾æ•°æ®çš„æ·»åŠ ä¿®æ”¹å’ŒæŸ¥è¯¢ç›´æŽ¥å½±å“è¡¨ä¸­çš„æ•°æ®ã€‚
 
-## Ë÷Òý
+## ç´¢å¼•
 
-- ÆÕÍ¨Ë÷Òý ÔÊÐíÖØ¸´ºÍ¿ÕÖµ
-- Î¨Ò»Ë÷Òý ²»ÔÊÐíÖØ¸´£¬ÔÊÐí¿ÕÖµ
-- Ö÷¼üË÷Òý µ¥Ò»Ö÷¼üÊ±×Ô¶¯´´½¨Ö÷¼üË÷Òý£¬Ö÷¼üË÷Òý·Ç¿Õ²»ÖØ¸´
-- ¸´ºÏË÷Òý ½«¶à¸öÁÐ×éºÏ×÷ÎªË÷Òý£»ÔÚ²éÑ¯ÖÐÖ»ÓÐÊ¹ÓÃÁË×éºÏË÷ÒýÖÐ×î×ó±ßµÄ×Ö¶ÎÊ±£¬Ë÷Òý²Å»á±»Ê¹ÓÃ
-- È«ÎÄË÷Òý Ö÷ÒªÓÃÓÚÔÚCAHR, TEXTµÈÊý¾ÝÖÐÈ«ÎÄ¼ìË÷Êý¾Ý
-- ¿Õ¼äË÷Òý MyISAM only£¬¶Ô¿Õ¼äÊý¾ÝÀàÐÍ½¨Á¢µÄË÷Òý
+- æ™®é€šç´¢å¼• å…è®¸é‡å¤å’Œç©ºå€¼
+- å”¯ä¸€ç´¢å¼• ä¸å…è®¸é‡å¤ï¼Œå…è®¸ç©ºå€¼
+- ä¸»é”®ç´¢å¼• å•ä¸€ä¸»é”®æ—¶è‡ªåŠ¨åˆ›å»ºä¸»é”®ç´¢å¼•ï¼Œä¸»é”®ç´¢å¼•éžç©ºä¸é‡å¤
+- å¤åˆç´¢å¼• å°†å¤šä¸ªåˆ—ç»„åˆä½œä¸ºç´¢å¼•ï¼›åœ¨æŸ¥è¯¢ä¸­åªæœ‰ä½¿ç”¨äº†ç»„åˆç´¢å¼•ä¸­æœ€å·¦è¾¹çš„å­—æ®µæ—¶ï¼Œç´¢å¼•æ‰ä¼šè¢«ä½¿ç”¨
+- å…¨æ–‡ç´¢å¼• ä¸»è¦ç”¨äºŽåœ¨CAHR, TEXTç­‰æ•°æ®ä¸­å…¨æ–‡æ£€ç´¢æ•°æ®
+- ç©ºé—´ç´¢å¼• MyISAM onlyï¼Œå¯¹ç©ºé—´æ•°æ®ç±»åž‹å»ºç«‹çš„ç´¢å¼•
 
-´´½¨ºÍÊ¹ÓÃË÷Òý
+åˆ›å»ºå’Œä½¿ç”¨ç´¢å¼•
 
-- ´´½¨Ë÷Òý `CREATE [UNQIUE | FULLTEXT | SPATIAL |] INDEX Ë÷ÒýÃû ON ±íÃû(×Ö¶ÎÃû[×Ö·û´®ÀàÐÍ¿ÉÒÔÖ¸¶¨Ë÷Òý³¤¶È])`
-- É¾³ýË÷Òý `DROP INDEX ±íÃû.Ë÷ÒýÃû`
-- ²é¿´Ë÷Òý `SHOW INDEX FROM ±íÃû`
+- åˆ›å»ºç´¢å¼• `CREATE [UNQIUE | FULLTEXT | SPATIAL |] INDEX ç´¢å¼•å ON è¡¨å(å­—æ®µå[å­—ç¬¦ä¸²ç±»åž‹å¯ä»¥æŒ‡å®šç´¢å¼•é•¿åº¦])`
+- åˆ é™¤ç´¢å¼• `DROP INDEX è¡¨å.ç´¢å¼•å`
+- æŸ¥çœ‹ç´¢å¼• `SHOW INDEX FROM è¡¨å`
 
-## Êý¾Ý±¸·Ý
+## æ•°æ®å¤‡ä»½
 
-±¸·Ý
+å¤‡ä»½
 
 - `mysqldump -u usrname -h host -p dbname[tbname1, ...] > filename.sql`
 
-»ò±£´æµ½Íâ²¿ÎÄ¼þ
+æˆ–ä¿å­˜åˆ°å¤–éƒ¨æ–‡ä»¶
 
 ```sql
 SELECT * FROM ...
 INTO OUTFILE 'filename' [OPTIONS]
 ```
 
-»Ö¸´
+æ¢å¤
 
 - `mysql -u -p [dbname] < filename.sql`
-- µÇÂ½MySQLºó£¬`source filename`
+- ç™»é™†MySQLåŽï¼Œ`source filename`
 
 ---
 
-## °²×°
+## å®‰è£…
 
-ÔÚLinux·¢ÐÐ°æÉÏ¿ÉÒÔÊ¹ÓÃ[ÅäÖÃ¹¤¾ß](https://downloads.mariadb.org/mariadb/repositories/)¡£
+åœ¨Linuxå‘è¡Œç‰ˆä¸Šå¯ä»¥ä½¿ç”¨[é…ç½®å·¥å…·](https://downloads.mariadb.org/mariadb/repositories/)ã€‚
 
-### ÔÚCentOS7ÉÏ°²×°
+### åœ¨CentOS7ä¸Šå®‰è£…
 
 ```sh
 yum install mariadb-server
@@ -431,34 +431,34 @@ sudo mysql_secure_installation
 mysqladmin -u root -p version
 ```
 
-## ¹ÜÀí
+## ç®¡ç†
 
-### ÅäÖÃÎÄ¼þ
+### é…ç½®æ–‡ä»¶
 
 `/etc/my.cnf`
 
-´ËÎÄ¼þÖÐ¿ÉÒÔÐÞ¸ÄÄ¬ÈÏ±àÂë¡£
+æ­¤æ–‡ä»¶ä¸­å¯ä»¥ä¿®æ”¹é»˜è®¤ç¼–ç ã€‚
 
-### ÃüÁîÐÐ¹¤¾ß
+### å‘½ä»¤è¡Œå·¥å…·
 
 `mysql -u root -p`
 
-- ÏÔÊ¾°ïÖúÄ¿Â¼ `HELP contents`
-- ²é¿´°æ±¾ºÍµÇÂ½ÓÃ»§Ãû`SELECT VERSION(), USER()`
-- ±àÂëÎÊÌâÁÙÊ±½â¾ö
+- æ˜¾ç¤ºå¸®åŠ©ç›®å½• `HELP contents`
+- æŸ¥çœ‹ç‰ˆæœ¬å’Œç™»é™†ç”¨æˆ·å`SELECT VERSION(), USER()`
+- ç¼–ç é—®é¢˜ä¸´æ—¶è§£å†³
 
     ```shell
     SET NAMES gbk;
-    # Ïàµ±ÓÚÏÂÃæÈýÌõÓï¾ä
+    # ç›¸å½“äºŽä¸‹é¢ä¸‰æ¡è¯­å¥
     SET character_set_client=gbk;
     SET character_set_results=gbk;
     SET character_set_connection=gbk;
     ```
 
-- ²é¿´Ö§³ÖµÄÒýÇæ `SHOW ENGINES`, `SHOW VARIABLES LIKE 'storage_engine'`
+- æŸ¥çœ‹æ”¯æŒçš„å¼•æ“Ž `SHOW ENGINES`, `SHOW VARIABLES LIKE 'storage_engine'`
 
 ---
 
-## ÎÄµµÁ´½Ó
+## æ–‡æ¡£é“¾æŽ¥
 
-- [MariaDB ServerÎÄµµ](https://mariadb.com/kb/en/library/documentation/)
+- [MariaDB Serveræ–‡æ¡£](https://mariadb.com/kb/en/library/documentation/)
