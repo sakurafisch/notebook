@@ -85,3 +85,5 @@ print(str(x) + " + " + str(y) + " = " + str(result))
 - [Python 编程风格](https://docs.python-guide.org/writing/style/)
 - [Python 中可用的字符串函数](https://www.w3schools.com/python/python_ref_string.asp)
 - [内置 Python 函数列表](https://docs.python.org/3/library/functions.html)
+- [官方文档](https://docs.python.org/zh-cn/3/tutorial/)
+
