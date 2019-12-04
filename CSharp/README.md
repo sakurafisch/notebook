@@ -11,6 +11,22 @@ C# 编程语言允许你构建多种类型的应用程序，例如：
 - 基于云的应用程序
 - 移动应用程序
 
+## Hello World
+
+```c#
+using System;
+namespace MyNewApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+        }
+    }
+}
+```
+
 ## 新手常错
 
 新程序员常犯的错误：
