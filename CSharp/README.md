@@ -67,7 +67,9 @@ char userOption;
 int gameScore;
 decimal particlesPerMillion;
 bool processedCustomer;
+```
 
+```c#
 string[] fraudulentOrderIDs = new string[3];  // 声明数组
 fraudulentOrderIDs[0] = "A123";  // 为数组赋值
 fraudulentOrderIDs[1] = "B456";
@@ -260,29 +262,53 @@ Console.WriteLine(roll);
 Random random = new Random();
 int daysUntilExpiration = random.Next(12);
 int discountPercentage = 0;
-
-if (daysUntilExpiration == 0)
-{
+if (daysUntilExpiration == 0) {
     Console.WriteLine("Your subscription has expired.");
 }
-else if (daysUntilExpiration == 1)
-{
+else if (daysUntilExpiration == 1) {
     Console.WriteLine("Your subscription expires within a day!");
     discountPercentage = 20;
 }
-else if (daysUntilExpiration <= 5)
-{
+else if (daysUntilExpiration <= 5) {
     Console.WriteLine($"Your subscription expires in {daysUntilExpiration} days.");
     discountPercentage = 10;
 }
-else if (daysUntilExpiration <= 10)
-{
+else if (daysUntilExpiration <= 10) {
     Console.WriteLine("Your subscription will expire soon.  Renew now!");
 }
 
-if (discountPercentage > 0)
-{
+if (discountPercentage > 0) {
     Console.WriteLine($"Renew now and save {discountPercentage}%.");
+}
+```
+
+## foreach语句
+
+```c#
+string[] names = { "Bob", "Conrad", "Grant" };
+foreach (string name in names) {
+    Console.WriteLine(name);
+}
+```
+
+```c#
+int[] inventory = { 200, 450, 700, 175, 250 };
+int sum = 0;
+int bin = 0;
+foreach (int items in inventory) {
+    sum += items;
+    bin++;
+    Console.WriteLine($"Bin {bin} = {items} items (Running tally: {sum})");
+}
+Console.WriteLine($"We have {sum} items in inventory.");
+```
+
+```c#
+string[] orderIDs = { "B123", "C234", "A345", "C15", "B177", "G3003", "C235", "B179" };
+foreach (string orderID in orderIDs) {
+    if (orderID.StartsWith("B")) {
+        Console.WriteLine(orderID);
+    }
 }
 ```
 
