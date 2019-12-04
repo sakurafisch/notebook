@@ -108,7 +108,10 @@ var message = "Hello world!";
 ### 常用内置方法
 
 - 使用 `ToUpper()` 或 `ToLower()` 帮助程序方法，确保字符串全部大写或全部小写。
+
 - 使用 `Trim()` 帮助程序方法，删除前导空格或尾随空格。
+
+- [Contains(String)](https://docs.microsoft.com/zh-cn/dotnet/api/system.string.contains?view=netframework-4.8)返回一个值，该值指示指定的子串是否出现在此字符串中。
 
 ### 字符转义序列和逐字字符串
 
