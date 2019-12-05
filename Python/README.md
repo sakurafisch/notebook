@@ -20,6 +20,10 @@ Python 是在 OSI 开放源代码许可证下获得许可的，并根据需求�
 
 **Tips: WIN10用户可以在WIN10商店一键安装Python 3.8。**
 
+## 变量和基本数据类型
+
+参考 [Python 中的变量和基本数据类型](https://docs.microsoft.com/zh-cn/learn/modules/intro-to-python/4-variables-and-data-types)
+
 ## 注释
 
 ```python
