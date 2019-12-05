@@ -23,9 +23,9 @@ virtualenv <folder_name>  # OSX/Linux (bash)
 
 > Using virtual environments.
 
-我们首先要激活它。（Firstly we need to ```activate``` it.）
+我们首先要 ```激活``` 它。（Firstly we need to ```activate``` it.）
 
-要把激活文件放在<folder_name>/Scripts文件夹中。
+激活脚本 ```Activate.*``` 位于 ```<folder_name>/Scripts``` 文件夹。
 
 ```cmd
 # Windows systems
