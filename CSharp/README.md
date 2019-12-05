@@ -308,6 +308,8 @@ if (discountPercentage > 0) {
 
 ## foreach语句
 
+foreach语句的局限性：不能重新分配 `name` 的值，因为它是 `foreach` 迭代的内部实现的一部分。
+
 ```c#
 string[] names = { "Bob", "Conrad", "Grant" };
 foreach (string name in names) {
@@ -334,5 +336,155 @@ foreach (string orderID in orderIDs) {
         Console.WriteLine(orderID);
     }
 }
+```
+
+## switch case 语句
+
+```c#
+int employeeLevel = 200;
+string employeeName = "John Smith";
+
+string title = "";
+
+switch (employeeLevel) {
+    case 100:
+        title = "Junior Associate";
+        break;
+    case 200:
+        title = "Senior Associate";
+        break;
+    case 300:
+        title = "Manager";
+        break;
+    case 400:
+        title = "Senior Manager";
+        break;
+    default:
+        title = "Associate";
+        break;
+}
+```
+
+```c#
+// SKU = Stock Keeping Unit
+string sku = "01-MN-L";
+
+string[] product = sku.Split('-');
+
+string type = "";
+string color = "";
+string size = "";
+
+switch (product[0])
+{
+    case "01":
+        type = "Sweat shirt";
+        break;
+    case "02":
+        type = "T-Shirt";
+        break;
+    case "03":
+        type = "Sweat pants";
+        break;
+    default:
+        type = "Other";
+        break;
+}
+
+switch (product[1])
+{
+    case "BL":
+        color = "Black";
+        break;
+    case "MN":
+        color = "Maroon";
+        break;
+    default:
+        color = "White";
+        break;
+}
+
+switch (product[2])
+{
+    case "S":
+        size = "Small";
+        break;
+    case "M":
+        size = "Medium";
+        break;
+    case "L":
+        size = "Large";
+        break;
+    default:
+        size = "One Size Fits All";
+        break;
+}
+
+Console.WriteLine($"Product: {size} {color} {type}");
+```
+
+## for语句
+
+```c#
+for (int i = 0; i < 10; i++) {
+    Console.WriteLine(i);
+}
+```
+
+```c#
+string[] names = { "Alex", "Eddie", "David", "Michael" };
+for (int i = 0; i < names.Length; i++)
+    if (names[i] == "David") names[i] = "Sammy";
+
+foreach (var name in names) Console.WriteLine(name); 
+```
+
+```c#
+for (int i = 1; i < 101; i++) {
+    if ((i % 3 == 0) && (i % 5 == 0))
+        Console.WriteLine($"{i} - FizzBuzz");
+    else if (i % 3 == 0)
+        Console.WriteLine($"{i} - Fizz");
+    else if (i % 5 == 0)
+        Console.WriteLine($"{i} - Buzz");
+    else
+        Console.WriteLine($"{i}");
+}
+```
+
+## do-while语句
+
+`do-while` 语句至少循环访问一次代码块，并且可能会根据布尔表达式继续循环访问。 布尔表达式的计算结果通常取决于在代码块内生成或检索到的某个值。
+
+```c#
+// 不断生成 1 到 10 之间的随机数，直到生成数字 7。
+Random random = new Random();
+int current = 0;
+
+do {
+    current = random.Next(1, 11);
+    Console.WriteLine(current);
+} while (current != 7);
+```
+
+## while语句
+
+`while` 语句首先计算布尔表达式，只要布尔表达式的计算结果为 `true`，就会继续循环访问代码块。
+
+```c#
+Random random = new Random();
+int current = random.Next(1, 11);
+
+while (current >= 3)
+{
+    Console.WriteLine(current);
+    current = random.Next(1, 11);
+}
+Console.WriteLine($"Last number: {current}");
+// 输出: 
+// 9
+// 7
+// 5
+// Last number: 1
 ```
 
