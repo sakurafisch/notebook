@@ -1,23 +1,49 @@
-# Dates
+# datetime
 
 ## 概述
 
+The [datetime module](https://docs.python.org/3/library/datetime.html) contains a number of classes for manipulating dates and times.
+
+Date and time types:
+
+- `date` stores year, month, and day
+- `time` stores hour, minute, and second
+- `datetime` stores year, month, day, hour, minute, and second
+- `timedelta` a duration of time between two dates, times, or datetimes
+
+When naming variables follow the PEP-8 Style Guide for Python Code
+
+- [PEP-8 Style Guide](https://www.python.org/dev/peps/pep-0008/#naming-conventions)
+
+Converting from string to datetime
+
+- [strptime](https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior)
+
+## 用法示例
+
 ```python
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # print today's date
 current_date = datetime.now()
 print(current_date)
+```
+```python
+from datetime import datetime, timedelta
 
 # print yesterday's date
 one_day = timedelta(days=1)
 yesterday = current_date - one_day
 print('Yesterday was: ' + str(yesterday))
+```
+```python
+from datetime import datetime
 
 # ask a user to enter a date
 date_entered = input('Please enter a date (dd/mm/yyyy): ')
 date_entered = datetime.strptime(date_entered, '%d/%m/%Y')
-
+```
+```python
 # print the date one week from the date entered
 one_week = timedelta(weeks=1)
 one_week_later = date_entered + one_week
