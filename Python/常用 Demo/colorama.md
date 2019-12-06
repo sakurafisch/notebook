@@ -1,6 +1,10 @@
 # colorama
 
+## 概述
+
 colorama module 用于打印不同颜色的文本。
+
+## 用法示例
 
 ```python
 import colorama

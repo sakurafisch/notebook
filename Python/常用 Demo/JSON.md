@@ -9,7 +9,7 @@ JSON is built on two structures:
 
 Python includes a [json](https://docs.python.org/zh-cn/3.9/library/json.html) module which helps you encode and decode JSON.  
 
-## Create Demo
+## Create JSON Demo
 
 ### create_json_from_dict.py
 
@@ -74,7 +74,7 @@ print(staff_json)
 
 
 
-## Read Demo
+## Read JSON Demo
 
 ### read_json.py
 
