@@ -676,8 +676,435 @@ Object ob2 = in.readObject();
 
 ### The Path Class
 
+[Interface Path](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html)
+
 Java SE 7 发行版中引入的 `Path` 类是 `java.nio.file` 包的主要入口点之一。 
 
 Path 类是文件系统中路径的程序表示。 Path 对象包含用于构造路径的文件名和目录列表，并用于检查，定位和操作文件。
 
 > A Path object contains the file name and directory list used to construct the path, and is used to examine, locate, and manipulate files.
+
+#### Path 操作
+
+> Path Operations
+
+##### 创建一个 Path
+
+> Creating a Path
+
+Path实例包含用于指定文件或目录位置的信息。
+
+使用Paths（请注意复数）帮助器类中的以下get方法之一轻松创建Path对象：
+
+```java
+Path p1 = Paths.get("/tmp/foo");
+Path p2 = Paths.get(args[0]);
+Path p3 = Paths.get(URI.create("file:///Users/joe/FileTest.java"));
+```
+
+Paths.get方法是以下代码的简写：
+
+```java
+Path p4 = FileSystems.getDefault().getPath("/users/sally");
+```
+
+以下示例假设您的主目录为 / u / joe 来创建 /u/joe/logs/foo.log ，如果在Windows上，则为C：\ joe \ logs \ foo.log。
+
+##### 检索有关路径的信息
+
+> Retrieving Information about a Path
+
+```java
+Path p5 = Paths.get(System.getProperty("user.home"),"logs", "foo.log");
+```
+
+您可以将 Path 视为将这些名称元素存储为序列。 目录结构中的最高元素将位于索引 0。目录结构中的最低元素将位于索引 [n-1]，其中 n 是路径中名称元素的数量。方法可用于使用这些索引检索单个元素或路径的子序列。
+
+![Sample directory structure](https://docs.oracle.com/javase/tutorial/figures/essential/io-dirStructure.gif)
+
+以下代码段定义了一个 Path 实例，然后调用几种方法来获取有关该路径的信息：
+
+```java
+// None of these methods requires that the file corresponding
+// to the Path exists.
+// Microsoft Windows syntax
+Path path = Paths.get("C:\\home\\joe\\foo");
+
+// Solaris syntax
+Path path = Paths.get("/home/joe/foo");
+
+System.out.format("toString: %s%n", path.toString());
+System.out.format("getFileName: %s%n", path.getFileName());
+System.out.format("getName(0): %s%n", path.getName(0));
+System.out.format("getNameCount: %d%n", path.getNameCount());
+System.out.format("subpath(0,2): %s%n", path.subpath(0,2));
+System.out.format("getParent: %s%n", path.getParent());
+System.out.format("getRoot: %s%n", path.getRoot());
+```
+这是 Windows 和 Solaris OS 的输出：
+| Method Invoked | Returns in the Solaris OS | Returns in Microsoft Windows | Comment                                                      |
+| -------------- | ------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| `toString`     | `/home/joe/foo`           | `C:\home\joe\foo`            | Returns the string representation of the `Path`. If the path was created using `Filesystems.getDefault().getPath(String)` or `Paths.get` (the latter is a convenience method for `getPath`), the method performs minor syntactic cleanup. For example, in a UNIX operating system, it will correct the input string `//home/joe/foo` to `/home/joe/foo`. |
+| `getFileName`  | `foo`                     | `foo`                        | Returns the file name or the last element of the sequence of name elements. |
+| `getName(0)`   | `home`                    | `home`                       | Returns the path element corresponding to the specified index. The 0th element is the path element closest to the root. |
+| `getNameCount` | `3`                       | `3`                          | Returns the number of elements in the path.                  |
+| `subpath(0,2)` | `home/joe`                | `home\joe`                   | Returns the subsequence of the `Path` (not including a root element) as specified by the beginning and ending indexes. |
+| `getParent`    | `/home/joe`               | `\home\joe`                  | Returns the path of the parent directory.                    |
+| `getRoot`      | `/`                       | `C:\`                        | Returns the root of the path.                                |
+
+前面的示例显示了绝对路径的输出。在以下示例中，指定了相对路径：
+
+```java
+// Solaris syntax
+Path path = Paths.get("sally/bar");
+// or
+// Microsoft Windows syntax
+Path path = Paths.get("sally\\bar");
+```
+
+这是 Windows 和 Solaris OS 的输出：
+
+| Method Invoked | Returns in the Solaris OS | Returns in Microsoft Windows |
+| -------------- | ------------------------- | ---------------------------- |
+| `toString`     | `sally/bar`               | `sally\bar`                  |
+| `getFileName`  | `bar`                     | `bar`                        |
+| `getName(0)`   | `sally`                   | `sally`                      |
+| `getNameCount` | `2`                       | `2`                          |
+| `subpath(0,1)` | `sally`                   | `sally`                      |
+| `getParent`    | `sally`                   | `sally`                      |
+| `getRoot`      | `null`                    | `null`                       |
+
+##### 从路径中删除冗余
+
+> Removing Redundancies From a Path
+
+以下是包括冗余的示例：
+
+```java
+/home/./joe/foo
+/home/sally/../joe/foo
+```
+
+规范化方法将删除所有冗余元素，其中包括任何  `.`  和  `..` 。前面的两个示例均规范化为 `/ home / joe / foo` 。
+
+在第二个示例中，如果 `sally` 是符号链接（symbolic link），则删除 `sally/..` 可能会导致路径不再找到目标文件。
+
+要在确保结果找到正确文件的同时清理路径，可以使用接下来介绍的 `toRealPath` 方法。
+
+##### 转换路径
+
+> Converting a Path
+
+可以使用三种方法来转换路径。
+
+1. `toUri` ：将路径转换为可以从浏览器打开的字符串。
+
+2. `toAbsolutePath` ：将路径转换为绝对路径。
+
+3.  `toRealPath` 方法返回现有文件的真实路径。
+    
+    `toRealPath`  方法一次执行多项操作：
+    
+    - 如果将 `true` 传递给此方法，并且文件系统支持符号链接，则此方法将解析路径中的所有符号链接。
+    - 返回绝对路径。
+    - 删除冗余元素。
+    
+    如果文件不存在或无法访问，则 `toRealPath` 方法将引发异常。
+
+```java
+// toUri 用法示例
+Path p1 = Paths.get("/home/logfile");
+// Result is file:///home/logfile
+System.out.format("%s%n", p1.toUri());
+```
+```java
+// toAbsolutePath 用法示例
+// 文件名为 FileTest.java
+public class FileTest {
+    public static void main(String[] args) {
+
+        if (args.length < 1) {
+            System.out.println("usage: FileTest file");
+            System.exit(-1);
+        }
+
+        Path inputPath = Paths.get(args[0]);  // 把输入字符串转换为 Path 对象
+
+        Path fullPath = inputPath.toAbsolutePath();  // 把 Path 对象的路径转换为绝对路径
+    }
+}
+```
+
+```java
+// toRealPath 用法示例
+try {
+    Path fp = path.toRealPath();
+} catch (NoSuchFileException x) {
+    System.err.format("%s: no such" + " file or directory%n", path);
+    // Logic for case when file doesn't exist.
+} catch (IOException x) {
+    System.err.format("%s%n", x);
+    // Logic for other sort of file error.
+}
+```
+
+##### 连接两个 Path
+
+> Joining Two Paths
+
+使用 `resolve` 方法合并路径。
+
+```java
+// Solaris
+Path p1 = Paths.get("/home/joe/foo");
+// Result is /home/joe/foo/bar
+System.out.format("%s%n", p1.resolve("bar"));
+
+// or
+
+// Microsoft Windows
+Path p1 = Paths.get("C:\\home\\joe\\foo");
+// Result is C:\home\joe\foo\bar
+System.out.format("%s%n", p1.resolve("bar"));
+```
+
+将绝对路径传递给 `resolve` 方法将返回传入的路径：
+
+```java
+// Result is /home/joe
+Paths.get("foo").resolve("/home/joe");
+```
+
+##### 在两条路径之间创建一条路径
+
+此方法构造一条路径，该路径从原始路径开始，并在传入路径的指定位置处终止。 新路径是相对于原始路径的。
+
+```java
+Path p1 = Paths.get("home");
+Path p3 = Paths.get("home/sally/bar");
+
+Path p1_to_p3 = p1.relativize(p3);  // Result is sally/bar
+
+Path p3_to_p1 = p3.relativize(p1);  // Result is ../..
+```
+
+如果只有一个路径包含 root 元素，则无法构造相对路径。 如果两个路径都包含 root 元素，则构造相对路径的能力取决于系统。
+
+递归 [`Copy`](https://docs.oracle.com/javase/tutorial/essential/io/examples/Copy.java) 示例使用相对化和求解方法：
+
+```java
+// Copy.java
+import java.nio.file.*;
+import static java.nio.file.StandardCopyOption.*;
+import java.nio.file.attribute.*;
+import static java.nio.file.FileVisitResult.*;
+import java.io.IOException;
+import java.util.*;
+
+/**
+ * Sample code that copies files in a similar manner to the cp(1) program.
+ */
+
+public class Copy {
+
+    /**
+     * Returns {@code true} if okay to overwrite a  file ("cp -i")
+     */
+    static boolean okayToOverwrite(Path file) {
+        String answer = System.console().readLine("overwrite %s (yes/no)? ", file);
+        return (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes"));
+    }
+
+    /**
+     * Copy source file to target location. If {@code prompt} is true then
+     * prompt user to overwrite target if it exists. The {@code preserve}
+     * parameter determines if file attributes should be copied/preserved.
+     */
+    static void copyFile(Path source, Path target, boolean prompt, boolean preserve) {
+        CopyOption[] options = (preserve) ?
+            new CopyOption[] { COPY_ATTRIBUTES, REPLACE_EXISTING } :
+            new CopyOption[] { REPLACE_EXISTING };
+        if (!prompt || Files.notExists(target) || okayToOverwrite(target)) {
+            try {
+                Files.copy(source, target, options);
+            } catch (IOException x) {
+                System.err.format("Unable to copy: %s: %s%n", source, x);
+            }
+        }
+    }
+
+    /**
+     * A {@code FileVisitor} that copies a file-tree ("cp -r")
+     */
+    static class TreeCopier implements FileVisitor<Path> {
+        private final Path source;
+        private final Path target;
+        private final boolean prompt;
+        private final boolean preserve;
+
+        TreeCopier(Path source, Path target, boolean prompt, boolean preserve) {
+            this.source = source;
+            this.target = target;
+            this.prompt = prompt;
+            this.preserve = preserve;
+        }
+
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+            // before visiting entries in a directory we copy the directory
+            // (okay if directory already exists).
+            CopyOption[] options = (preserve) ?
+                new CopyOption[] { COPY_ATTRIBUTES } : new CopyOption[0];
+
+            Path newdir = target.resolve(source.relativize(dir));
+            try {
+                Files.copy(dir, newdir, options);
+            } catch (FileAlreadyExistsException x) {
+                // ignore
+            } catch (IOException x) {
+                System.err.format("Unable to create: %s: %s%n", newdir, x);
+                return SKIP_SUBTREE;
+            }
+            return CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+            copyFile(file, target.resolve(source.relativize(file)),
+                     prompt, preserve);
+            return CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+            // fix up modification time of directory when done
+            if (exc == null && preserve) {
+                Path newdir = target.resolve(source.relativize(dir));
+                try {
+                    FileTime time = Files.getLastModifiedTime(dir);
+                    Files.setLastModifiedTime(newdir, time);
+                } catch (IOException x) {
+                    System.err.format("Unable to copy all attributes to: %s: %s%n", newdir, x);
+                }
+            }
+            return CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) {
+            if (exc instanceof FileSystemLoopException) {
+                System.err.println("cycle detected: " + file);
+            } else {
+                System.err.format("Unable to copy: %s: %s%n", file, exc);
+            }
+            return CONTINUE;
+        }
+    }
+
+    static void usage() {
+        System.err.println("java Copy [-ip] source... target");
+        System.err.println("java Copy -r [-ip] source-dir... target");
+        System.exit(-1);
+    }
+
+    public static void main(String[] args) throws IOException {
+        boolean recursive = false;
+        boolean prompt = false;
+        boolean preserve = false;
+
+        // process options
+        int argi = 0;
+        while (argi < args.length) {
+            String arg = args[argi];
+            if (!arg.startsWith("-"))
+                break;
+            if (arg.length() < 2)
+                usage();
+            for (int i=1; i<arg.length(); i++) {
+                char c = arg.charAt(i);
+                switch (c) {
+                    case 'r' : recursive = true; break;
+                    case 'i' : prompt = true; break;
+                    case 'p' : preserve = true; break;
+                    default : usage();
+                }
+            }
+            argi++;
+        }
+
+        // remaining arguments are the source files(s) and the target location
+        int remaining = args.length - argi;
+        if (remaining < 2)
+            usage();
+        Path[] source = new Path[remaining-1];
+        int i=0;
+        while (remaining > 1) {
+            source[i++] = Paths.get(args[argi++]);
+            remaining--;
+        }
+        Path target = Paths.get(args[argi]);
+
+        // check if target is a directory
+        boolean isDir = Files.isDirectory(target);
+
+        // copy each source file/directory to target
+        for (i=0; i<source.length; i++) {
+            Path dest = (isDir) ? target.resolve(source[i].getFileName()) : target;
+
+            if (recursive) {
+                // follow links when copying files
+                EnumSet<FileVisitOption> opts = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
+                TreeCopier tc = new TreeCopier(source[i], dest, prompt, preserve);
+                Files.walkFileTree(source[i], opts, Integer.MAX_VALUE, tc);
+            } else {
+                // not recursive so source must not be a directory
+                if (Files.isDirectory(source[i])) {
+                    System.err.format("%s: is a directory%n", source[i]);
+                    continue;
+                }
+                copyFile(source[i], dest, prompt, preserve);
+            }
+        }
+    }
+}
+```
+
+##### 比较两条路径
+
+
+> Comparing Two Paths
+
+`Path` 类支持 [`equals`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html#equals-java.lang.Object-)，能够测试两条路径是否相等； [`startsWith`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html#startsWith-java.nio.file.Path-) 和 [`endsWith`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html#endsWith-java.nio.file.Path-) 方法能够测试路径是以特定字符串开头还是结尾。
+
+```java
+Path path = ...;
+Path otherPath = ...;
+Path beginning = Paths.get("/home");
+Path ending = Paths.get("foo");
+
+if (path.equals(otherPath)) {
+    // equality logic here
+} else if (path.startsWith(beginning)) {
+    // path begins with "/home"
+} else if (path.endsWith(ending)) {
+    // path ends with "foo"
+}
+```
+
+`Path` 类实现了 [`Iterable`](https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html) 接口。迭代器（iterator）方法返回一个对象，可以迭代路径中的名称元素。返回的第一个元素是最接近目录树根目录的元素。
+
+```java
+//  以下代码段遍历路径，打印每个 name 元素：
+Path path = ...;
+for (Path name: path) {
+    System.out.println(name);
+}
+```
+
+`Path` 类还实现 [`Comparable`](https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html) 接口。 可以使用 `compareTo` 来比较 `Path` 对象，这对于排序很有用。
+
+也可以将 Path 对象放入集合中。详见 [Collections](https://docs.oracle.com/javase/tutorial/collections/index.html) 。
+
+要验证两个 `Path` 对象是否位于同一文件时，可以使用 `isSameFile` 方法。详见：[Checking Whether Two Paths Locate the Same File](https://docs.oracle.com/javase/tutorial/essential/io/check.html#same) 。
+
+#### File Operations
