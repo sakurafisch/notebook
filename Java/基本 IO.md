@@ -684,11 +684,11 @@ Path 类是文件系统中路径的程序表示。 Path 对象包含用于构造
 
 > A Path object contains the file name and directory list used to construct the path, and is used to examine, locate, and manipulate files.
 
-#### Path 操作
+### Path 操作
 
 > Path Operations
 
-##### 创建一个 Path
+#### 创建一个 Path
 
 > Creating a Path
 
@@ -710,7 +710,7 @@ Path p4 = FileSystems.getDefault().getPath("/users/sally");
 
 以下示例假设您的主目录为 / u / joe 来创建 /u/joe/logs/foo.log ，如果在Windows上，则为C：\ joe \ logs \ foo.log。
 
-##### 检索有关路径的信息
+#### 检索有关路径的信息
 
 > Retrieving Information about a Path
 
@@ -775,7 +775,7 @@ Path path = Paths.get("sally\\bar");
 | `getParent`    | `sally`                   | `sally`                      |
 | `getRoot`      | `null`                    | `null`                       |
 
-##### 从路径中删除冗余
+#### 从路径中删除冗余
 
 > Removing Redundancies From a Path
 
@@ -792,7 +792,7 @@ Path path = Paths.get("sally\\bar");
 
 要在确保结果找到正确文件的同时清理路径，可以使用接下来介绍的 `toRealPath` 方法。
 
-##### 转换路径
+#### 转换路径
 
 > Converting a Path
 
@@ -802,7 +802,7 @@ Path path = Paths.get("sally\\bar");
 
 2. `toAbsolutePath` ：将路径转换为绝对路径。
 
-3.  `toRealPath` 方法返回现有文件的真实路径。
+3.  `toRealPath`： 方法返回现有文件的真实路径。
     
     `toRealPath`  方法一次执行多项操作：
     
@@ -849,7 +849,7 @@ try {
 }
 ```
 
-##### 连接两个 Path
+#### 连接两个 Path
 
 > Joining Two Paths
 
@@ -876,7 +876,7 @@ System.out.format("%s%n", p1.resolve("bar"));
 Paths.get("foo").resolve("/home/joe");
 ```
 
-##### 在两条路径之间创建一条路径
+#### 在两条路径之间创建一条路径
 
 此方法构造一条路径，该路径从原始路径开始，并在传入路径的指定位置处终止。 新路径是相对于原始路径的。
 
@@ -1070,7 +1070,7 @@ public class Copy {
 }
 ```
 
-##### 比较两条路径
+#### 比较两条路径
 
 
 > Comparing Two Paths
@@ -1108,4 +1108,103 @@ for (Path name: path) {
 
 要验证两个 `Path` 对象是否位于同一文件时，可以使用 `isSameFile` 方法。详见：[Checking Whether Two Paths Locate the Same File](https://docs.oracle.com/javase/tutorial/essential/io/check.html#same) 。
 
-#### File Operations
+### File Operations
+
+可能有用的文档：
+
+- [FileSystemException](https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystemException.html)
+
+`File` 类是 `java.nio.file` 包的另一个主要入口点。 此类提供了一组丰富的静态方法，用于读取，写入和操作文件和目录。 `File` 方法对 `Path` 对象的实例起作用。 
+
+#### Link Awareness
+
+`File` 类是 “link aware” 的。每个 `File` 方法要么检测遇到符号链接时的操作，要么提供一个用于配置遇到符号链接时的行为的选项。
+
+> The `Files` class is "link aware." Every `Files` method either detects what to do when a symbolic link is encountered, or it provides an option enabling you to configure the behavior when a symbolic link is encountered.
+
+### 检查文件或目录
+
+> Checking a File or Directory
+
+#### 检查文件或目录是否存在
+
+> Verifying the Existence of a File or Directory
+
+使用 [`exists(Path, LinkOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#exists-java.nio.file.Path-java.nio.file.LinkOption...-) 或  [`notExists(Path, LinkOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#notExists-java.nio.file.Path-java.nio.file.LinkOption...-) 方法检查文件或目录是否存在。
+
+`!Files.exists(path)` 不等同于 `Files.notExists(path)`
+
+当验证文件是否存在时，可能会出现三个结果：
+
+1. 文件存在。
+2. 文件不存在。
+3. 文件的存在性未知。（当程序无权访问该文件时，可能会出现此结果。）
+
+如果 `exists` 和 `notExists` 都返回 `false`, 那么文件的存在性将无法验证。
+
+#### 检查文件的可访问性
+
+> Checking File Accessibility
+
+使用  [`isReadable(Path)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#isReadable-java.nio.file.Path-) ， [`isWritable(Path)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#isWritable-java.nio.file.Path-) ，或 [`isExecutable(Path)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#isExecutable-java.nio.file.Path-) 方法检查文件的可访问性。
+
+下面的代码片段验证了特定文件的存在以及该程序具有执行该文件的能力。
+
+```java
+Path file = ...;
+boolean isRegularExecutableFile = Files.isRegularFile(file) &
+         Files.isReadable(file) & Files.isExecutable(file);
+```
+
+#### 检查两个 Path 对象是否指向同一个文件
+
+> Checking Whether Two Paths Locate the Same File
+
+`isSameFile(Path，Path)`方法比较两个路径以确定它们是否在文件系统上指向相同的文件。
+
+```java
+Path p1 = ...;
+Path p2 = ...;
+
+if (Files.isSameFile(p1, p2)) {
+    // Logic when the paths locate the same file
+}
+```
+
+### 删除文件或目录
+
+> Deleting a File or Directory
+
+可以删除文件，目录或链接。
+
+使用符号链接时，链接将被删除，而不是链接的目标。对于目录，目录必须为空，否则删除失败。
+
+`File` 类提供了两种删除方法。
+
+- [`delete(Path)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#delete-java.nio.file.Path-) 方法用于删除文件，如果删除失败将引发异常。例如，如果文件不存在，则会引发NoSuchFileException。
+
+```java
+// delete(Path) 用法示例
+try {
+    Files.delete(path);
+} catch (NoSuchFileException x) {
+    System.err.format("%s: no such" + " file or directory%n", path);
+} catch (DirectoryNotEmptyException x) {
+    System.err.format("%s not empty%n", path);
+} catch (IOException x) {
+    // File permission problems are caught here.
+    System.err.println(x);
+}
+```
+
+- [`deleteIfExists(Path)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#deleteIfExists-java.nio.file.Path-) 方法也会删除文件，但不会引发任何异常。 当有多个线程删除文件并且不想仅因为一个线程先这样做而引发异常时，静默失败很有用。
+
+### 复制文件或目录
+
+> Copying a File or Directory
+
+您可以使用 [`copy(Path, Path, CopyOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#copy-java.nio.file.Path-java.nio.file.Path-java.nio.file.CopyOption...-) 方法复制文件或目录。如果目标文件存在，则复制失败，除非指定了 `REPLACE_EXISTING` 选项。
+
+目录可以被复制。但是，目录内的文件不会被复制，因此即使原始目录包含文件，新目录也为空。
+
+复制符号链接时，将会复制所链接的目标。如果要复制链接本身而不是复制链接的内容，请指定 `NOFOLLOW_LINKS` 或 `REPLACE_EXISTING` 选项。

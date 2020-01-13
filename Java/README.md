@@ -128,6 +128,66 @@ Lambda 允许把函数作为一个方法的参数。
 
 lambda 表达式只能引用final 或 effectively final 的外层局部变量，这就是说不能在 lambda 内部修改定义在域外的局部变量，否则会编译错误。
 
+## 方法链接
+
+> Method Chaining
+
+每个方法都返回一个对象，使调用可以在单个语句中链接在一起，而无需使用变量来存储中间结果。
+
+> Each method returns an object, allowing the calls to be chained together in a single statement without requiring variables to store the intermediate results.
+
+```java
+String value = Charset.defaultCharset().decode(buf).toString();
+UserPrincipal group =
+    file.getFileSystem().getUserPrincipalLookupService().
+         lookupPrincipalByName("me");
+```
+
+该技术可生成紧凑的代码，避免声明不需要的临时变量。
+
+## 任意参数个数
+
+> Arbitrary Number of Arguments
+
+参考 [Arbitrary Number of Arguments](https://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html#varargs)
+
+`varargs` 的构造将任意数量的值传递给方法。 当不知道将多少种特定类型的参数传递给方法时，可以使用 `varargs` 。 这是手动创建数组的方式。
+
+使用 `varargs` 时，要在最后一个参数的类型后加上省略号（三个点，...），然后是空格和参数名称。然后可以使用任意数量的该参数（包括无）调用该方法。
+
+```java
+// 在方法内部，corners 被视为数组。
+// 可以使用数组或参数序列调用该方法。
+// 在任何一种情况下，方法主体中的代码均会将参数视为数组。
+public Polygon polygonFrom(Point... corners) {
+    int numberOfSides = corners.length;
+    double squareOfSide1, lengthOfSide1;
+    squareOfSide1 = (corners[1].x - corners[0].x)
+                     * (corners[1].x - corners[0].x) 
+                     + (corners[1].y - corners[0].y)
+                     * (corners[1].y - corners[0].y);
+    lengthOfSide1 = Math.sqrt(squareOfSide1);
+
+    // more method body code follows that creates and returns a 
+    // polygon connecting the Points
+}
+```
+
+通常会在打印方法中看到 `varargs` 。例如，此 `printf` 方法：
+
+```java
+public PrintStream printf(String format, Object... args)
+```
+
+允许打印任意数量的对象。可以这样调用：
+
+```java
+System.out.printf("%s: %d, %s%n", name, idnum, address);
+// 或者
+System.out.printf("%s: %d, %s, %s, %s%n", name, idnum, address, phone, email);
+// 或使用其他数量的参数
+```
+
 ## 方法引用
 
 [方法引用](https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html)
@@ -323,6 +383,29 @@ import static java.lang.Math.*;  // 导入全部常量和静态方法
 ### 源文件组织方法
 
 详见 [Managing Source and Class Files](https://docs.oracle.com/javase/tutorial/java/package/managingfiles.html)
+
+## Glob 语法
+
+详见 `FileSystem` 类中的 [`getPathMatcher`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/FileSystem.html#getPathMatcher-java.lang.String-) 方法。
+
+`glob` 模式指定一个 `string` ，并且与其他字符串（例如目录或文件名）匹配。
+
+匹配规则：
+
+- 星号 `*` 匹配任意数量的字符（包括无字符）。
+- 两个星号 `**` 的作用类似于 `*` ，但跨越目录边界。此语法通常用于匹配完整路径。
+- 问号 `？`恰好匹配一个字符。
+- 花括号 `{}` 指定子模式的集合。例如：
+  - `{sun,moon,stars}` 匹配 "sun", "moon" 或者 "stars"。
+  - `{temp*,tmp*}` 匹配所有以 "temp" 或者 "tmp" 开头的字符串。
+- 方括号 `[]` 表示一组单个字符；或者，如果使用连字符（-），则表示一系列字符。
+  - `[aeiou]` 匹配任何小写的元音。
+  - `[0-9]` 匹配任何数字。
+  - `[A-Z]` 匹配任何大写字母。
+  - `[a-z,A-Z]` 匹配任何大写或小写字母。
+  - 在方括号内, `*`, `?` 和 `\` 自己和自己匹配。
+- 所有其他字符和它自身匹配。
+- 要匹配 `*` 、`?` 或其他特殊字符，可以使用反斜杠字符 `\` 对其进行转义。例如：`\\` 匹配单个反斜杠，而 `\？` 匹配问号。
 
 ## Exception 摘要
 
