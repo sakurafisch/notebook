@@ -742,6 +742,7 @@ System.out.format("getParent: %s%n", path.getParent());
 System.out.format("getRoot: %s%n", path.getRoot());
 ```
 这是 Windows 和 Solaris OS 的输出：
+
 | Method Invoked | Returns in the Solaris OS | Returns in Microsoft Windows | Comment                                                      |
 | -------------- | ------------------------- | ---------------------------- | ------------------------------------------------------------ |
 | `toString`     | `/home/joe/foo`           | `C:\home\joe\foo`            | Returns the string representation of the `Path`. If the path was created using `Filesystems.getDefault().getPath(String)` or `Paths.get` (the latter is a convenience method for `getPath`), the method performs minor syntactic cleanup. For example, in a UNIX operating system, it will correct the input string `//home/joe/foo` to `/home/joe/foo`. |
