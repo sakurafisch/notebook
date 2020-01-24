@@ -22,6 +22,7 @@ go get -u github.com/go-delve/delve/cmd/dlv
 go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 ```
 
+## 一键安装脚本
 ```shell
 # 一键安装 VS Code 插件&工具
 echo on
