@@ -47,6 +47,7 @@ go get -u github.com/go-delve/delve/cmd/dlv
 go get -u github.com/stamblerre/gocode
 go get -u golang.org/x/lint/golint
 go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+go get -u golang.org/x/tools/cmd/goimports
 pause
 exit
 ```
