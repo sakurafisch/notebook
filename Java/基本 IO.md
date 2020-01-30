@@ -1203,8 +1203,251 @@ try {
 
 > Copying a File or Directory
 
-您可以使用 [`copy(Path, Path, CopyOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#copy-java.nio.file.Path-java.nio.file.Path-java.nio.file.CopyOption...-) 方法复制文件或目录。如果目标文件存在，则复制失败，除非指定了 `REPLACE_EXISTING` 选项。
+可以使用 [`copy(Path, Path, CopyOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#copy-java.nio.file.Path-java.nio.file.Path-java.nio.file.CopyOption...-) 方法复制文件或目录。如果目标文件存在，则复制失败，除非指定了 `REPLACE_EXISTING` 选项。
 
 目录可以被复制。但是，目录内的文件不会被复制，因此即使原始目录包含文件，新目录也为空。
 
 复制符号链接时，将会复制所链接的目标。如果要复制链接本身而不是复制链接的内容，请指定 `NOFOLLOW_LINKS` 或 `REPLACE_EXISTING` 选项。
+
+此方法采用 varargs 参数。支持以下 `StandardCopyOption` 和 `LinkOption` 枚举：
+
+- `REPLACE_EXISTING` 即使目标文件已经存在，也执行复制。
+  -  如果目标是符号链接，则复制链接本身（而不是链接的目标）。
+  -  如果目标是非空目录，则复制失败并抛出FileAlreadyExistsException 异常。
+- `COPY_ATTRIBUTES` 将与文件关联的属性复制到目标文件。
+  - 所支持的属性取决于文件系统和平台
+  - 跨平台支持上次修改时间。
+
+- `NOFOLLOW_LINKS` 不遵循符号链接。
+  - 如果要复制的文件是符号链接，则复制该链接（而不是链接的目标）。
+
+```java
+// 复制文件示例
+import static java.nio.file.StandardCopyOption.*;
+...
+Files.copy(source, target, REPLACE_EXISTING);
+```
+
+[`copy(InputStream, Path, CopyOptions...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#copy-java.io.InputStream-java.nio.file.Path-java.nio.file.CopyOption...-) 方法可用于将所有字节从输入流复制到文件。
+
+ [`copy(Path, OutputStream)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#copy-java.nio.file.Path-java.io.OutputStream-) 方法可用于将所有字节从文件复制到输出流。
+
+```java
+// Copy.java
+// 使用 copy 和 Files.walkFileTree 方法来支持递归复制
+import java.nio.file.*;
+import static java.nio.file.StandardCopyOption.*;
+import java.nio.file.attribute.*;
+import static java.nio.file.FileVisitResult.*;
+import java.io.IOException;
+import java.util.*;
+
+/**
+ * Sample code that copies files in a similar manner to the cp(1) program.
+ */
+
+public class Copy {
+
+    /**
+     * Returns {@code true} if okay to overwrite a  file ("cp -i")
+     */
+    static boolean okayToOverwrite(Path file) {
+        String answer = System.console().readLine("overwrite %s (yes/no)? ", file);
+        return (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes"));
+    }
+
+    /**
+     * Copy source file to target location. If {@code prompt} is true then
+     * prompt user to overwrite target if it exists. The {@code preserve}
+     * parameter determines if file attributes should be copied/preserved.
+     */
+    static void copyFile(Path source, Path target, boolean prompt, boolean preserve) {
+        CopyOption[] options = (preserve) ?
+            new CopyOption[] { COPY_ATTRIBUTES, REPLACE_EXISTING } :
+            new CopyOption[] { REPLACE_EXISTING };
+        if (!prompt || Files.notExists(target) || okayToOverwrite(target)) {
+            try {
+                Files.copy(source, target, options);
+            } catch (IOException x) {
+                System.err.format("Unable to copy: %s: %s%n", source, x);
+            }
+        }
+    }
+
+    /**
+     * A {@code FileVisitor} that copies a file-tree ("cp -r")
+     */
+    static class TreeCopier implements FileVisitor<Path> {
+        private final Path source;
+        private final Path target;
+        private final boolean prompt;
+        private final boolean preserve;
+
+        TreeCopier(Path source, Path target, boolean prompt, boolean preserve) {
+            this.source = source;
+            this.target = target;
+            this.prompt = prompt;
+            this.preserve = preserve;
+        }
+
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+            // before visiting entries in a directory we copy the directory
+            // (okay if directory already exists).
+            CopyOption[] options = (preserve) ?
+                new CopyOption[] { COPY_ATTRIBUTES } : new CopyOption[0];
+
+            Path newdir = target.resolve(source.relativize(dir));
+            try {
+                Files.copy(dir, newdir, options);
+            } catch (FileAlreadyExistsException x) {
+                // ignore
+            } catch (IOException x) {
+                System.err.format("Unable to create: %s: %s%n", newdir, x);
+                return SKIP_SUBTREE;
+            }
+            return CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+            copyFile(file, target.resolve(source.relativize(file)),
+                     prompt, preserve);
+            return CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+            // fix up modification time of directory when done
+            if (exc == null && preserve) {
+                Path newdir = target.resolve(source.relativize(dir));
+                try {
+                    FileTime time = Files.getLastModifiedTime(dir);
+                    Files.setLastModifiedTime(newdir, time);
+                } catch (IOException x) {
+                    System.err.format("Unable to copy all attributes to: %s: %s%n", newdir, x);
+                }
+            }
+            return CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) {
+            if (exc instanceof FileSystemLoopException) {
+                System.err.println("cycle detected: " + file);
+            } else {
+                System.err.format("Unable to copy: %s: %s%n", file, exc);
+            }
+            return CONTINUE;
+        }
+    }
+
+    static void usage() {
+        System.err.println("java Copy [-ip] source... target");
+        System.err.println("java Copy -r [-ip] source-dir... target");
+        System.exit(-1);
+    }
+
+    public static void main(String[] args) throws IOException {
+        boolean recursive = false;
+        boolean prompt = false;
+        boolean preserve = false;
+
+        // process options
+        int argi = 0;
+        while (argi < args.length) {
+            String arg = args[argi];
+            if (!arg.startsWith("-"))
+                break;
+            if (arg.length() < 2)
+                usage();
+            for (int i=1; i<arg.length(); i++) {
+                char c = arg.charAt(i);
+                switch (c) {
+                    case 'r' : recursive = true; break;
+                    case 'i' : prompt = true; break;
+                    case 'p' : preserve = true; break;
+                    default : usage();
+                }
+            }
+            argi++;
+        }
+
+        // remaining arguments are the source files(s) and the target location
+        int remaining = args.length - argi;
+        if (remaining < 2)
+            usage();
+        Path[] source = new Path[remaining-1];
+        int i=0;
+        while (remaining > 1) {
+            source[i++] = Paths.get(args[argi++]);
+            remaining--;
+        }
+        Path target = Paths.get(args[argi]);
+
+        // check if target is a directory
+        boolean isDir = Files.isDirectory(target);
+
+        // copy each source file/directory to target
+        for (i=0; i<source.length; i++) {
+            Path dest = (isDir) ? target.resolve(source[i].getFileName()) : target;
+
+            if (recursive) {
+                // follow links when copying files
+                EnumSet<FileVisitOption> opts = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
+                TreeCopier tc = new TreeCopier(source[i], dest, prompt, preserve);
+                Files.walkFileTree(source[i], opts, Integer.MAX_VALUE, tc);
+            } else {
+                // not recursive so source must not be a directory
+                if (Files.isDirectory(source[i])) {
+                    System.err.format("%s: is a directory%n", source[i]);
+                    continue;
+                }
+                copyFile(source[i], dest, prompt, preserve);
+            }
+        }
+    }
+}
+```
+
+### 移动文件或目录
+
+> Moving a File or Directory
+
+可以使用 [`move(Path, Path, CopyOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#move-java.nio.file.Path-java.nio.file.Path-java.nio.file.CopyOption...-)方法移动文件或目录。如果目标文件存在，则移动将失败，除非指定了 `REPLACE_EXISTING` 选项。
+
+空目录可以移动。 如果目录不为空，则可以在不移动目录内容的情况下进行移动。 在 UNIX 系统上，在同一分区内移动目录通常包括重命名目录； 在这种情况下，即使目录包含文件，此方法也可以使用。
+
+此方法采用 varargs 参数，支持以下 `StandardCopyOption` 枚举：
+
+- `REPLACE_EXISTING` 即使目标文件已经存在也执行移动。 
+  - 如果目标是符号链接，则将替换符号链接，但是它所指向的内容不受影响。
+- `ATOMIC_MOVE` 将移动作为原子文件操作执行。
+  -  如果文件系统不支持原子移动，则会引发异常。
+  - 可以将文件移动到目录中，并确保监视目录的所有进程都可以访问完整的文件。
+
+```java
+// 移动文件示例
+import static java.nio.file.StandardCopyOption.*;
+...
+Files.move(source, target, REPLACE_EXISTING);
+```
+
+### 管理元数据
+
+> Managing Metadata 
+
+元数据的定义是 “关于其他数据的数据”。文件系统的元数据通常称为其文件属性。 File 类包含可用于获取文件的单个属性或设置属性的方法。
+
+| Methods                                                      | Comment                                                      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [`size(Path)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#size-java.nio.file.Path-) | Returns the size of the specified file in bytes.             |
+| [`isDirectory(Path, LinkOption)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#isDirectory-java.nio.file.Path-java.nio.file.LinkOption...-) | Returns true if the specified `Path` locates a file that is a directory. |
+| [`isRegularFile(Path, LinkOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#isRegularFile-java.nio.file.Path-java.nio.file.LinkOption...-) | Returns true if the specified `Path` locates a file that is a regular file. |
+| [`isSymbolicLink(Path)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#isSymbolicLink-java.nio.file.Path-) | Returns true if the specified `Path` locates a file that is a symbolic link. |
+| [`isHidden(Path)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#isHidden-java.nio.file.Path-) | Returns true if the specified `Path` locates a file that is considered hidden by the file system. |
+| [`getLastModifiedTime(Path, LinkOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#getLastModifiedTime-java.nio.file.Path-java.nio.file.LinkOption...-) [`setLastModifiedTime(Path, FileTime)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#setLastModifiedTime-java.nio.file.Path-java.nio.file.attribute.FileTime-) | Returns or sets the specified file's last modified time.     |
+| [`getOwner(Path, LinkOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#getOwner-java.nio.file.Path-java.nio.file.LinkOption...-) [`setOwner(Path, UserPrincipal)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#setOwner-java.nio.file.Path-java.nio.file.attribute.UserPrincipal-) | Returns or sets the owner of the file.                       |
+| [`getPosixFilePermissions(Path, LinkOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#getPosixFilePermissions-java.nio.file.Path-java.nio.file.LinkOption...-) [`setPosixFilePermissions(Path, Set)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#setPosixFilePermissions-java.nio.file.Path-java.util.Set-) | Returns or sets a file's POSIX file permissions.             |
+| [`getAttribute(Path, String, LinkOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#getAttribute-java.nio.file.Path-java.lang.String-java.nio.file.LinkOption...-) [`setAttribute(Path, String, Object, LinkOption...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#setAttribute-java.nio.file.Path-java.lang.String-java.lang.Object-java.nio.file.LinkOption...-) | Returns or sets the value of a file attribute.               |
+
