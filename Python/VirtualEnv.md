@@ -49,3 +49,10 @@ pip install colorma  # Install an individual package
 pip install -r requirments.txt  # Install from a list of packages
 ```
 
+## 使用清华大学镜像源
+
+可以在使用 pip 的时候加参数 -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+```cmd
+pip install colorma -i https://pypi.tuna.tsinghua.edu.cn/simple
+```
