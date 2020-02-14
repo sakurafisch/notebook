@@ -20,7 +20,14 @@ continue for          import  return       var
 
 ## 变量声明
 
-语法为 `varName := value` 
+```go
+var variableName type  // 定义一个名称为“variableName”，类型为"type"的变量
+var vname1, vname2, vname3 type  // 定义三个类型都是“type”的变量
+var variableName type = value  // 初始化“variableName”的变量为“value”值，类型是“type”
+var vname1, vname2, vname3 type= v1, v2, v3  // 定义三个类型都是"type"的变量,并分别初始化
+```
+
+简短声明语法为 `varName := value` ，只能用在函数内部。
 
 > Variables declared without a corresponding initialization are *zero-valued*. For example, the zero value for an `int` is `0`.
 
@@ -30,4 +37,8 @@ continue for          import  return       var
 var a int
 fmt.Println(a)  // 0
 ```
+
+`_`（下划线）是个特殊的变量名，任何赋予它的值都会被丢弃。
+
+已声明但未使用的变量会在编译阶段报错。
 
