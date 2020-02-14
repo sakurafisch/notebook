@@ -1,6 +1,4 @@
-# Golang
-
-
+# Golang 笔记
 
 ## 在本地启动文档
 
@@ -10,7 +8,15 @@
 > 
 > 浏览 http://localhost:8000/pkg/testing/ 将会看到一些有用的内容。
 
+## 关键字速览
 
+```
+break    default      func    interface    select
+case     defer        go      map          struct
+chan     else         goto    package      switch
+const    fallthrough  if      range        type
+continue for          import  return       var
+```
 
 ## 变量声明
 
