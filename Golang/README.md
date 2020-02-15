@@ -454,7 +454,7 @@ Go程序会自动调用`init()`和`main()`，所以你不需要在任何地方�
 
 ![img](https://github.com/astaxie/build-web-application-with-golang/raw/master/zh/images/2.3.init.png?raw=true)
 
-### import
+## import
 
 我们在写Go代码的时候经常用到import这个命令用来导入包文件，而我们经常看到的方式参考如下：
 
