@@ -301,3 +301,67 @@ float64 0 //长度为 8 byte
 bool    false
 string  ""
 ```
+
+## if
+
+Go里面`if`条件判断语句中不需要括号
+
+Go的`if`还条件判断语句里面允许声明一个变量，这个变量的作用域只能在该条件逻辑块内。
+
+## goto
+
+用`goto`跳转到必须在当前函数内定义的标签。标签名是大小写敏感的。
+
+## for
+
+```go
+for expression1; expression2; expression3 {
+	//...
+}
+```
+
+其中`expression1`和`expression3`是变量声明或者函数调用返回值之类的，`expression2`是用来条件判断，`expression1`在循环开始之前调用，`expression3`在每轮循环结束之时调用。
+
+有些时候需要进行多个赋值操作，由于Go里面没有`,`操作符，那么可以使用平行赋值`i, j = i+1, j-1`
+
+忽略`expression1`和`expression3 `就是`while`的功能
+
+`break`操作是跳出当前循环，`continue`是跳过本次循环。
+
+`for`配合`range`可以用于读取`slice`和`map`的数据：
+
+```go
+for k,v:=range map {
+	fmt.Println("map's key:",k)
+	fmt.Println("map's val:",v)
+}
+```
+
+由于 Go 支持 “多值返回”, 而对于“声明而未被调用”的变量, 编译器会报错, 在这种情况下, 可以使用`_`来丢弃不需要的返回值 例如：
+
+```go
+for _, v := range map{
+	fmt.Println("map's val:", v)
+}
+```
+
+## switch
+
+```
+switch sExpr {
+case expr1:
+	some instructions
+case expr2:
+	some other instructions
+case expr3:
+	some other instructions
+default:
+	other code
+}
+```
+
+`sExpr`和`expr1`、`expr2`、`expr3`的类型必须一致。
+
+表达式不必是常量或整数，执行的过程从上至下，直到找到匹配项；而如果`switch`没有表达式，它会匹配`true`。
+
+Go里面`switch`默认相当于每个`case`最后带有`break`，匹配成功后不会自动向下执行其他case，而是跳出整个`switch`, 但是可以使用`fallthrough`强制执行后面的case代码。
