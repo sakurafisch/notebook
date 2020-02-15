@@ -205,3 +205,67 @@ Slice_a := Array_a[2:5]
 - `copy` 函数`copy`从源`slice`的`src`中复制元素到目标`dst`，并且返回复制的元素的个数
 
 > 注：`append`函数会改变`slice`所引用的数组的内容，从而影响到引用同一数组的其它`slice`。 但当`slice`中没有剩余空间（即`(cap-len) == 0`）时，此时将动态分配新的数组空间。返回的`slice`数组指针将指向这个空间，而原数组的内容将保持不变；其它引用此数组的`slice`则不受影响。
+
+从 Go1.2 开始 slice 支持第三个参数用以指定其容量。
+
+之前我们一直采用这种方式在 slice 或者 array 基础上来获取一个 slice：
+
+```
+var array [10]int
+slice := array[2:4]
+```
+
+这个例子里面 slice 的容量是 8，新版本里面可以指定这个容量：
+
+```
+slice = array[2:4:7]
+```
+
+上面这个的容量就是`7-2`，即 5。这样这个产生的新的 slice 就没办法访问最后的三个元素。
+
+如果 slice 是这样的形式`array[:i:j]`，即第一个参数为空，默认值就是0。
+
+## map
+
+`map`也是一种引用类型，如果两个`map`同时指向一个底层，那么一个改变，另一个也相应的改变：
+
+`map` 也就是Python中字典的概念，它的格式为 `map[keyType]valueType`
+
+`map` 的读取和设置也类似 `slice` 一样，通过 `key` 来操作，只是 `slice` 的 `index` 只能是 `int` 类型，而 `map` 多了很多类型。
+
+```go
+// 声明一个字典,其 key 是 string 类型，值是 int 类型,这种方式的声明需要在使用之前使用make初始化
+var numbers map[string]int
+// 另一种map的声明方式
+numbers = make(map[string]int)
+numbers["one"] = 1  //赋值
+numbers["ten"] = 10 //赋值
+numbers["three"] = 3
+
+fmt.Println("第三个数字是: ", numbers["three"]) // 读取数据
+// 打印出来如:第三个数字是: 3
+```
+
+使用map过程中需要注意的几点：
+
+- `map`是无序的，每次打印出来的`map`都会不一样，它不能通过`index`获取，而必须通过`key`获取
+- `map`的长度是不固定的，也就是和`slice`一样，也是一种引用类型
+- 内置的`len`函数同样适用于`map`，返回`map`拥有的`key`的数量
+- `map`的值可以很方便的修改，通过`numbers["one"]=11`可以很容易的把key为`one`的字典值改为`11`
+- `map`和其他基本型别不同，它不是thread-safe，在多个go-routine存取时，必须使用mutex lock机制
+
+`map`内置有判断是否存在`key`的方式，通过`delete`删除`map`的元素：
+
+```go
+// 初始化一个字典
+rating := map[string]float32{"C":5, "Go":4.5, "Python":4.5, "C++":2 }
+// map有两个返回值，第二个返回值，如果不存在key，那么ok为false，如果存在ok为true
+csharpRating, ok := rating["C#"]
+if ok {
+	fmt.Println("C# is in the map and its rating is ", csharpRating)
+} else {
+	fmt.Println("We have no rating associated with C# in the map")
+}
+
+delete(rating, "C")  // 删除key为C的元素
+```
