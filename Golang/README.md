@@ -8,6 +8,17 @@
 > 
 > 浏览 http://localhost:8000/pkg/testing/ 将会看到一些有用的内容。
 
+## CLI
+
+```bash
+go build -v  # 编译代码
+go clean  # 清除编译文件
+go fmt  # 格式化代码
+go get  # 动态获取远程代码包
+go install  # 安装某个包
+go test  # 读取 *_test.go ，生成并运行测试用的可执行文件
+```
+
 ## 关键字速览
 
 ```
