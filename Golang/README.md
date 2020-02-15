@@ -365,3 +365,148 @@ default:
 表达式不必是常量或整数，执行的过程从上至下，直到找到匹配项；而如果`switch`没有表达式，它会匹配`true`。
 
 Go里面`switch`默认相当于每个`case`最后带有`break`，匹配成功后不会自动向下执行其他case，而是跳出整个`switch`, 但是可以使用`fallthrough`强制执行后面的case代码。
+
+## func
+
+```go
+func funcName(input1 type1, input2 type2) (output1 type1, output2 type2) {
+	//这里是处理逻辑代码
+	//返回多个值
+	return value1, value2
+}
+```
+
+最好命名返回值，因为不命名返回值，虽代码更简洁，但是生成的文档可读性差。
+
+```go
+func SumAndProduct(A, B int) (add int, Multiplied int) {
+	add = A+B
+	Multiplied = A*B
+	return
+}
+```
+
+### 变参
+
+函数可以有不定数量的参数。为了做到这点，首先需要定义函数使其接受变参：
+
+```go
+func myfunc(arg ...int) {}
+```
+
+`arg ...int`告诉Go这个函数接受不定数量的参数。这些参数的类型全部是`int`。在函数体中，变量`arg`是一个`int`的`slice`：
+
+```go
+for _, n := range arg {
+	fmt.Printf("And the number is: %d\n", n)
+}
+```
+
+### 传值与传指针
+
+当我们传一个参数值到被调用函数里面时，实际上是传了这个值的一份copy，当在被调用函数中修改参数值的时候，调用函数中相应实参不会发生任何变化，因为数值变化只作用在copy上。
+
+Go语言中`channel`，`slice`，`map`这三种类型的实现机制类似指针，所以可以直接传递，而不用取地址后传递指针。（注：若函数需改变`slice`的长度，则仍需要取地址传递指针）
+
+### 函数作为值、类型
+
+在Go中函数也是一种变量，我们可以通过`type`来定义它，它的类型就是所有拥有相同的参数，相同的返回值的一种类型
+
+```go
+type typeName func(input1 inputType1 , input2 inputType2 [, ...]) (result1 resultType1 [, ...])
+```
+
+可以把这个类型的函数当做值来传递。
+
+## defer
+
+当函数执行到最后时，这些defer语句会按照逆序执行，最后该函数返回。
+
+## Panic和Recover
+
+Go没有像Java那样的异常机制，它不能抛出异常，而是使用了`panic`和`recover`机制。
+
+应当把它作为最后的手段来使用，也就是说，你的代码中应当没有，或者很少有`panic`的东西。
+
+- ### Panic
+
+> 是一个内建函数，可以中断原有的控制流程，进入一个`panic`状态中。当函数`F`调用`panic`，函数F的执行被中断，但是`F`中的延迟函数会正常执行，然后F返回到调用它的地方。在调用的地方，`F`的行为就像调用了`panic`。这一过程继续向上，直到发生`panic`的`goroutine`中所有调用的函数返回，此时程序退出。`panic`可以直接调用`panic`产生。也可以由运行时错误产生，例如访问越界的数组。
+
+- ### Recover
+
+> 是一个内建的函数，可以让进入`panic`状态的`goroutine`恢复过来。`recover`仅在延迟函数中有效。在正常的执行过程中，调用`recover`会返回`nil`，并且没有其它任何效果。如果当前的`goroutine`陷入`panic`状态，调用`recover`可以捕获到`panic`的输入值，并且恢复正常的执行。
+
+## `main`函数和`init`函数
+
+Go里面有两个保留的函数：`init`函数（能够应用于所有的`package`）和`main`函数（只能应用于`package main`）。
+
+这两个函数在定义时不能有任何的参数和返回值。
+
+虽然一个`package`里面可以写任意多个`init`函数，但这无论是对于可读性还是以后的可维护性来说，我们都强烈建议用户在一个`package`中每个文件只写一个`init`函数。
+
+Go程序会自动调用`init()`和`main()`，所以你不需要在任何地方调用这两个函数。
+
+每个`package`中的`init`函数都是可选的，但`package main`就必须包含一个`main`函数。
+
+程序的初始化和执行都起始于`main`包。如果`main`包还导入了其它的包，那么就会在编译时将它们依次导入。有时一个包会被多个包同时导入，那么它只会被导入一次。
+
+当一个包被导入时，如果该包还导入了其它的包，那么会先将其它包导入进来，然后再对这些包中的包级常量和变量进行初始化，接着执行`init`函数（如果有的话），依次类推。等所有被导入的包都加载完毕了，就会开始对`main`包中的包级常量和变量进行初始化，然后执行`main`包中的`init`函数（如果存在的话），最后执行`main`函数。下图详细地解释了整个执行过程：
+
+![img](https://github.com/astaxie/build-web-application-with-golang/raw/master/zh/images/2.3.init.png?raw=true)
+
+### import
+
+我们在写Go代码的时候经常用到import这个命令用来导入包文件，而我们经常看到的方式参考如下：
+
+```go
+import(
+    "fmt"
+)
+```
+
+上面这个fmt是Go语言的标准库，其实是去`GOROOT`环境变量指定目录下去加载该模块。
+
+Go的import还支持如下两种方式来加载自己写的模块：
+
+- 相对路径
+```go
+import “./model” //当前文件同一目录的model目录，但是不建议这种方式来import
+```
+- 绝对路径
+```go
+import “shorturl/model” //加载gopath/src/shorturl/model模块
+```
+上面展示了一些import常用的几种方式，但是还有一些特殊的import：
+
+- 点操作
+
+这个包导入之后，调用这个包的函数时，可以省略前缀的包名
+
+```
+import(
+    . "fmt"
+)
+```
+
+- 别名操作
+
+把包命名成另一个名字
+
+调用包函数时前缀变成自定义前缀，即 `f.Println("hello world")`
+
+```go
+import(
+    f "fmt"
+)
+```
+
+- _ 操作
+
+_ 操作引入该包，而不直接使用包里面的函数，而是调用了该包里面的init函数。
+
+```go
+import (
+"database/sql"
+_ "github.com/ziutek/mymysql/godrv"
+)
+```
