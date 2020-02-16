@@ -80,6 +80,41 @@ fmt.Println(a)  // 0
 
 已声明但未使用的变量会在编译阶段报错。
 
+## 类型转换
+
+表达式 `T(v)` 将值 `v` 转换为类型 `T`。
+
+```go
+var i int = 42
+var f float64 = float64(i)
+var u uint = uint(f)
+```
+
+```go
+i := 42
+f := float64(i)
+u := uint(f)
+```
+
+## 类型推导
+
+在定义一个变量但不指定其类型时（使用没有类型的 `var` 或 `:=` 语句）， 变量的类型由右值推导得出。
+
+当右值定义了类型时，新变量的类型与其相同：
+
+```go
+var i int
+j := i // j 也是一个 int
+```
+
+但是当右边包含了未指名类型的数字常量时，新的变量就可能是 `int` 、 `float64` 或 `complex128`。 这取决于常量的精度：
+
+```go
+i := 42           // int
+f := 3.142        // float64
+g := 0.867 + 0.5i // complex128
+```
+
 ## iota枚举
 
 Go里面有一个关键字`iota`，这个关键字用来声明`enum`的时候采用，它默认开始值是0，const中每增加一行加1：
@@ -421,6 +456,8 @@ type typeName func(input1 inputType1 , input2 inputType2 [, ...]) (result1 resul
 ## defer
 
 当函数执行到最后时，这些defer语句会按照逆序执行，最后该函数返回。
+
+- 延迟调用的参数会立刻生成
 
 ## Panic和Recover
 
@@ -851,9 +888,17 @@ ch := make(chan type, value)
 
 ## Range和Close
 
-可以通过range，像操作slice或者map一样操作缓存类型的channel
+发送者可以 `close` 一个 channel 来表示再没有值会被发送了。接收者可以通过赋值语句的第二参数来测试 channel 是否被关闭：
 
+```gp
+v, ok := <-ch
 ```
+
+循环 `for i := range c` 会不断从 channel 接收值，直到它被关闭。
+
+可以通过range，像操作slice或者map一样操作缓存类型的channel：
+
+```go
 package main
 
 import (
@@ -886,9 +931,13 @@ func main() {
 
 ## select
 
- select选择准备就绪的第一个channel并从中接收（或发送给它）。如果准备好一个以上的channels，则它将随机选择要接收的channel。如果没有一个channel准备就绪，该语句将阻塞直到一个可用。
+`select` 语句使得一个 goroutine 在多个通讯操作上等待。
 
-select语句通常用于实现超时：
+`select` 会阻塞，直到条件分支中的某个可以继续执行，这时就会执行那个条件分支。当多个都准备好的时候，会随机选择一个。
+
+`select` 选择准备就绪的第一个channel并从中接收（或发送给它）。如果准备好一个以上的channels，则它将随机选择要接收的channel。如果没有一个channel准备就绪，该语句将阻塞直到一个可用。
+
+`select` 语句通常用于实现超时：
 
 ```go
 select {
@@ -904,6 +953,8 @@ case <- time.After(time.Second):
 `time.After` 创建一个频道，并在给定的持续时间后发送当前时间。（我们对时间不感兴趣，所以我们没有将其存储在变量中。）
 
 我们还可以指定一个 `default` 情况：
+
+当 `select` 中的其他条件分支都没有准备好的时候，`default` 分支会被执行。
 
 ```go
 select {
@@ -941,3 +992,63 @@ runtime包中有几个处理goroutine的函数：
 - GOMAXPROCS
 
   用来设置可以并行计算的CPU核数的最大值，并返回之前的值。
+
+## Web 服务器
+
+[包 http](http://golang.org/pkg/net/http/) 通过任何实现了 `http.Handler` 的值来响应 HTTP 请求：
+
+```go
+package http
+
+type Handler interface {
+    ServeHTTP(w ResponseWriter, r *Request)
+}
+```
+
+举个🌰，以下代码中，类型 `Hello` 实现了 `http.Handler`。
+
+```go
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+)
+
+type Hello struct{}
+
+func (h Hello) ServeHTTP(
+	w http.ResponseWriter,
+	r *http.Request) {
+	fmt.Fprint(w, "Hello!")
+}
+
+func main() {
+	var h Hello
+	err := http.ListenAndServe("localhost:4000", h)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+```
+
+## 图片
+
+参考 [文档](http://golang.org/pkg/image/#Image)
+
+[Package image](http://golang.org/pkg/image/#Image) 定义了 `Image` 接口：
+
+```go
+package image
+
+type Image interface {
+    ColorModel() color.Model
+    Bounds() Rectangle  // 此处的 Rectangle 为 image.Rectangle
+    At(x, y int) color.Color
+}
+```
+
+*注意*：`Bounds` 方法的 `Rectangle` 返回值实际上是一个 [`image.Rectangle`](http://golang.org/pkg/image/#Rectangle)， 其定义在 `image` 包中。
+
+`color.Color` 和 `color.Model` 也是接口，但是通常因为直接使用预定义的实现 `image.RGBA` 和 `image.RGBAModel` 而被忽视了。这些接口和类型由[image/color 包](http://golang.org/pkg/image/color/)定义。
