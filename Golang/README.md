@@ -454,6 +454,8 @@ Go程序会自动调用`init()`和`main()`，所以你不需要在任何地方�
 
 ![img](https://github.com/astaxie/build-web-application-with-golang/raw/master/zh/images/2.3.init.png?raw=true)
 
+在 `main.main` 函数执行之前所有代码都运行在同一个 goroutine，也就是程序的主系统线程中。因此，如果某个 `init` 函数内部用 go 关键字启动了新的 goroutine 的话，新的 goroutine 只有在进入 `main.main` 函数之后才可能被执行到。
+
 ## import
 
 我们在写Go代码的时候经常用到import这个命令用来导入包文件，而我们经常看到的方式参考如下：
@@ -506,7 +508,293 @@ _ 操作引入该包，而不直接使用包里面的函数，而是调用了该
 
 ```go
 import (
-"database/sql"
-_ "github.com/ziutek/mymysql/godrv"
+    "database/sql"
+    _ "github.com/ziutek/mymysql/godrv"
 )
 ```
+
+## Struct
+
+```go
+type person struct {
+	name string
+	age int
+}
+```
+
+### 匿名字段（嵌入字段）
+
+Go支持只提供类型，而不写字段名的方式，也就是匿名字段，也称为嵌入字段。
+
+当匿名字段是一个struct的时候，那么这个struct所拥有的全部字段都被隐式地引入了当前定义的这个struct。
+
+- 匿名字段能够实现字段的继承。
+
+- 最外层的优先访问。
+
+- 自定义类型、内置类型都可以作为匿名字段，而且可以在相应的字段上面进行函数操作（如append）。
+
+```go
+package main
+
+import "fmt"
+
+type Human struct {
+	name string
+	age int
+	weight int
+}
+
+type Student struct {
+	Human  // 匿名字段，那么默认Student就包含了Human的所有字段
+	speciality string
+}
+
+func main() {
+	// 我们初始化一个学生
+	mark := Student{Human{"Mark", 25, 120}, "Computer Science"}
+
+	// 我们访问相应的字段
+	fmt.Println("His name is ", mark.name)
+	fmt.Println("His age is ", mark.age)
+	fmt.Println("His weight is ", mark.weight)
+	fmt.Println("His speciality is ", mark.speciality)
+	// 修改对应的备注信息
+	mark.speciality = "AI"
+	fmt.Println("Mark changed his speciality")
+	fmt.Println("His speciality is ", mark.speciality)
+	// 修改他的年龄信息
+	fmt.Println("Mark become old")
+	mark.age = 46
+	fmt.Println("His age is", mark.age)
+	// 修改他的体重信息
+	fmt.Println("Mark is not an athlet anymore")
+	mark.weight += 60
+	fmt.Println("His weight is", mark.weight)
+}
+```
+
+Student访问属性age和name的时候，就像访问自己所有用的字段一样。
+
+student还能访问Human这个字段作为字段名：
+
+```go
+mark.Human = Human{"Marcus", 55, 220}
+mark.Human.age -= 1
+```
+
+所有的内置类型和自定义类型都是可以作为匿名字段，而不仅仅是struct字段
+
+```go
+package main
+
+import "fmt"
+
+type Skills []string
+
+type Human struct {
+	name string
+	age int
+	weight int
+}
+
+type Student struct {
+	Human  // 匿名字段，struct
+	Skills // 匿名字段，自定义的类型string slice
+	int    // 内置类型作为匿名字段
+	speciality string
+}
+
+func main() {
+	// 初始化学生Jane
+	jane := Student{Human:Human{"Jane", 35, 100}, speciality:"Biology"}
+	// 现在我们来访问相应的字段
+	fmt.Println("Her name is ", jane.name)
+	fmt.Println("Her age is ", jane.age)
+	fmt.Println("Her weight is ", jane.weight)
+	fmt.Println("Her speciality is ", jane.speciality)
+	// 我们来修改他的skill技能字段
+	jane.Skills = []string{"anatomy"}
+	fmt.Println("Her skills are ", jane.Skills)
+	fmt.Println("She acquired two new ones ")
+	jane.Skills = append(jane.Skills, "physics", "golang")
+	fmt.Println("Her skills now are ", jane.Skills)
+	// 修改匿名内置类型字段
+	jane.int = 3
+	fmt.Println("Her preferred number is", jane.int)
+}
+```
+
+## method
+
+method的语法如下：
+
+```go
+func (r ReceiverType) funcName(parameters) (results)
+```
+
+**Receiver以值传递不会改变原对象，以指针传递会改变原对象。**
+
+- 虽然method的名字一模一样，但是如果接收者不一样，那么method就不一样
+- method里面可以访问接收者的字段
+- 调用method通过`.`访问，就像struct里面访问字段一样
+
+method 可以定义在任何内置类型、struct等各种类型上面。
+
+method 也是可以继承的。如果匿名字段实现了一个method，那么包含这个匿名字段的struct也能调用该method。
+
+method 可以重写，类似于匿名字段。
+
+## Interface
+
+interface类型定义了一组方法，如果某个对象实现了某个接口的所有方法，则此对象就实现了此接口。
+
+interface就是一组抽象方法的集合，它必须由其他非interface类型实现，而不能自我实现。
+
+```go
+type Men interface {
+	SayHi()
+	Sing(lyrics string)
+	Guzzle(beerStein string)
+}
+```
+
+如果我们定义一个interface的变量，那么这个变量里面可以存实现这个interface的任意类型的对象。因为m能够持有这三种类型的对象。
+
+### 空 interface
+
+任意的类型都实现了空interface(即 interface{})，也就是包含0个method的interface。
+
+空interface对于描述起不到任何的作用(因为它不包含任何的method），但是空interface在我们需要存储任意类型的数值的时候相当有用，因为它可以存储任意类型的数值。它有点类似于C语言的void*类型。
+
+一个函数把interface{}作为参数，那么它可以接受任意类型的值作为参数，如果一个函数返回interface{},那么也就可以返回任意类型的值。
+
+### interface 函数参数
+
+interface的变量可以持有任意实现该interface类型的对象，这给我们编写函数(包括method)提供了一些额外的思考：可以通过定义interface参数，让函数接受各种类型的参数。
+
+举个🌰：fmt.Println是我们常用的一个函数，但是你是否注意到它可以接受任意类型的数据。打开fmt的源码文件，可以看到这样一个定义:
+
+```go
+type Stringer interface {
+	 String() string
+}
+// Stringer 接口只有一个 String 方法，因此只要实现 String 方法即可实现 Stringer 接口。
+```
+
+也就是说，任何实现了String方法的类型都能作为参数被fmt.Println调用。
+
+注：实现了error接口的对象（即实现了Error() string的对象），使用fmt输出时，会调用Error()方法，因此不必再定义String()方法了。
+
+### interface变量存储的类型
+
+我们知道interface的变量里面可以存储任意类型的数值(该类型实现了interface)。那么我们怎么反向知道这个变量里面实际保存了的是哪个类型的对象呢？目前常用的有两种方法：
+
+- Comma-ok断言，可以直接判断是否是该类型的变量。
+
+```go
+ value, ok = element.(T)
+```
+
+这里value就是变量的值，ok是一个bool类型，element是interface变量，T是断言的类型。
+
+如果element里面确实存储了T类型的数值，那么ok返回true，否则返回false。
+
+- switch测试
+
+`element.(type)`语法不能在switch外的任何逻辑里面使用，如果要在switch外面判断一个类型就使用`comma-ok`。
+
+### 嵌入interface
+
+功能类似于 Struct 的匿名字段：如果一个interface1作为interface2的一个嵌入字段，那么interface2隐式的包含了interface1里面的method。
+
+举个🌰
+
+```go
+// 在源码包 container/heap 的一个定义
+type Interface interface {
+	sort.Interface  // 嵌入字段sort.Interface
+	Push(x interface{})  // a Push method to push elements into the heap
+	Pop() interface{}  // a Pop elements that pops elements from the heap
+}
+```
+
+sort.Interface其实就是嵌入字段，把sort.Interface的所有method给隐式的包含进来了。也就是下面三个方法：
+
+```go
+type Interface interface {
+	// Len is the number of elements in the collection.
+	Len() int
+	// Less returns whether the element with index i should sort
+	// before the element with index j.
+	Less(i, j int) bool
+	// Swap swaps the elements with indexes i and j.
+	Swap(i, j int)
+}
+```
+
+再举一个🌰
+
+io包下面的 io.ReadWriter ，它包含了io包下面的Reader和Writer两个interface：
+
+```go
+// io.ReadWriter
+type ReadWriter interface {
+	Reader
+	Writer
+}
+```
+
+## 反射
+
+反射机制不仅包括要能在运行时对程序自身信息进行检测，还要求程序能进一步根据这些信息改变程序状态或结构。我们一般用到的包是reflect包。参考 [laws of reflection](http://golang.org/doc/articles/laws_of_reflection.html)
+
+> **元编程**（英语：Metaprogramming），又译**超编程**，是指某类[计算机程序](https://zh.wikipedia.org/wiki/计算机程序)的编写，这类计算机程序编写或者操纵其它程序（或者自身）作为它们的数据，或者在[运行时](https://zh.wikipedia.org/wiki/运行时)完成部分本应在[编译时](https://zh.wikipedia.org/wiki/编译时)完成的工作。多数情况下，与手工编写全部代码相比，程序员可以获得更高的工作效率，或者给与程序更大的灵活度去处理新的情形而无需重新编译。
+>
+> 编写元程序的语言称之为[元语言](https://zh.wikipedia.org/wiki/元語言)。被操纵的程序的语言称之为“[目标语言](https://zh.wikipedia.org/w/index.php?title=目标语言&action=edit&redlink=1)”。一门编程语言同时也是自身的元语言的能力称之为“[反射](https://zh.wikipedia.org/wiki/反射_(计算机科学))”或者“自反”。
+>
+> 反射是促进元编程的一种很有价值的语言特性。把编程语言自身作为一级数据类型（如[LISP](https://zh.wikipedia.org/wiki/LISP)、[Forth](https://zh.wikipedia.org/wiki/Forth)或[Rebol](https://zh.wikipedia.org/wiki/Rebol)）也很有用。支持[泛型编程](https://zh.wikipedia.org/wiki/泛型编程)的语言也使用元编程能力。
+
+使用reflect一般分成三步:
+
+要去反射某个类型的值(这些值都实现了空interface)，首先需要把它转化成reflect对象(reflect.Type或者reflect.Value，根据不同的情况调用不同的函数)。这两种获取方式如下:
+
+```go
+t := reflect.TypeOf(i)    //得到类型的元数据,通过t我们能获取类型定义里面的所有元素
+v := reflect.ValueOf(i)   //得到实际的值，通过v我们获取存储在里面的值，还可以去改变值
+```
+
+转化为reflect对象之后我们就可以进行一些操作了，也就是将reflect对象转化成相应的值，例如:
+
+```go
+tag := t.Elem().Field(0).Tag  //获取定义在struct里面的标签
+name := v.Elem().Field(0).String()  //获取存储在第一个字段里面的值
+```
+
+获取反射值能返回相应的类型和数值
+
+```go
+var x float64 = 3.4
+v := reflect.ValueOf(x)
+fmt.Println("type:", v.Type())
+fmt.Println("kind is float64:", v.Kind() == reflect.Float64)
+fmt.Println("value:", v.Float())
+```
+
+最后，**反射的字段必须是可修改的**。反射的字段必须是可读写的意思是，如果下面这样写，那么会发生错误
+
+```go
+var x float64 = 3.4
+v := reflect.ValueOf(x)
+v.SetFloat(7.1)
+```
+
+如果要修改相应的值，必须这样写
+
+```go
+var x float64 = 3.4
+p := reflect.ValueOf(&x)
+v := p.Elem()
+v.SetFloat(7.1)
+```
+
