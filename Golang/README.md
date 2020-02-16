@@ -306,7 +306,7 @@ string  ""
 
 Go里面`if`条件判断语句中不需要括号
 
-Go的`if`还条件判断语句里面允许声明一个变量，这个变量的作用域只能在该条件逻辑块内。
+Go的`if`条件判断语句里面还允许声明一个变量，这个变量的作用域只能在该条件逻辑块内。
 
 ## goto
 
@@ -798,3 +798,146 @@ v := p.Elem()
 v.SetFloat(7.1)
 ```
 
+## goroutine
+
+```go
+go hello(a, b, c)
+```
+
+多个goroutine运行在同一个进程里面，共享内存数据，不过设计上我们要遵循：不要通过共享来通信，而要通过通信来共享。
+
+> runtime.Gosched()表示让CPU把时间片让给别人,下次某个时候继续恢复执行该goroutine。
+
+> 默认情况下，在Go 1.5将标识并发系统线程个数的runtime.GOMAXPROCS的初始值由1改为了运行环境的CPU核数。
+
+但在Go 1.5以前调度器仅使用单线程，也就是说只实现了并发。想要发挥多核处理器的并行，需要在我们的程序中显式调用 runtime.GOMAXPROCS(n) 告诉调度器同时使用多个线程。GOMAXPROCS 设置了同时运行逻辑代码的系统线程的最大数量，并返回之前的设置。如果n < 1，不会改变当前设置。
+
+## channels
+
+channel 默认是无缓冲的。
+
+channel可以与Unix shell 中的双向管道做类比：可以通过它发送或者接收值。这些值只能是特定的类型：channel类型。
+
+无缓冲的 channel接收和发送数据都是阻塞的，除非另一端已经准备好，这样就使得Goroutines同步变的更加的简单，而不需要显式的lock。
+
+> 无缓冲的 channel 是同步的；两端中任意一端的 channel 将等到另一端准备好为止。
+
+定义一个channel时，也需要定义发送到channel的值的类型。必须使用make 创建channel：
+
+```
+ci := make(chan int)
+cs := make(chan string)
+cf := make(chan interface{})
+```
+
+channel通过操作符`<-`来接收和发送数据
+
+```
+ch <- v    // 发送v到channel ch.
+v := <-ch  // 从ch中接收数据，并赋值给v
+```
+
+### Buffered Channels
+
+可以指定 channel 的缓冲大小
+
+```go
+ch := make(chan type, value)
+```
+
+当 value = 0 时，channel 是无缓冲阻塞读写的，当value > 0 时，channel 有缓冲、是非阻塞的，直到写满 value 个元素才阻塞写入。
+
+> 缓冲 channel 是异步的，除非 channel 已满，否则发送或接收消息将不会等待。
+
+## Range和Close
+
+可以通过range，像操作slice或者map一样操作缓存类型的channel
+
+```
+package main
+
+import (
+	"fmt"
+)
+
+func fibonacci(n int, c chan int) {
+	x, y := 1, 1
+	for i := 0; i < n; i++ {
+		c <- x
+		x, y = y, x + y
+	}
+	close(c)
+}
+
+func main() {
+	c := make(chan int, 10)
+	go fibonacci(cap(c), c)
+	for i := range c {
+		fmt.Println(i)
+	}
+}
+```
+
+`for i := range c`能够不断的读取channel里面的数据，直到该channel被显式的关闭。上面代码我们看到可以显式的关闭channel，生产者通过内置函数`close`关闭channel。关闭channel之后就无法再发送任何数据了，在消费方可以通过语法`v, ok := <-ch`测试channel是否被关闭。如果ok返回false，那么说明channel已经没有任何数据并且已经被关闭。
+
+> 记住应该在生产者的地方关闭channel，而不是消费的地方去关闭它，这样容易引起panic
+
+> channel不像文件之类的，不需要经常去关闭，只有当确实没有任何发送数据了，或者想显式的结束range循环之类的
+
+## select
+
+ select选择准备就绪的第一个channel并从中接收（或发送给它）。如果准备好一个以上的channels，则它将随机选择要接收的channel。如果没有一个channel准备就绪，该语句将阻塞直到一个可用。
+
+select语句通常用于实现超时：
+
+```go
+select {
+case msg1 := <- c1:
+  fmt.Println("Message 1", msg1)
+case msg2 := <- c2:
+  fmt.Println("Message 2", msg2)
+case <- time.After(time.Second):
+  fmt.Println("timeout")
+}
+```
+
+`time.After` 创建一个频道，并在给定的持续时间后发送当前时间。（我们对时间不感兴趣，所以我们没有将其存储在变量中。）
+
+我们还可以指定一个 `default` 情况：
+
+```go
+select {
+case msg1 := <- c1:
+  fmt.Println("Message 1", msg1)
+case msg2 := <- c2:
+  fmt.Println("Message 2", msg2)
+case <- time.After(time.Second):
+  fmt.Println("timeout")
+default:
+  fmt.Println("nothing ready")
+}
+```
+
+## runtime goroutine
+
+runtime包中有几个处理goroutine的函数：
+
+- Goexit
+
+  退出当前执行的goroutine，但是defer函数还会继续调用
+
+- Gosched
+
+  让出当前goroutine的执行权限，调度器安排其他等待的任务运行，并在下次某个时候从该位置恢复执行。
+
+- NumCPU
+
+  返回 CPU 核数量
+
+- NumGoroutine
+
+  返回正在执行和排队的任务总数
+
+- GOMAXPROCS
+
+  用来设置可以并行计算的CPU核数的最大值，并返回之前的值。
