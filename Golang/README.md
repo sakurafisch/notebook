@@ -1586,3 +1586,41 @@ func ParseJSON(input string) (s *Syntax, err error) {
 标准库中的`json`包，在内部递归解析JSON数据的时候如果遇到错误，会通过抛出异常的方式来快速跳出深度嵌套的函数调用，然后由最外一级的接口通过`recover`捕获`panic`，然后返回相应的错误信息。
 
 Go语言库的实现习惯: 即使在包内部使用了`panic`，但是在导出函数时会被转化为明确的错误值。
+
+## Go访问C内存创建大于2GB的内存
+
+因为Go语言实现的限制，我们无法在Go语言中创建大于2GB内存的切片（具体请参考makeslice实现代码）。不过借助cgo技术，我们可以在C语言环境创建大于2GB的内存，然后转为Go语言的切片使用：
+
+```go
+package main
+
+/*
+#include <stdlib.h>
+
+void* makeslice(size_t memsize) {
+    return malloc(memsize);
+}
+*/
+import "C"
+import "unsafe"
+
+func makeByteSlize(n int) []byte {
+    p := C.makeslice(C.size_t(n))
+    return ((*[1 << 31]byte)(p))[0:n:n]
+}
+
+func freeByteSlice(p []byte) {
+    C.free(unsafe.Pointer(&p[0]))
+}
+
+func main() {
+    s := makeByteSlize(1<<32+1)
+    s[len(s)-1] = 255
+    print(s[len(s)-1])
+    freeByteSlice(s)
+}
+```
+
+例子中我们通过 `makeByteSlize` 来创建大于4G内存大小的切片，从而绕过了Go语言实现的限制。而 `freeByteSlice` 辅助函数则用于释放从C语言函数创建的切片。
+
+因为C语言内存空间是稳定的，基于C语言内存构造的切片也是绝对稳定的，不会因为Go语言栈的变化而被移动。
