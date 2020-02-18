@@ -681,6 +681,9 @@ Go没有像Java那样的异常机制，它不能抛出异常，而是使用了`p
 
 - ### Recover
 
+  - `recover` 只在 `defer` 语句中有效。
+  - 必须要和有异常的栈帧只隔一个栈帧，`recover`函数才能正常捕获异常。换言之，`recover`函数捕获的是祖父一级调用函数栈帧的异常（刚好可以跨越一层`defer`函数）！
+
 > 是一个内建的函数，可以让进入`panic`状态的`goroutine`恢复过来。`recover`仅在延迟函数中有效。在正常的执行过程中，调用`recover`会返回`nil`，并且没有其它任何效果。如果当前的`goroutine`陷入`panic`状态，调用`recover`可以捕获到`panic`的输入值，并且恢复正常的执行。
 
 ## `main`函数和`init`函数
