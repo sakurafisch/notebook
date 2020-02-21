@@ -1238,66 +1238,6 @@ runtime包中有几个处理goroutine的函数：
 > Go的运行时还包含了其自己的调度器，这个调度器使用了一些技术手段，可以在n个操作系统线程上多工调度m个Goroutine。Go调度器的工作和内核的调度是相似的，但是这个调度器只关注单独的Go程序中的Goroutine。Goroutine采用的是半抢占式的协作调度，只有在当前Goroutine发生阻塞时才会导致调度；同时发生在用户态，调度器会根据具体函数只保存必要的寄存器，切换的代价要比系统线程低得多。运行时有一个`runtime.GOMAXPROCS`变量，用于控制当前运行正常非阻塞Goroutine的系统线程数目。
 >
 
-## Web 服务器
-
-[包 http](http://golang.org/pkg/net/http/) 通过任何实现了 `http.Handler` 的值来响应 HTTP 请求：
-
-```go
-package http
-
-type Handler interface {
-    ServeHTTP(w ResponseWriter, r *Request)
-}
-```
-
-举个🌰，以下代码中，类型 `Hello` 实现了 `http.Handler`。
-
-```go
-package main
-
-import (
-	"fmt"
-	"log"
-	"net/http"
-)
-
-type Hello struct{}
-
-func (h Hello) ServeHTTP(
-	w http.ResponseWriter,
-	r *http.Request) {
-	fmt.Fprint(w, "Hello!")
-}
-
-func main() {
-	var h Hello
-	err := http.ListenAndServe("localhost:4000", h)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-```
-
-## 图片
-
-参考 [文档](http://golang.org/pkg/image/#Image)
-
-[Package image](http://golang.org/pkg/image/#Image) 定义了 `Image` 接口：
-
-```go
-package image
-
-type Image interface {
-    ColorModel() color.Model
-    Bounds() Rectangle  // 此处的 Rectangle 为 image.Rectangle
-    At(x, y int) color.Color
-}
-```
-
-*注意*：`Bounds` 方法的 `Rectangle` 返回值实际上是一个 [`image.Rectangle`](http://golang.org/pkg/image/#Rectangle)， 其定义在 `image` 包中。
-
-`color.Color` 和 `color.Model` 也是接口，但是通常因为直接使用预定义的实现 `image.RGBA` 和 `image.RGBAModel` 而被忽视了。这些接口和类型由[image/color 包](http://golang.org/pkg/image/color/)定义。
-
 ## 指针随时可能会变
 
 不要假设变量在内存中的位置是固定不变的，指针随时可能会变。
@@ -1624,3 +1564,23 @@ func main() {
 例子中我们通过 `makeByteSlize` 来创建大于4G内存大小的切片，从而绕过了Go语言实现的限制。而 `freeByteSlice` 辅助函数则用于释放从C语言函数创建的切片。
 
 因为C语言内存空间是稳定的，基于C语言内存构造的切片也是绝对稳定的，不会因为Go语言栈的变化而被移动。
+
+## 图片
+
+参考 [文档](http://golang.org/pkg/image/#Image)
+
+[Package image](http://golang.org/pkg/image/#Image) 定义了 `Image` 接口：
+
+```go
+package image
+
+type Image interface {
+    ColorModel() color.Model
+    Bounds() Rectangle  // 此处的 Rectangle 为 image.Rectangle
+    At(x, y int) color.Color
+}
+```
+
+*注意*：`Bounds` 方法的 `Rectangle` 返回值实际上是一个 [`image.Rectangle`](http://golang.org/pkg/image/#Rectangle)， 其定义在 `image` 包中。
+
+`color.Color` 和 `color.Model` 也是接口，但是通常因为直接使用预定义的实现 `image.RGBA` 和 `image.RGBAModel` 而被忽视了。这些接口和类型由[image/color 包](http://golang.org/pkg/image/color/)定义。
