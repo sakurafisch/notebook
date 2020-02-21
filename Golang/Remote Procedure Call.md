@@ -154,3 +154,82 @@ func main() {
 ```
 
 在新的RPC服务端实现中，我们用RegisterHelloService函数来注册函数，这样不仅可以避免命名服务名称的工作，同时也保证了传入的服务对象满足了RPC接口的定义。最后我们新的服务改为支持多个TCP链接，然后为每个TCP链接提供RPC服务。
+
+## 跨语言
+
+标准库的RPC默认采用Go语言特有的gob编码，因此从其它语言调用Go语言实现的RPC服务将比较困难，而每个RPC以及服务的使用者都可能采用不同的编程语言。得益于RPC的框架设计，Go语言的RPC其实也是很容易实现跨语言支持的。
+
+Go语言的RPC框架有两个比较有特色的设计：一个是RPC数据打包时可以通过插件实现自定义的编码和解码；另一个是RPC建立在抽象的io.ReadWriteCloser接口之上的，我们可以将RPC架设在不同的通讯协议之上。
+
+这里我们将尝试通过官方自带的net/rpc/jsonrpc扩展实现一个跨语言的RPC。
+
+基于JSON编码重新实现RPC服务端：
+
+```go
+func main() {
+    rpc.RegisterName("HelloService", new(HelloService))
+
+    listener, err := net.Listen("tcp", ":1234")
+    if err != nil {
+        log.Fatal("ListenTCP error:", err)
+    }
+
+    for {
+        conn, err := listener.Accept()
+        if err != nil {
+            log.Fatal("Accept error:", err)
+        }
+
+        go rpc.ServeCodec(jsonrpc.NewServerCodec(conn))  // 取代了rpc.ServeConn函数
+    }
+}
+```
+
+代码中最大的变化是用rpc.ServeCodec函数替代了rpc.ServeConn函数，传入的参数是针对服务端的json编解码器。
+
+JSON版本的客户端：
+
+```go
+func main() {
+    conn, err := net.Dial("tcp", "localhost:1234")
+    if err != nil {
+        log.Fatal("net.Dial:", err)
+    }
+
+    client := rpc.NewClientWithCodec(jsonrpc.NewClientCodec(conn))
+
+    var reply string
+    err = client.Call("HelloService.Hello", "hello", &reply)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Println(reply)
+}
+```
+
+先手工调用net.Dial函数建立TCP链接，然后基于该链接建立针对客户端的json编解码器。
+
+在确保客户端可以正常调用RPC服务的方法之后，我们在客户端用一个普通的TCP服务代替Go语言版本的RPC服务，这样可以查看客户端调用时发送的数据格式。比如在客户端通过nc命令`nc -l 1234`在同样的端口启动一个TCP服务。然后再次执行一次RPC调用将会发现nc输出了以下的信息：
+
+```json
+{"method":"HelloService.Hello","params":["hello"],"id":0}
+```
+
+method部分对应要调用的rpc服务和方法组合成的名字，params部分的第一个元素为参数，id是由调用端维护的一个唯一的调用编号。
+
+请求的json数据对象在内部对应两个结构体：客户端是clientRequest，服务端是serverRequest。clientRequest和serverRequest结构体的内容基本是一致的：
+
+```go
+type clientRequest struct {
+    Method string         `json:"method"`
+    Params [1]interface{} `json:"params"`
+    Id     uint64         `json:"id"`
+}
+
+type serverRequest struct {
+    Method string           `json:"method"`
+    Params *json.RawMessage `json:"params"`
+    Id     *json.RawMessage `json:"id"`
+}
+```
