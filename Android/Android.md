@@ -415,3 +415,112 @@ listView.setAdapter(adapter);
 
 ## GridView
 
+## Intent
+
+```java
+Intent intent = new Intent();
+Bundle bundle = new Bundle();
+bundle.putString("name", "tom");
+intent.putExtras(bundle);
+```
+
+```java
+Intent intent = new Intent();
+intent.putExtras("name", "tom");
+```
+
+putExtra()重载方法
+
+- putExtra(String name, String value)
+- putExtra(String name, long value)
+
+```java
+// putExtra()方法内部原理
+putExtra(String name, String value) {
+    if (mExtras == null) mExtras = new Bundle();
+    mExtras.putString(name, value);
+}
+```
+
+### Activity数据回传
+
+```java
+// 获取数据的启动方式
+StartActivityForResult(intent, requestCode);
+```
+
+```java
+// 原 Activity 获取新 Activity 传回的数据
+onActivityResult(requestCode, resultCode, intent);
+```
+
+- request 请求码
+- resultCode 结果码
+- intent 携带返回数据的intent。
+- intent.getExtras().getString("key");
+
+新启动的 Activity 在关闭的时候向前面的Activity设置数据
+
+- setResult(resultCode, intent);
+
+```java
+Intent intent = new Intent();
+intent.putExtra("string", "字符串数据");
+intent.putExtra("int", 110);
+setResult(1, intent); // 设置回传数据
+// finish();
+```
+
+```java
+// 获取传递过来的数据
+Intent intent= getIntent();
+String string = intent.getStringExtra("string");
+int anInt = intent.getIntentExtra("int", 0); // 若没有传递，默认值为0
+```
+
+```java
+// 获取回传数据
+// 写在onActivityResult方法中
+super.onActivityResult(resultCode, resultCode, data);
+rec = data.getStringExtra("string");
+// rec = data.getExtras().getString("string");
+```
+
+### Component
+
+Component属性明确指定Intent的目标组件的类名称
+
+```java
+Intent intent = new Intent();
+intent.setComponent(new ComponentName("com.example.otherapp",
+                     "com.example.otherapp.MainActivity2"));
+startActivity(intent);
+```
+
+### 拨打电话
+
+```java
+Intent intent = new Intent(Intent.ACTION.DIAL);
+intent.setData(Uri.parse("tel:15205205205"));
+startActivity(intent);
+```
+
+### 发送短信
+
+```java
+Intent intent = new Intent(Intent.ACTION_SENDTO);
+intent.setData(Uri.parse("smsto:15205205205"));
+intent.putExtra("sms_body", "你好");
+startActivity(intent);
+```
+
+### 播放MP3文件
+
+```java
+Intent intent = new Intent();
+intent.setAction(Intent.ACTION_VIEW);
+Uri uri = Uri.parse("" + "file:///storage/emulated/0/Music/我爱你.mp3");
+intent.setDataAndType(uri, "audio/mp3");
+startActivity(intent);
+```
+
