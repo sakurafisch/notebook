@@ -889,3 +889,309 @@ if(httpUrlConnection.getResponseCode() == 200){
 HttpClient封装了http的header、参数、body、response等。
 
 于 Android 6.0 弃用。
+
+## JSON数据解析
+
+### JSONObject对象解析
+
+```java
+JSONObject jsonObject = new JSONObject(str);
+jsonObject.getString("name");
+jsonObject.getInt("age");
+jsonObject.getJSONObjecj("dept");
+```
+
+### JSONArray数组解析
+
+```java
+JSONArray jsonArray = object.getJSONArray("person");
+JSONObject jsonObject = array.getJSONObject(i);
+```
+
+### 第三方JSON解析框架
+
+- 阿里巴巴的Fastjson
+- 谷歌的Gson
+- jackson
+
+## 加载网络图片
+
+### 网络获取输入流转换为图片
+
+```java
+InputStream inputStream = httpUrlConnection.getInputStream();
+Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+```
+
+### 三级缓存策略
+
+内存 - 文件 - 网络
+
+当根据URL向网络拉取图片的时候，先从内存中找，如果内存中没有，再从缓存文件中找，如果缓存中也没有，再从网络上通过HTTP请求拉取图片。
+
+### 大图和多图加载处理
+
+加载大图片出现的问题
+
+- 在加载较大的图片到内存时，程序可能挂掉并报COM的错误。
+
+问题产生的原因
+
+- Android系统App的每个进程或者每个虚拟机有最大内存限制，如果申请的内存资源超过这个限制，系统就会抛出COM错误。
+
+大图COM问题的解决方式
+
+- 压缩图片
+
+```java
+// 加载到内存前
+// 先算出该bitmap的大小
+// 然后通过适当调节采样频率使得加载的图片刚好
+Options options = new Options();
+options.inJustDecodeBounds = true(false);
+BitmapFactory.decodeFile(pathName, options)
+```
+
+- 采用低内存占用量的编码方式
+
+  Bitmap.Config.ARGB_4444 比 Bitmap.Config.ARGB_8888更省内存。
+
+- 采用第三方框架，比如 picasso、imageloader、glide、frsco
+
+## Frame帧动画
+
+Frame动画是一系列图片按照一定的顺序展示的过程，和放电影的机制很相似。
+
+实现方式
+
+- 在XML中配置
+- Java代码实现
+
+## 补间动画
+
+补间动画无需逐一定义每一帧，只需定义开始、结束的帧和指定动画持续时间。
+
+补间动画有四种，它们均为Animation抽象类的子类
+
+- AlpahAnimation（透明度，0~1）
+
+```java
+AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1); // 参数为透明度始末数值
+alphaAnimation.setDuration(1000);  // 播放时间
+alphaAnimation.setFillAfter(true); // 停留在最后一帧
+image.startAnimation(alphaAnimation); // 启动动画
+```
+
+- ScaleAnimation（大小缩放，X、Y轴缩放，还包括缩放中心pivotX、pivotY）
+
+```java
+ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 2, 1f, 1.5f); // x轴变为原来的2倍数，y轴变为原来的1.5倍
+scaleAnimation.setDuration(1000); // 持续1s
+scaleAnimation.setFillAfter(true); // 停留在最后一帧
+image.startAnimation(scaleAnimation); // 启动动画
+```
+
+- TranslationAnimation（位移，X、Y轴位移）
+
+```java
+TranslateAnimation translateAnimation = new TranslateAnimation(0, 100, 0, 0); // 参数依次为x轴起点终点、y轴起点终点
+translateAnimation.setDuration(1000); // 持续时间
+translateAnimation.setFillAfter(true); // 停留在最后一帧
+
+```
+
+- RotateAnimation（旋转，包括缩放中心pivotX、pivotY）
+
+```java
+RotateAnimation rotateAnimation = new RotateAnimation(0, -60); // 参数依存为开始位置和旋转度数
+rotateAnimation.setDuration(1000);
+rotateAnimation.setFillAfter(false);
+image.startAnimation(rotateAnimation);
+```
+
+## 属性动画
+
+### 继承关系
+
+- Animator -> ValueAnimator -> ObjectAnimator
+
+### 使用步骤
+
+1. 调用ObjectAnimator的静态工厂方法创建动画(ofInt、ofFloat、ofObject)
+2. 调用SetXxx()设置动画持续时间、插值方式、重复次数等。
+3. 动画的监听事件
+4. 调用Animator对象的start()方法启动动画
+
+```java
+// 透明度改变动画
+ObjectAnimator.ofFloat(image, "alpha", 0, 1).start();
+```
+
+```java
+// 平移动画
+ObjectAnimator.ofFloat(image, "translationX", 0, 100).start();
+```
+
+```java
+// 旋转动画
+ObjectAnimator.ofFloat(image, "scaleX", 1, 2).start();
+```
+
+```java
+// 背景变化动画
+ValueAnimator valueAnimator = ObjectAnimator.ofInt(image, "backgroundColor", 0x979b9a, 0xF9AC07);
+valueAnimator.setEvaluator(new ArgbEvaluator());
+valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
+valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
+valueAnimator.start();
+// 动画监听器
+valueAnimator.addListener(new Animator.AnimatorListener(){
+    @Override
+    public void onAnimationStart(Animator animator) {
+        
+    }
+    // 还可以重载更多方法
+});
+```
+
+## MediaPlayer
+
+MediaPlayer 包含了 Audio 和 Video 的播放功能，在 Android 的界面上，Music 和 Video 两个应用程序都是调用 MediaPlayer 来实现的。
+
+### 使用步骤
+
+1. 创建 MediaPlayer 对象
+2. 调用 setDataSource() 方法设置音视频文件路径
+3. 调用 prepare() 方法使 MediaPlayer 进入准备状态
+4. 调用 start() 方法播放音视频
+
+### Media要播放的媒体文件来源
+
+- 用户在应用中事先自带的 resource 资源
+
+```java
+MediaPlayer.create(this, R.raw.test);
+```
+
+- 存储在SD卡或者其他文件路径下的媒体文件
+
+```java
+mediaPlayer.setDataSource("/sdcard/path/to/media/test.mp3");
+```
+
+- 网络上的媒体文件
+
+```java
+mediaPlayer.setDataSource("url");
+```
+
+## 弹框提示组件
+
+### Dialog普通对话框
+
+```java
+public void normalDialog(View view){
+    AlertDialog.Builder builder = new AlertDialog.builder(this);
+    mNormalDialog = builder.setTitle("我是普通对话框")
+        .setPositiveButton("确认", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                Toast.makeText(AlertDialogActivity.this, "点击确认", Toast.LENGTH_SHORT).show();
+            }
+        })
+        .setNegativeButton("取消", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                Toast.makeText(AlertDialogActivity.this, "点击取消", Toast.LENGTH_SHORT).show();
+            }
+        }).create();
+    mNormalDialog.show();
+}
+```
+
+### Dialog列表对话框
+
+```java
+public void lieBiaDialog(View view) {
+    AlertDialog.Builder = new AlertDialog.builder(this);
+    mLieBiaoDialog = builder.setTitle("列表对话框")
+        .setItems(items, new OnClick(DialogInterface dialogInterface, int i){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                Toast.makeText(AlertDialogActivity.this, "点击了" + i + "次", Toast.LENGTH_SHORT).show();
+            }
+        }).create();
+    mLieBiaoDialog.show();
+}
+```
+
+### Dialog单选对话框
+
+```java
+public void singleDialog(View view) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this,);
+    mSingleDialog = builder.setTitle("单选对话框");
+    builder.setTitle("单选对话框")
+        .setSingleChoiceItems(items, 1, new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(AlertDialogActivity.this, "点击了" + item[which] + "个", Toast.LENGTH_SHORT).show();
+            }
+        })
+        .setPositiveButton("确认", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mSingleDialog.dismiss();
+            }
+        })
+        .create();
+    mSingleDialog.show();
+}
+```
+
+### Dialog复选对话框
+
+```java
+public void multiDialog{
+	AlertDialog.Builder builder = new AlertDialog.Builder(this,);
+	mCheckDialog = build.setTitle("多选对话框")
+    	.setMultiChoiceItems(items, checkItems, new DialogInterface.OnMultiChoiceClickListener(){
+        	@Override
+        	public void onClick(DialogInterface dialogInterface, int i){
+            	// do something
+        	}
+    	}).create();
+	mCheckDialog.show();
+}
+```
+
+### Dialog自定义对话框
+
+```java
+// do it yourself
+```
+
+### Notification通知提示栏
+
+Notification是在应用的常规界面之外展示消息，当app让系统发送一个消息的时候，消息首先以图表的形式显示在通知栏。
+
+Notification的使用
+
+- 系统默认通知
+- 自定义通知
+
+### Popwindow弹出菜单
+
+PopupWindow的作用与Notification类似，但它可以指定显示的位置。
+
+必须设置：
+
+- View contentView
+- int width
+- int height
+
+常用方法：
+
+- showAsDropDown(View anchor)
+- showAsDropDown(View anchor, int xoff, int yoff)
+- showAsLocation(View parent, int gravity, int x, int y)
