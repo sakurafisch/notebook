@@ -1,5 +1,26 @@
 # Android
 
+## 设置 JDK 版本
+
+参考 [设置JDK版本](https://developer.android.com/studio/intro/studio-config#jdk)
+
+Android Studio 2.2 及更高版本捆绑提供了最新版本的 OpenJDK，这是我们建议用于 Android 项目的 JDK 版本。要使用捆绑的 JDK，请执行以下操作：
+
+1. 在 Android Studio 中打开您的项目，然后在菜单栏中依次选择 **File > Project Structure**。
+2. 在 **SDK Location** 页面中的 **JDK location** 下方，选中 **Use embedded JDK** 复选框。
+3. 点击 **OK**。
+
+默认情况下，用于编译项目的 Java 语言版本基于项目的 [`compileSdkVersion`](http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.BaseExtension.html#com.android.build.gradle.BaseExtension:compileSdkVersion)（因为不同版本的 Android 支持不同版本的 Java）。如有必要，您可以通过将以下[`CompileOptions {}`](http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.CompileOptions.html)代码块添加到`build.gradle` 文件来替换此默认 Java 版本：
+
+```groovy
+android {
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION\_1\_6
+            targetCompatibility JavaVersion.VERSION\_1\_6
+        }
+    }
+```
+
 ## DP尺寸单位
 
 - `dp`在不同密度的屏幕中实际显示比例将保持一致，1dp相当于160dpi屏幕中的1px。
@@ -524,3 +545,347 @@ intent.setDataAndType(uri, "audio/mp3");
 startActivity(intent);
 ```
 
+## 广播
+
+### 广播发送者
+
+- Context.sendBroadcast() 发送普通广播，订阅者都有机会获得并进行处理。
+- Context.sendOrderedBroadcast() 发送有序广播。
+- BroadcastReceiver.abortBroadcast() 终止广播
+
+### 广播接收者
+
+订阅Intent后，异步接收广播Intent。
+
+```java
+// 动态注册
+IntentFilter filter = new IntentFilter("ACTION");
+registerReceiver(reveiver, filter);
+```
+
+```xml
+<!--静态注册-->
+<!--AndroidManifest.xml-->
+<action android:name="ACTION" />
+```
+
+常见系统广播Action
+
+- android.intent.action.BATTERY_CHANGED 电池电量改变
+- android.intent.action.PHONE_STATE 通话状态改变，比如有电话接入
+- android.intent.action.BOOT_COMPLETED 系统启动完毕
+- android.intent.action.DATE_CHANGED 日期改变
+- android.provider.Telephony.SMS_RECEIVED 收到短信
+
+## Handler实现线程间通信
+
+handler用于实现Activity与Thread/runnable之间的通信，它运行于主UI线程，与子线程通过Message传递数据。
+
+主线程中接收消息
+
+- 创建handler对象，实现handleMessage(msg)方法。
+
+子线程中发送消息
+
+- handler.sendEmptyMessage(key) 
+- handler.obtainMessage(key, obj).sendToTarget()
+
+## Server服务
+
+服务没有图形界面，一直在后台运行。
+
+#### 使用步骤：
+
+- 继承Server类
+
+- 在AndroidManifest.xml对服务进行配置
+
+```xml
+<service android:name=".SMSService"/>
+```
+
+- 调用startService()或bindService()方法启动服务。
+
+#### startService()启动特点
+
+调用者与服务之间没有关联，即使调用者退出了，服务仍然运行。只能调用Context.stopService()方法结束服务。
+
+##### 生命周期
+
+`onCreate` -> `onStartCommand` -> `onDestory`
+
+##### Note
+
+- 如果服务已经开启，不会再调用onCreate()
+
+- 服务只能被停止一次
+
+#### bindService()启动特点
+
+bind方式开启服务，绑定服务，调用者挂了，服务也会跟着挂掉。绑定者可以与服务进行交互。
+
+##### 生命周期
+
+`onCreate` -> `onBind` -> `onUnBind` -> `onDestory`
+
+##### Note
+
+- 绑定服务不会调用 `onStart()` 或者 `onStartCommond`方法。
+
+- 回调方法onServiceConnected传递一个lBinder对象，可以此调用服务方法。
+
+## XML数据操作
+
+### XmlSerializer
+
+[看文档吧](https://developer.android.com/reference/org/xmlpull/v1/XmlSerializer)
+
+### Pull
+
+```java
+// 获取解析器对象
+XmlPullParser pullParser = Xml.newPullParser();
+// 绑定文件
+pullParser.setInput(is, "utf-8");
+// 基于事件类型解析
+int eventType = pullParser.getEventType();
+// 获取对应标签的内容
+pullParser.nextText();
+// 移动到下一个标签
+pullParser.next();
+```
+
+## SharedPreferences
+
+### Mode常用模式
+
+- MODE_PRIVATE 默认模式，文件只能被本程序访问
+- MODE_WORLD_READABLE 允许所有程序读取文件
+- MODE_WORLD_WRITEABLE 允许所有程序改写文件
+
+### 存储数据
+
+SharedPreferences是轻量级的存储类，类似于Properties类。
+
+存储数据
+
+```java
+SharedPreferences sharedPreferences = getSharedPreferences("filename", MODE_PRIVATE);
+// 获取编辑器
+SharePreferences.Editor editor = sharedPreferences.edit();
+// 设置String类型的值
+editor.putString("key1", "value");
+// 存储Int类型的值
+editor.putInt("key2", 12);
+// 提交事物才会生效
+editor.commit();
+```
+
+数据以XML文件形式存储
+
+存储路径为
+
+```
+/data/data/<package_name>/filename
+```
+
+存储内容为
+
+```xml
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+	<string name="key1">value</string>
+    <int name="key2" value="12" />
+</map>
+```
+
+### 读取数据
+
+```java
+// 获取到 SharedPreferences 对象
+SharedPreferences sharedPreferences = this.getPreferences(MODE_PRIVATE);
+// 获取 String 类型的数据
+String name = sharedPreferences.getString("key1", "default_value");
+// 获取 int 类型的数据
+int age = sharedPreferences.getInt("age", 0);
+```
+
+### 访问其他应用的SharedPreferences
+
+访问前提
+
+- 写入方式为：MODE_WORLD_READABLE
+
+使用方式
+
+```java
+try {
+    // 获取对应应用的 Context
+    Context = context = createPackageContext("包名", CONTEXT_IGNORE_SECURITY);
+} catch (PackageManager.NameNotFoundException e) {
+    e.printStackTrace();
+}
+SharedPreferences sharePreferences = other.getSharedPreferences("xml文件名")
+```
+
+## SD Card存储配置
+
+在电脑可模拟创建SD卡
+
+- cd到Android SDK安装路径的tools目录，输入指令：
+
+```cmd
+mksdcard 2048M D:\sdcard.img
+```
+
+SD卡操作权限配置
+
+```xml
+<!--在SD Card中创建与删除文件权限-->
+<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+<!--往SD Card写入数据权限-->
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+
+SD Card读写操作
+
+```java
+// 获取SD卡的状态
+Environment.getExternalStorageState(); 
+// 判断SD卡是否存在,如果存在并可读写，则返回 MEDIA_MOUNTED
+Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+// 获取SD卡目录
+Environment.getExternalStorageDirectory();
+// 或
+File saveFile = new File("/sdcard/abc.txt");
+```
+
+## SQLite
+
+可以使用 [SQLiteOpenHelper](https://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper) 类来创建和更新SQLite数据库。
+
+首先需要写一个类继承 SQLiteOpenHelper 类，然后参考下文：
+
+### 创建数据库
+
+```java
+// 创建数据库表格
+@Override
+public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    sqLiteDatabase.execSQL("create table student(" + "_id Integer primary key autoincrement" + ", name varchar(20), age Integer)")
+}
+```
+
+### 更新数据库版本
+
+```java
+// 更新数据库版本
+@Override
+public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int j) {
+}
+```
+
+### 插入数据
+
+- insert(String 表名, String 非空列名, ContentValues values);
+
+```java
+// 获取数据库
+SQLiteDatabase sqLiteDatabase = help.getWritableDatabase();
+// 封装数据
+ContentValues contentValues = new ContentValues();
+contentValues.put("name", name);
+contentValues.put("age", age);
+// 插入操作
+long insert =sqLiteDatabase.insert(table, null, contentValues);
+// 关闭数据库
+sqLiteDatabase.close()
+```
+
+### 删除操作
+
+- delete(String 表名, String where, String[] args);
+
+```java
+SQLiteDatabase sqLiteDatabase = help.getWritableDatabase();
+// 删除数据
+int delete = sqLiteDatabase.delete(table, "name=?", new String[]{name});
+sqLiteDatabase.close
+```
+
+### 修改数据
+
+```java
+SQLiteDatabase sqLiteDatabase = help.getWritableDatabase();
+// 封装数据
+ContentValues contentValues = new ContentValues();
+values.put("age", age);
+// 修改数据
+int update = sqLiteDatabase.update(table, values, "name=?", new String[]{name});
+sqLiteDatabase.close
+```
+
+### 查询操作
+
+```java
+SQLiteDatabase sqLiteDatabase = help.getReadableDatabase();
+Cursor cursor = sqLiteDatabase.query(table, new String[]{"_id", "name", "age"}, null, null, null, null, null);
+while (cursor.moveToNext()) { // 判断是否存在数据
+    User user = new User();
+    int id = cursor.getInt(0);
+    user.setId(id);
+    lists.add(user);
+}
+cursor.close();
+sqLiteDatabase.close;
+return lists;
+```
+
+## ContentProvider
+
+四大基本组件之一，主要用于实现不同应用间的数据共享。
+
+### 主要属性 URI
+
+content://hx.android.text.myprovider/tablename/#
+
+- hx.android.text.myprovider 主机名
+- tablename 路径，即要操作的表名
+- \# 需要获取的记录的ID
+
+### ContentResolver
+
+用于获取ContentProvider数据
+
+```java
+// 获取ContentResolver对象
+ContentResolver contentResolver = getContentResolver();
+```
+
+常用方法
+
+- query(Uri uri, String[] cols, String where, String[] args, String orderBy);
+- insert(Uri uri, ContentValues contentValues);
+- update(Uri uri, ContentValues contentValues, String where, String[] args);
+- delete(Uri uri, String where, String[] args);
+
+## 网络操作
+
+### HttpUrlConnection
+
+java标准类，没有封装，方便扩展。
+
+```java
+URL url = new URL("http://winnerwinter.com?username=yourusername");
+HttpUrlConnection httpUrlConnection = (HttpUrlConnection)url.openConnection();
+httpUrlConnection.setRequestMethod("GET");
+if(httpUrlConnection.getResponseCode() == 200){
+    httpUrlConnection.getInputStream();
+}
+```
+
+### HttpClient（已弃用）
+
+HttpClient封装了http的header、参数、body、response等。
+
+于 Android 6.0 弃用。
