@@ -1195,3 +1195,19 @@ PopupWindow的作用与Notification类似，但它可以指定显示的位置。
 - showAsDropDown(View anchor)
 - showAsDropDown(View anchor, int xoff, int yoff)
 - showAsLocation(View parent, int gravity, int x, int y)
+
+## WebView
+
+- 加载网址
+
+```java
+webview.loadURL(https://cn.bing.com);
+```
+
+- 加载本地的HTML文件
+
+```java
+webview.loadURL("file:///android_asset/file_name.html");
+```
+
+- webview与js+html交互
