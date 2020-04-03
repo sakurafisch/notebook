@@ -14,7 +14,7 @@ ng serve --open  #启动
 
 ### ng generate
 
-[参考文档](https://angular.io/cli/generate)
+[参考文档：CLI Generate](https://angular.io/cli/generate)
 
 ```bash
 ng generate <schematic> [options]
@@ -26,7 +26,9 @@ ng generate pipe <pipe-name>
 
 ### ng build
 
-[参考文档](https://angular.io/cli/build)
+[参考文档：CLI Build](https://angular.io/cli/build)
+
+[参考文档：Deployment](https://angular.io/guide/deployment)
 
 ```bash
 ng build --prod=true --aot=true
