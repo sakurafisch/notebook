@@ -80,6 +80,32 @@ console.table(
 - `console.trace()`用于显示调用栈。
 - `console.clear()`用于清空输出。
 
+## let 和 const
+
+`let`和`const`命令用于声明变量。
+
+`let`声明的变量是可变的，`const`声明的变量是不可变的。
+
+```js
+let foo = 1;
+foo = 2;
+
+const bar = 1;
+bar = 2; // 报错
+```
+
+注意，如果`const`声明的变量指向一个对象，那么该对象的属性是可变的。
+
+```js
+const foo = {
+  bar: 1
+};
+
+foo.bar = 2;
+```
+
+上面代码中，变量`foo`本身是不可变的，即`foo`不能指向另一个对象。但是，对象内部的属性是可变的，这是因为这时`foo`保存的是一个指针，这个指针本身不可变，但它指向的对象本身是可变的。
+
 ## IIFE
 
 [参考文档](https://developer.mozilla.org/zh-CN/docs/Glossary/%E7%AB%8B%E5%8D%B3%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F)
@@ -134,6 +160,74 @@ var [one, two, three] = foo;
 console.log(one); // "one"
 console.log(two); // "two"
 console.log(three); // "three"
+```
+
+解构赋值时，还可以设置默认值。
+
+```js
+let [x, y = 'b'] = ['a']; // x='a', y='b'
+```
+
+上面代码中，变量`y`解构赋值时没有取到值，所以默认值就生效了。
+
+## Promise 对象
+
+Promise 是 ES6 引入的封装异步操作的统一接口。它返回一个对象，包含了异步操作的信息。
+
+Promise 本身是一个构造函数，提供了`resolve`和`reject`两个方法。一旦异步操作成功结束，就调用`resolve`方法，将 Promise 实例对象的状态改为`resolved`，一旦异步操作失败，就调用`reject`方法，将 Promise 实例的状态改成`rejected`。
+
+```js
+function timeout(duration = 0) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, duration);
+  })
+}
+```
+
+上面代码中，`timeout`函数返回一个 Promise 实例，在指定时间以后，将状态改为`resolved`。
+
+```js
+var p = timeout(1000).then(() => {
+  return timeout(2000);
+}).then(() => {
+  throw new Error("hmm");
+}).catch(err => {
+  return Promise.all([timeout(100), timeout(200)]);
+})
+```
+
+一旦 Promise 实例的状态改变以后，就可以使用`then()`方法指定下面将要执行的函数，`catch()`方法用来处理`rejected`状态的情况。
+
+## module
+
+ES6 意义最重大的语法变化，就是引入了模块（module）。
+
+一个模块内部，使用`export`命令输出对外的接口。
+
+```js
+// lib/math.js
+export function sum(x, y) {
+  return x + y;
+}
+export var pi = 3.141593;
+```
+
+上面的模块输出了`sum`和`pi`两个接口。
+
+`import`命令用于引入该模块。
+
+```js
+// app.js
+import * as math from "lib/math";
+alert("2π = " + math.sum(math.pi, math.pi));
+```
+
+上面代码中，`*`表示引入所有接口，也可以只引入指定的接口。
+
+```js
+// otherApp.js
+import {sum, pi} from "lib/math";
+alert("2π = " + sum(pi, pi));
 ```
 
 ## 常见问题
