@@ -1,15 +1,36 @@
 # Angular
 
-## 配置环境
+## CLI
 
 ```bash
 npm install -g @angular/cli  # 全局安装 Angular CLI
 ng new <app-name>  # 创建应用
 cd <app-name>  # 进入应用工作区目录
+
 ng serve --open  #启动
 ```
 
 `ng serve` 命令会启动开发服务器、监视文件，并在这些文件发生更改时重建应用。
+
+### ng generate
+
+[参考文档](https://angular.io/cli/generate)
+
+```bash
+ng generate <schematic> [options]
+# 比如 
+ng generate module <module-name>  # 创建组件
+ng generate directive <directive-name>  # 创建指令
+ng generate pipe <pipe-name>
+```
+
+### ng build
+
+[参考文档](https://angular.io/cli/build)
+
+```bash
+ng build --prod=true --aot=true
+```
 
 ## NgModule
 
@@ -232,6 +253,14 @@ constructor(private service: SiteService) { }
 如果容器中还没有所请求的服务实例，注入器就会创建一个服务实例，并且添加到容器中，然后把这个服务返回给 Angular 。
 
 当所有的服务都被解析完并返回时， Angular 会以这些服务为参数去调用组件的构造函数。 这就是依赖注入 。
+
+# HttpClient
+
+[参考文档](https://angular.cn/guide/http)
+
+现代浏览器支持使用两种不同的 API 发起 HTTP 请求：`XMLHttpRequest` 接口和 `fetch()` API。
+
+`@angular/common/http` 中的 `HttpClient` 类为 Angular 应用程序提供了一个简化的 API 来实现 HTTP 客户端功能。它基于浏览器提供的 `XMLHttpRequest` 接口。
 
 ## 路由
 

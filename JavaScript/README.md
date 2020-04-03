@@ -96,6 +96,46 @@ console.table(
 
 第二部分再一次使用 `()` 创建了一个立即执行函数表达式，JavaScript 引擎到此将直接执行函数。
 
+## 解构赋值
+
+[参考文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+
+解构赋值语法是一种 Javascript 表达式。通过解构赋值, 可以将属性/值从对象/数组中取出,赋值给其他变量。
+
+```js
+var a, b, rest;
+[a, b] = [10, 20];
+console.log(a); // 10
+console.log(b); // 20
+
+[a, b, ...rest] = [10, 20, 30, 40, 50];
+console.log(a); // 10
+console.log(b); // 20
+console.log(rest); // [30, 40, 50]
+
+({ a, b } = { a: 10, b: 20 });
+console.log(a); // 10
+console.log(b); // 20
+
+
+// Stage 4（已完成）提案中的特性
+({a, b, ...rest} = {a: 10, b: 20, c: 30, d: 40});
+console.log(a); // 10
+console.log(b); // 20
+console.log(rest); // {c: 30, d: 40}
+
+var x = [1, 2, 3, 4, 5];
+var [y, z] = x;
+console.log(y); // 1
+console.log(z); // 2
+
+var foo = ["one", "two", "three"];
+var [one, two, three] = foo;
+console.log(one); // "one"
+console.log(two); // "two"
+console.log(three); // "three"
+```
+
 ## 常见问题
 
 - this、作用域、优先级等综合考察：
