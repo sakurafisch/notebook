@@ -230,6 +230,42 @@ import {sum, pi} from "lib/math";
 alert("2π = " + sum(pi, pi));
 ```
 
+## Array.prototype.filter()
+
+[参考文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+
+### 语法
+
+```js
+var newArray = arr.filter(callback(element[, index[, array]])[, thisArg])
+```
+
+###  参数
+
+- `callback`
+
+  用来测试数组的每个元素的函数。返回 `true` 表示该元素通过测试，保留该元素，`false` 则不保留。它接受以下三个参数：
+
+  `element`数组中当前正在处理的元素。`index`可选正在处理的元素在数组中的索引。`array`可选调用了 `filter` 的数组本身。
+
+- `thisArg`可选
+
+  执行 `callback` 时，用于 `this` 的值。
+
+### 返回值
+
+一个新的、由通过测试的元素组成的数组，如果没有任何数组元素通过测试，则返回空数组。
+
+举个🌰
+
+```js
+function isBigEnough(element) {
+  return element >= 10;
+}
+var filtered = [12, 5, 8, 130, 44].filter(isBigEnough);
+// filtered is [12, 130, 44] 
+```
+
 ## 常见问题
 
 - this、作用域、优先级等综合考察：

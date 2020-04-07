@@ -199,5 +199,125 @@ Object getAttribute(String name); // 通过key获取数据
 void removeAttribute(String name); // 通过key移除key:value对 
 ```
 
+## HTTP Response API
 
+### 设置响应行
+
+```java
+setStatus(int sc)
+```
+
+举个🌰
+
+```java
+response.setStatus(302);
+```
+
+### 设置响应头
+
+```java
+setHeader(String name, String value);
+```
+
+举个🌰
+
+```java
+response.setHeader("location", "/contextpath/login")
+```
+
+### 设置响应体
+
+- 字符输出流
+
+```java
+PrintWriter getWriter();
+```
+
+- 字节输出流
+
+```java
+ServletOutputStream getOutputStream();
+```
+
+举个🌰
+
+```java
+response.setContentType("text/html;charset=utf-8"); // 设置编码
+PrintWriter printWriter = response.getWriter(); // 获取字符输出流
+printerWriter.writer("<h1>This is a response message!</h1>"); //输出数据
+```
+
+再举一个🌰
+
+```java
+response.setContentType("text/heml;charset=utf-8");
+ServletOutputStream servletOutputStream = response.getOutputStream();
+servletOutputStream.write("你好".getBytes("utf-8"));
+```
+
+### 简单的重定向(redirect)方法
+
+重定向的特点：
+
+- 地址栏发生变化。
+- 可以访问其他站点（服务器）的资源。
+- 两次请求。因此不能用 request 对象共享数据。
+
+```java
+response.sendRedirect("/contextpath/register");
+```
+
+### 转发(forward)
+
+转发的特点：
+
+- 地址栏路径不变。
+- 只能访问当前服务器的资源。
+- 一次请求。因此可以使用 request 对象共享数据。
+
+## 验证码
+
+```java
+int width = 100;
+int height = 50;
+
+// 创建一个对象，在内存中的图片
+BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+// 填充背景色
+Graphics graphics = image.getGraphics();// 获取画笔对象
+graphics.setColor(Color.PINK); // 设置画笔颜色
+graphics.fillRect(0, 0, width, height);
+
+// 画边框
+graphics.setColor(Color.BLUE);
+graphics.drawRect(0, 0, width -1, height -1);
+
+String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+Random random = new Random();// 生成随机角标
+
+
+for (int i = 1; i <= 4; i++) {
+    int index = random.nextInt(str.length());
+    // 获取字符
+	char ch = str.charAt(index); // 随机字符
+	// 写验证码
+    graphics.drawString(ch + "", width /5 * i, height / 2);
+}
+
+graphics.setColor(Color.GREEN);  // 设置画笔为绿色
+
+for (int i = 0; i < 10; i++) {
+    // 随机生成坐标点
+	int x1 = random.nextInt(width);
+	int x2 = random.nextInt(width);
+	int y1 = random.nextInt(height);
+	int y2 = random.nextInt(height);
+	// 画干扰线
+	graphics.drawLine(1, )
+}
+
+// 将图片输出到页面显示
+ImageIO.write(image, "jpg", response.getOutputStream());
+```
 
