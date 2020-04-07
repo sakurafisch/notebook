@@ -321,3 +321,193 @@ for (int i = 0; i < 10; i++) {
 ImageIO.write(image, "jpg", response.getOutputStream());
 ```
 
+## 文件下载
+
+使用响应头设置资源的打开方式
+
+```
+content-disposition:attachment;filename=xxx
+```
+
+```java
+// 获取请求参数，文件名称
+String filename = request.getParameter("filename");
+// 使用字节输入流加载文件进内存
+ServletContext servletContext = this.getServletContext();
+String realPath = servletContext.getRealPath("/foldername" + filename);
+FileInputStream fileInputStream = new FileInputStream(realPath);
+// 设置response响应头
+String mimeType = servletContext.getMimeType(filename);
+response.setHeader("content-type", mimeType);
+
+// 解决中文文件名问题
+String agent = request.getHeader("user-agent");
+filename = DownLoadUtils.getFileName(agent, filename);
+
+response.setHeader("content-disposition", "attachment;filename="+filename);
+
+// 将输入流的数据写出到输出流中
+ServletOutputStream = servletOutputStream = response.getOutputStream();
+byte[] buff = new byte[1024 * 8];
+int len = 0;
+while((len = fileInputStream.read(buff)) != -1) {
+    servletOutputStream.write(buff, 0, len);
+}
+fileInputStream.close();
+```
+
+## 会话技术
+
+会话：一次会话中包含多次请求和响应。
+
+一次会话：浏览器第一次给服务器资源发送请求，会话建立，直到有一方断开为止。
+
+功能：在一次会话的多次请求间，共享数据。
+
+方式：
+
+1. 客户端会话技术：Cookie
+2. 服务器端会话技术：Session
+
+## Cookie
+
+概念：客户端会话技术，将数据保存在客户端。
+
+### 使用步骤：
+
+- 创建 Cookie 对象，绑定数据
+
+```java
+new Cookie(String name, String value);
+```
+
+- 发送 Cookie 对象
+
+```java
+response.addCookie(Cookie cookie);
+```
+
+- 获取 Cookie，拿到数据
+
+```java
+Cookie[] getCookies(); // API 定义，返回 Cookie 数组
+```
+
+```java
+request.getCookies();  // 使用示例
+```
+
+```java
+// 遍历 Cookie[] 示例
+Cookie[] cs = request.getCookies();
+if(cs != null) {
+    for (Cookie c : cs) {
+        String name = c.getName();
+        String value = c.getValue();
+        System.out.println(name + ":" + value);
+    }
+}
+```
+
+```java
+// 一次请求发送多个 Cookie 示例
+Cookie c1 = new Cookie("msg", "hello");
+Cookie c2 = new Cookie("name", "winnerwinter");
+response.addCookie(c1);
+response.addCookie(c2);
+```
+
+### 持久化
+
+默认情况下，Cookie存放于内存中，随浏览器关闭而销毁。
+
+持久化存储
+
+```java
+setMaxAge(int seconds); // 正数：持久化；负数：默认值；零：删除
+```
+
+### 同一服务器的Cookie共享
+
+```java
+setPath(String path);
+```
+
+举个🌰
+
+```java
+Cookie cookie = new Cookie("msg", "Hello");
+cookie.setPath("/");
+```
+
+### 同一域名不同服务器的Cookie共享
+
+```java
+setDomain(String path);
+```
+
+举个🌰
+
+```java
+Cookie cookie = new ("msg", "Hello");
+cookie.setDomain(".google.com");
+```
+
+## Session
+
+[HttpSession](https://tomcat.apache.org/tomcat-9.0-doc/servletapi/javax/servlet/http/HttpSession.html)
+
+概念：服务器端会话技术，在一次会话的多次请求间共享数据，将数据保存在服务器端的对象中。
+
+API
+
+```java
+Object getAttribute(String name);
+void getAttribute(String name, Object value);
+void removeAttribute(String name);
+```
+
+举个🌰
+
+```java
+HttpSession httpSession = request.getSession();
+httpSession.setAttribute("msg", "Hello Session");
+```
+
+```java
+HttpSession httpSession = request.getSession();
+Object msg = session.getAttribute("msg");
+System.out.println("msg");
+```
+
+查找 Session 的 id 依赖于 Cookie。
+
+使浏览器端存储 JSESSIONID 的 Cookie 持久化：
+
+```java
+// 使浏览器端存储 JSESSIONID 的 Cookie 持久化
+Cookie cookie = new Cookie("JSESSIONID", session.getId());
+cookie.setMaxAge(60 * 60);
+cookie.addCookie(cookie);
+```
+
+Session 的钝化和活化：
+
+- 钝化：在服务器正常关闭之前，将 session 对象序列化到硬盘上。
+- 活化：在服务器启动后，将 session 文件转化为内存中的 session 对象。
+
+Tomcat 会自动完成 Session 的钝化和活化过程，但在 IDEA 中活化不会成功，因为 IDEA 启动时会删除原来的 work 目录并重新创建一个。
+
+Session 在以下情况下被销毁：
+
+- 服务器关闭
+- session 对象调用 invalidate();
+- session 默认失效时间，30分钟
+
+```xml
+<!-- web.xml -->
+<session-config>
+	<session-timeout>30</session-timeout>
+</session-config>
+```
+

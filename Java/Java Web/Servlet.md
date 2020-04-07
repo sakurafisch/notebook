@@ -53,3 +53,41 @@ GenericServlet是一个抽象类，它对Servlet接口的其他方法做了空�
 
 ## HttpServlet
 
+## ServletContext对象
+
+概念：代表整个Web应用，可以和程序的容器（服务器）通信
+
+获取方式：
+
+```java
+// 通过 request 对象获取
+request.getServletContext();
+```
+
+```java
+// 通过 HttpServlet 获取
+this.getServletContext();
+```
+
+功能：
+
+- 获取 MIME 类型
+
+```java
+String getMimeType(String file);
+```
+
+- 域对象：共享数据
+
+```java
+setAttribute(String name, Object value);
+getAttribute(String name);
+removeAttribute(String name);
+```
+
+- 获取文件的真实（服务器）路径
+
+```java
+String getRealPath(String path);
+```
+
