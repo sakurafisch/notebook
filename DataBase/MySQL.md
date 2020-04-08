@@ -431,3 +431,152 @@ SELECT * FROM student LIMIT 10, 10;
 SELECT * FROM student LIMIT 20, 10;
 ```
 
+## 约束
+
+约束的概念：对表中的数据进行限定，保证数据的正确性、有效性和完整性。
+
+分类：
+
+- 主键约束：primary key
+- 非空约束：not null
+- 唯一约束：unique
+- 外键约束：foreign key
+
+### 主键约束PRIMARY KEY
+
+主键：
+
+1. 非空且唯一
+2. 一张表只能有一个字段为主键
+3. 主键是表中记录的唯一标识
+
+- 在创建表时添加主键
+
+```mysql
+CREATE TABLE stu(
+	id INT PRIMARY KEY,
+    NAME VARCHAR(20)
+);
+```
+
+- 在创建表后添加主键
+
+```mysql
+ALTER TABLE stu MODIFY id INT PRIMARY KEY;
+```
+
+- 删除主键
+
+```mysql
+ALTER TABLE stu DROP PRIMARY KEY;
+```
+
+#### 自动增长AUTO_INCREMENT
+
+概念：如果某一列是数值类型的，则可用 auto_increment 实现值的自动增长。
+
+- 在创建表时设置自动增长
+
+```mysql
+CREATE TABLE stu(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    NAME VARCHAR(20)
+);
+```
+
+- 添加自动增长
+
+```mysql
+ALTER TABLE stu MODIFY id AUTO_INCREMENT;
+```
+
+- 删除自动增长
+
+```mysql
+ALTER TABLE stu MODIFY id INT;
+```
+
+### 非空约束NOT NULL
+
+- 在创建表时添加约束
+
+```mysql
+CREATE TABLE stu(
+	id INT,
+	NAME VARCHAR(20) NOT NULL
+);
+```
+
+- 在创建表后，添加非空约束
+
+```mysql
+ALTER TABLE stu MODIFY NAME VARCHAR(20) NOT NULL;
+```
+
+- 删除 NAME 的非空约束
+
+```mysql
+ALTER TABLE stu MODIFY NAME VARCHAR(20);
+```
+
+### 唯一约束UNIQUE
+
+注意：唯一约束限定的列的值可以有多个 NULL
+
+- 在创建表时，添加唯一约束
+
+```mysql
+CREATE TABLE stu (
+	id INT;
+    phone_number VARCHAR(20) UNIQUE
+);
+```
+
+- 在创建表后，添加唯一约束
+
+当数据有重复时，会导致添加唯一约束失败
+
+```mysql
+ALTER TABLE stu MODIFY phone_number VARCHAR(20) UNIQUE;
+```
+
+- 删除唯一约束
+
+```mysql
+ALTER TABLE stu DROP INDEX phone_number VARCHAR(20);
+```
+
+### 外键约束FOREIGN KEY
+
+外键约束：让表与表产生关系，从而保证数据的正确性。
+
+- 在创建表时添加外键
+
+```mysql
+CREATE TABLE <表名>(
+	... ,
+    CONSTRAINT <外键名称> FOREIGN KEY (<外键列名称>) REFERENCES <主表名称>(<主表列名称>)
+) ;
+```
+
+- 在创建表后添加外键
+
+```mysql
+ALTER TABLE <表名> ADD CONSTRAINT <外键名称> FOREIGN KEY (<外键字段名称>) REFERENCES <主表名称>(<主表列名称>);
+```
+
+- 删除外键
+
+```mysql
+ALTER TABLE <表名> DROP FOREIGN KEY <外键名称>;
+```
+
+#### 级联操作(谨慎使用)
+
+- 级联更新：ON UPDATE CASCADE
+- 级联删除：ON DELETE CASCADE
+
+```mysql
+ALTER TABLE employee ADD CONSTRAINT emp_dept_fk FOREIGN KEY (dep_id) REFERENCES department(id) ON UPDATE CASCADE;
+```
+
