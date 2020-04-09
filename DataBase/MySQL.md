@@ -21,9 +21,9 @@ net stop mysql # 关闭
 ## 登录
 
 ```bash
-mysql -uroot -p密码
-mysql -hip -uroot -p连接目标的密码
-mysql --host=ip:host --user=root --password=连接目标的密码
+mysql -uroot -p<密码>
+mysql -hip -uroot -p<连接目标的密码>
+mysql --host=ip:host --user=root --password=<连接目标的密码>
 ```
 
 ## 退出
@@ -31,6 +31,36 @@ mysql --host=ip:host --user=root --password=连接目标的密码
 ```bash
 exit
 quit
+```
+
+## 数据库的备份和还原
+
+### 备份
+
+```mysql
+mysqldump -u<用户名> -p<密码> <数据库名称> > <要保存的路径>
+```
+
+### 还原
+
+- 先登录
+
+- 创建数据库
+
+```mysql
+create database <数据库名称>;
+```
+
+- 使用数据库
+
+```mysql
+use database <数据库名称>;
+```
+
+- 执行文件
+
+```mysql
+source <文件路径>;
 ```
 
 ## 客户端图形化工具SQLYog
@@ -64,7 +94,7 @@ quit
 - timestamp：时间戳类型，包含年月日时分秒，yy-MM-dd，若创建时不赋值或赋值为null，自动赋值为当前系统时间
 - varchar：字符串类型，例如 varchar(20)
 
-## DDL
+## DDL操作数据库和表
 
 ### 创建数据库
 
@@ -206,7 +236,7 @@ drop table <表名>;
 drop table if exists <表名>
 ```
 
-## DML
+## DML增删改表中数据
 
 ### 添加数据
 
@@ -244,7 +274,7 @@ delete from <表名> [where <条件>]
 TRUNCATE TABLE <表名>;
 ```
 
-## DQL
+## DQL查询表中数据
 
 ### 语法一览
 
@@ -431,6 +461,106 @@ SELECT * FROM student LIMIT 10, 10;
 SELECT * FROM student LIMIT 20, 10;
 ```
 
+## DCL管理用户和授权
+
+### 添加用户
+
+```mysql
+CREATE USER '<用户名>'@'<主机名>' IDENTIFIED BY '<密码>';
+```
+
+### 删除用户
+
+```mysql
+DROP USER '<用户名>'@<主机名>;
+```
+
+### 修改用户密码
+
+```mysql
+UPDATE USER SET PASSWORD = PASSWORD('<新密码>') WHERE USER = '<用户名>';
+```
+
+```mysql
+SET PASSWORD FOR '<用户名>'@'<主机名>' = PASSWORD('新密码');
+```
+
+### 查询用户
+
+- 切换到 `mysql` 数据库
+
+```mysql
+USE mysql;
+```
+
+- 查询 `user` 表
+
+```mysql
+SELECT * FROM USER;
+```
+
+通配符 `%` 表示可以在任意主机使用该用户登录数据库。
+
+### 忘记 root 密码
+
+- 先停止 MySQL 服务
+
+```cmd
+net stop mysql # 使用 cmd 停止 MySQL 服务
+```
+
+```bash
+sudo systemctl stop mysql.service # 使用 bash 停止 MySQL 服务
+```
+
+- 使用无验证方式启动 MySQL 服务，保持该命令行窗口打开
+
+```cmd
+mysql --skip-grant-tables
+```
+
+- 新开一个命令行窗口并进入 MySQL
+
+```cmd
+mysql
+```
+
+- 更改 `root` 用户的密码
+
+```mysql
+UPDATE USER SET PASSWORD = PASSWORD('<新密码>') WHERE USER='root';
+```
+
+- 结束MySQL服务，然后重新开启
+
+### 查询用户权限
+
+```mysql
+SHOW GRANTS FOR '<用户名>@<主机名>';
+```
+
+### 授予用户权限
+
+```mysql
+GRANT <权限列表> ON <数据库名.表名> TO '<用户名>'@'<主机名>';
+```
+
+权限有以下这些可选项：
+
+- SELECT | DELETE | UPDATE | ALL
+
+给某用户授予所有权限，在任意数据库任意表上：
+
+```mysql
+GRANT ALL ON *.* TO '<用户名>'@<主机名>;
+```
+
+### 撤销用户权限
+
+```mysql
+REVOKE <权限列表> ON <数据库名.表名> FROM '<用户名>'@'<主机名 >'; 
+```
+
 ## 约束
 
 约束的概念：对表中的数据进行限定，保证数据的正确性、有效性和完整性。
@@ -580,3 +710,210 @@ ALTER TABLE <表名> DROP FOREIGN KEY <外键名称>;
 ALTER TABLE employee ADD CONSTRAINT emp_dept_fk FOREIGN KEY (dep_id) REFERENCES department(id) ON UPDATE CASCADE;
 ```
 
+## 多表之间的关系
+
+### 一对一
+
+举例：一个人只有一个身份证，一个身份证只能对应一个人。
+
+实现：在任意一张表添加外键指向另一张表的主键，并对该外键添加唯一约束(`UNIQUE`)。
+
+### 一对多
+
+举例：一个部门有多个员工，一个员工只能对应一个部门。
+
+实现：在多的一方建立外键，指向一的一方的主键。
+
+### 多对多
+
+举例：一个学生可以选择多门课程，一门课程可以被很多学生选择。
+
+实现；建立一张表，比如学生选课表，联合主键是sid和cid的组合。
+
+## 3NF范式设计思路
+
+能创建表：第一范式（1NF）
+
+在1NF的基础上，消除非主属性对主码的依赖：第二范式（2NF）
+
+在2NF的基础上，消除传递依赖：第三范式（3NF）
+
+## 多表查询
+
+### 笛卡尔积
+
+```mysql
+select * FROM <表A>, <表B>;
+```
+
+### 内连接查询
+
+#### 隐式内连接
+
+使用 `where` 条件消除无用数据。
+
+举例，查询所有员工信息和对应的部门信息
+
+```mysql
+SELECT * FROM emp, dept WHERE emp.`dept_id` = dept.`id`;
+```
+
+#### 显式内连接
+
+```mysql
+SELECT <字段列表> FROM <表A> INNER JOIN <表B> ON <条件>
+```
+
+举例
+
+```mysql
+SELECT * FROM emp INNER JOIN dept ON emp.`dept_id` = dept.`id`;
+```
+
+### 外连接查询
+
+#### 左外连接
+
+```mysql
+SELECT <字段列表> FROM <表A> LEFT OUTER JOIN <表B> ON <条件>
+```
+
+#### 右外连接
+
+```mysql
+SELECT <字段列表> FROM <表A> RIGHT OUTER JOIN <表B> ON <条件>
+```
+
+### 子查询
+
+若查询中包含嵌套查询，则其中的嵌套查询称为子查询。
+
+#### 结果为单行单列的子查询
+
+当子查询的结果为单行当列时，子查询可以作为条件，使用运算符去判断。
+
+举例，查询工资最高的员工信息：
+
+```mysql
+SELECT * FROM emp WHERE emp.`salary` = (SELECT MAX(salary) FROM emp);
+```
+
+再举一例，查询工资低于平均工资的员工信息
+
+```mysql
+SELECT * FROM emp WHERE emp.salary < (SELECT AVG(salary) FROM emp);
+```
+
+#### 结果为多行单列的子查询
+
+当子查询的结果为多行单列时，子查询可以作为条件，使用运算符 `IN` 去判断。
+
+举例，查询财务部和市场部所有员工的信息
+
+```mysql
+SELECT * FROM emp WHERE dept_id IN (SELECT id FROM dept WHERE NAME = '财务部' OR NAME = '市场部');
+```
+
+#### 结果为多行多列的子查询
+
+当子查询的结果为多行多列时，子查询可以作为一张虚拟表。
+
+举例，查询入职日期为2011-11-11之后的员工信息和部门信息：
+
+```mysql
+SELECT * FROM dept AS table1, (SELECT * FROM emp WHERE emp.`join_date` > '2011-11-11') AS table2 WHERE table1.id = table2.id;
+```
+
+与内连接作对比：
+
+```mysql
+SELECT * FROM emp AS table1, dept AS table2 WHERE table1.`dept_id` = t2.`id` AND t1.`join_date` > '2011-11-11';
+```
+
+## 事务
+
+### 事务的基本介绍
+
+#### 事务的概念
+
+如果一个包含多个步骤的业务操作，被事务管理，那么这些操作要么同时成果，要么同时失败。
+
+#### 事务的基本操作
+
+- 开启事务
+
+```mysql
+start transaction;
+```
+
+- 回滚
+
+```mysql
+rollback;
+```
+
+- 提交
+
+```mysql
+commit;
+```
+
+#### MySQL 事务的默认提交方式
+
+在MySQL数据库中事务默认自动提交（在Oracle数据库中事务默认手动提交），一条 DML 语句会自动提交一次事务；当执行 `start transaction;` 后，本次事务变为手动提交。
+
+可以查看 DML 语句的事务是否设置为自动提交：
+
+```mysql
+SELECT @@autocommit; -- 1 代表自动提交，0 代表手动提交
+```
+
+可以更改事务的默认提交方式：
+
+```mysql
+SET @@autocommit = 0; -- 设为手动提交
+```
+
+设为手动提交后，如果执行了 DML 语句而没有手动提交，当退出登录后后台会自动回滚。
+
+### 事务的四大特征
+
+1. 原子性
+2. 持久性
+3. 隔离性
+4. 一致性
+
+### 事务的隔离级别
+
+#### 要解决的问题
+
+事务的不同隔离级别，是为了解决这些问题：
+
+- 脏读：一个事务读取到另一个事务中没有提交的数据
+- 不可重复读（虚读）：在同一个事务中，两次读取到的数据不一样。
+- 幻读：一个事务操作（DML）数据表中所有记录，另一个事务添加了一条数据，则第一个事务查询不到自己的修改。
+
+#### 隔离级别
+
+- read uncommited
+- read committed（Oracle默认）：解决了脏读
+- repeatable read（MySQL默认）：解决了脏读、不可重复读
+- serializable：解决了所有问题
+
+事务的级别由小到大安全性越来越高，但效率越来越低。
+
+### 事务的相关操作
+
+数据库查询隔离级别
+
+```mysql
+select @@tx_isolation;
+```
+
+数据库设置隔离级别
+
+```mysql
+set global transaction isolation level <隔离级别字符串>;
+```
+
+注意：当改变数据库的事务隔离级别后，要重新登录才能生效。
