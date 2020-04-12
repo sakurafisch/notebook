@@ -1,5 +1,7 @@
 # Android
 
+建议按照[应用架构指南](https://developer.android.google.cn/jetpack/docs/guide)优雅地开发。
+
 ## 设置 JDK 版本
 
 参考 [设置JDK版本](https://developer.android.com/studio/intro/studio-config#jdk)

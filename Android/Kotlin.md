@@ -14,7 +14,33 @@
 
 Kotlin包括对Java本身当前不支持的[许多功能的](https://kotlinlang.org/docs/reference/comparison-to-java.html)支持。
 
+## 常用文档
 
+[在 Android 开发中使用常见的 Kotlin 模式](https://developer.android.com/kotlin/common-patterns)
+
+[安卓文档](https://developer.android.com/reference/kotlin/packages)
+
+[Kotlin标准库](https://kotlinlang.org/api/latest/jvm/stdlib/)
+
+## 在 Kotlin 代码中使用 C++ 代码
+
+Kotlin 支持 JNI。使用 [external 修饰符](https://kotlinlang.org/docs/reference/java-interop.html#using-jni-with-kotlin)标记 JNI 方法即可。
+
+To declare a function that is implemented in native (C or C++) code, you need to mark it with the `external` modifier:
+
+```kotlin
+external fun foo(x: Int): Double
+```
+
+The rest of the procedure works in exactly the same way as in Java.
+
+## 将 Java 语言代码转换成 Kotlin 代码
+
+打开 Java 文件，然后依次选择 **Code > Convert Java File to Kotlin File**。您也可以新建一个 Kotlin 文件 (**File > New > Kotlin File/Class**)，然后将 Java 代码粘贴到此文件中。界面上出现提示时，点击 **Yes** 即可将 Java 代码转换成 Kotlin 代码。
+
+务必要审核任何转化代码，确保测试可以继续通过。
+
+[代码转换为可 null 性](https://developer.android.com/kotlin/add-kotlin#conversion-and-nullability)
 
 ## 变量声明
 
@@ -36,6 +62,20 @@ Kotlin 在数字和字符串相加时，选择了作为字符串拼接处理，�
 当您为 `languageName` 赋予初始值时，Kotlin 编译器可根据所赋值的类型来推断类型。Kotlin 是一种静态类型的语言。这意味着，类型在编译时解析且从不改变。
 
 ## Null 安全
+
+默认情况下，Kotlin 变量不能持有 null 值。这意味着以下代码段无效：
+
+```kotlin
+val languageName: String = null  // 编译失败
+```
+
+要使变量持有 null 值，它必须是可为 null 类型。您可以在变量类型后面加上 `?` 后缀，将变量指定为可为 null，如以下示例所示：
+
+```kotlin
+val languageName: String? = null  // 编译成功
+```
+
+可以在编译器中使用 `-Xno-param-assertions` 停用运行时 null 值检查
 
 ## 动态类型(not for JVM)
 
@@ -141,7 +181,35 @@ occupations["Jayne"] = "Public Relations"
 println(occupations) // 输出 {Malcolm=Captain, Kaylee=Mechanic, Jayne=Public Relations}
 ```
 
-## 控制流
+## if-else表达式
+
+常规的条件语句：
+
+```kotlin
+if (count == 42) {
+        println("I have the answer.")
+    } else {
+        println("The answer eludes me.")
+    }
+```
+
+具有特色的条件语句：
+
+```kotlin
+val answerString: String = if (count == 42) {
+        "I have the answer."
+    } else if (count > 35) {
+        "The answer is close."
+    } else {
+        "The answer eludes me."
+    }
+
+    println(answerString)
+```
+
+每个条件分支都隐式地返回其最后一行上的表达式的结果，因此您无需使用 `return` 关键字。由于全部三个分支的结果都是 `String` 类型，因此 if-else 表达式的结果也是 `String` 类型。
+
+## when表达式
 
  Kotlin 用增强版的 when 取代了 switch ，if 和 when 不仅可做控制语句，也可作表达式使用。
 
@@ -172,6 +240,8 @@ when (nb) {
 // Cascade notation (..)
 // N/A，可以用 Builder 模式或者 apply, also 函数 
 ```
+
+`when` 表达式中的每个分支都由一个条件、一个箭头 (`->`) 和一个结果来表示。如果箭头左侧的条件求值为 true，则会返回右侧的表达式结果。
 
 ## 函数
 
@@ -241,6 +311,65 @@ area(2, height = 3)
 
 // 全部采用命名参数时可以按任意顺序书写
 area(height = 3, width = 2)
+```
+
+### 简化函数声明
+
+通过直接返回函数中包含的 if-else 表达式的结果来跳过声明局部变量，将 return 关键字替换为赋值运算符：
+
+```kotlin
+fun generateAnswerString(countThreshold: Int): String = if (count > countThreshold) {
+            "I have the answer"
+        } else {
+            "The answer eludes me"
+        }
+```
+
+### 匿名函数
+
+```kotlin
+// 函数声明和定义
+// 用 stringLengthFunc 保留对某个匿名函数的引用
+val stringLengthFunc: (String) -> Int = { input ->
+        input.length
+    }
+
+// 函数调用
+val stringLength: Int = stringLengthFunc("Android")
+```
+
+### 高阶函数
+
+一个函数可以将另一个函数当作参数。将其他函数用作参数的函数称为“高阶函数”。此模式对组件之间的通信（其方式与在 Java 中使用回调接口相同）很有用。
+
+示例：
+
+```kotlin
+// 函数声明和定义
+fun stringMapper(str: String, mapper: (String) -> Int): Int {
+        // Invoke function
+        return mapper(str)
+    }
+// 调用函数
+stringMapper("Android", { input ->
+        input.length
+    })
+```
+
+`stringMapper()` 函数接受一个 `String` 以及一个函数，该函数根据您传递给它的 `String` 来推导 `Int` 值。
+
+如果匿名函数是在某个函数上定义的最后一个参数，则您可以在用于调用该函数的圆括号之外传递它，如以下示例所示：
+
+```kotlin
+// 函数声明和定义
+fun stringMapper(str: String, mapper: (String) -> Int): Int {
+        // Invoke function
+        return mapper(str)
+    }
+// 调用函数
+stringMapper("Android") { input ->
+        input.length
+    }
 ```
 
 ## Lambda 表达式、闭包
