@@ -234,3 +234,6 @@ public boolean login(String username, String password) {
 }
 ```
 
+## 连接 MySQL
+
+[参考文档](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-usagenotes-connect-drivermanager.html)
