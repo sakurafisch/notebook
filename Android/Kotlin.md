@@ -2,7 +2,11 @@
 
 [Kotlin 官网](https://kotlinlang.org/)
 
+[ktlint](https://github.com/pinterest/ktlint)
+
 [使用 Kotlin 开发 Android 应用](https://developer.android.com/kotlin)
+
+[Android API reference](https://developer.android.com/reference)
 
 [2015年6月，InfoQ推断Kotlin可能替代Java在Android的地位。](https://www.infoq.cn/article/2015/06/Android-JVM-JetBrains-Kotlin/)
 

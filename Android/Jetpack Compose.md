@@ -2,9 +2,13 @@
 
 [参考文档](https://developer.android.com/jetpack/compose/tutorial)
 
+[概览](https://developer.android.com/jetpack/androidx/versions?hl=zh-cn)
+
 [Android Jetpack 使用入门](https://developer.android.com/jetpack/docs/getting-started?hl=zh-cn)
 
 [Compose Samples Repository](https://github.com/android/compose-samples)
+
+[不妨看看别人的笔记](https://blog.csdn.net/qq_37704124/article/details/100568243)
 
 Jetpack Compose is built around composable functions. To create a composable function, just add the `@Composable` annotation to the function name.
 
@@ -22,4 +26,79 @@ Jetpack Compose 采取单一向下数据流和单一向上事件流的方式构�
 - ViewModel 持有 Repository，获取数据并驱动 View 层更新。
 - View 持有 ViewModel，观察 LiveData 携带的数据，数据驱动 UI。
 
+## ViewModel
+
+```java
+public class MyViewModel extends ViewModel {
+    private MutableLiveData<Integer> number;
+    
+    public MutableLiveData<Integer> getNumber() {
+        if (number == null) {
+            number = new MutableLiveData<>();
+            number.setValue(0);
+        }
+        return number;
+    }
+    public void add() {
+        number.setValue(number.getValue() + 1);
+    }
+}
+```
+
+```java
+MyViewModel myViewModel;
+// 监听事件
+myViewModel = ViewModelProviders.of(this).get(MyViewModel.class);
+myViewModel.getNumber().observe(this, new Observer<Integer>() {
+   @Override
+   public void onChanged(Integer integer) {
+       textView.setText(String.valueOf(integer));
+   }
+});
+```
+
+## 在Java代码中使用DataBinding
+
+```gradle
+dataBinding {
+	enabled true
+}
+```
+
+
+
+```java
+MyViewModel myViewModel;
+ActivityMainBinding binding;
+
+binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+myViewModel = ViewModelProviders.of(this).get(MyViewModel.class);
+myViewModel.getNumber().observe(this, new Observer<Integer>() {
+    @Override
+    public void onChanged(Integer integer) {
+        binding.textView.setText(String.valueOf(integer));
+    }
+});
+
+binding.button.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        myViewModel.add();
+    }
+});
+```
+
+## 在XML中使用DataBinding
+
+此处省略XML代码。
+
+```java
+MyViewModel myViewModel;
+ActivityMainBinding binding;
+
+binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+myViewModel = ViewModelProviders.of(this).get(MyViewModel.class);
+binding.setData(myViewModel);
+binding.setLiftcycleOwner(this);
+```
 

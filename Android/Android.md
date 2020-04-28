@@ -2,6 +2,18 @@
 
 建议按照[应用架构指南](https://developer.android.google.cn/jetpack/docs/guide)优雅地开发。
 
+[安卓版本列表](https://zh.wikipedia.org/wiki/Android%E7%89%88%E6%9C%AC%E5%88%97%E8%A1%A8)
+
+[布局](https://developer.android.com/guide/topics/ui/declaring-layout?hl=zh-cn#kotlin)
+
+[约束布局 training](https://developer.android.com/training/constraint-layout)
+
+[约束布局 reference](https://developer.android.com/reference/android/support/constraint/ConstraintLayout)
+
+[Material Design](https://material.io/develop/android/)
+
+[Fluent Design](https://www.microsoft.com/design/fluent/#/android)
+
 ## 设置 JDK 版本
 
 参考 [设置JDK版本](https://developer.android.com/studio/intro/studio-config#jdk)
@@ -23,7 +35,11 @@ android {
     }
 ```
 
-## DP尺寸单位
+## 支持不同的像素密度
+
+[参考文档](https://developer.android.com/training/multiscreen/screendensities)
+
+### DP尺寸单位
 
 - `dp`在不同密度的屏幕中实际显示比例将保持一致，1dp相当于160dpi屏幕中的1px。
 
@@ -37,7 +53,7 @@ android {
 | 240dpi | 1dp | 1.5px |
 | 320dpi | 1dp | 2px |
 
-## SP尺寸单位
+### SP尺寸单位
 
 - `sp`是`Scale-independent Pixels`的缩写。
 
@@ -45,7 +61,7 @@ android {
 
 - 它随用户对系统字体大小的设置进行比例缩放。
 
-## 获取屏幕尺寸
+### 获取屏幕尺寸
 
 ```java
 // 获取系统管理器
@@ -58,7 +74,9 @@ screenWidth = defaultDisplay.getWidth();
 screenHeight - defaultDisplay.getHeight();
 ```
 
-## DP与PX间的转换
+### DP与PX间的转换
+
+公式：px = dp * (dpi / 160)
 
 ```java
 // 根据手机分辨率从 dp 单位转成 px
@@ -73,6 +91,47 @@ public static int dip2px(Context context, float dpValue) {
 public static int px2dip(Context context, float pxValue) {
     final float scale = context.getResources().getDisplayMetrics().density;
     return (int)(pxValue / scale + 0.5f);
+}
+```
+
+## 屏幕适配
+
+### 常用方案
+
+[支持不同的屏幕尺寸](https://developer.android.com/training/multiscreen/screensizes)
+
+[创建布局变体](https://developer.android.com/studio/write/layout-editor#create-variant)
+
+[使用 Resource Manager 管理应用的界面资源](https://developer.android.com/studio/write/resource-manager)
+
+### 把屏幕锁定为竖直状态
+
+在 AndroidManifest.xml 中为相应的 Activity 添加属性 android:screenOrientation="portrait" 即可。
+
+例如：
+
+```xml
+<activity android:name=".MainActivity" android:screenOrientation="portrait"></activity>
+```
+
+### 为横屏单独创建布局
+
+在 Android Studio 中点击 Create Landscape Variation 即可为横屏创建布局。
+
+转屏后保存数据，举个例子：
+
+```java
+@Override
+protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putString("KEY", textView.getText().toString());
+}
+```
+
+```java
+if (saveInstanceState != null) {
+    Stirng str = savedInstanceState.getString("KEY");
+    textView.setText(str);
 }
 ```
 

@@ -1,5 +1,7 @@
 # JavaScript笔记
 
+[文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)
+
 ## 概述
 
 - ECMAScript是JavaScript的语言标准，JavaScript是ECMAScript的一种实现。

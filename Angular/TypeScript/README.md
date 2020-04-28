@@ -1,5 +1,9 @@
 # TypeScript
 
+[英文文档](https://www.typescriptlang.org/docs/home/)
+
+[中文文档](https://www.tslang.cn/docs/home.html)
+
 ## 语法特性
 
 - 类 Classes
