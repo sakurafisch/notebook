@@ -22,7 +22,26 @@ go get -u github.com/go-delve/delve/cmd/dlv
 go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 ```
 
+## 配置代理
+
+[仓库链接](https://github.com/goproxyio/goproxy)
+
+[参考文档](https://goproxy.io/zh/)
+
+确保 Go 版本是1.13 及以上
+
+```shell
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.io,direct
+
+# 设置不走 proxy 的私有仓库，多个用逗号相隔（可选）
+go env -w GOPRIVATE=*.corp.example.com
+```
+
+设置完上面几个环境变量后，您的 `go` 命令将从公共代理镜像中快速拉取您所需的依赖代码了。[私有库的支持请看这里](https://goproxy.io/zh/docs/goproxyio-private.html)。
+
 ## 一键安装脚本
+
 ```shell
 # 一键安装 VS Code 插件&工具
 echo on

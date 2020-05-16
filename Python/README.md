@@ -84,6 +84,19 @@ result = x + y
 print(str(x) + " + " + str(y) + " = " + str(result))
 ```
 
+## lambdas
+
+```python
+# lambda 写法
+lambda item: item['name']
+```
+
+```python
+# 常规函数的写法
+def sorter(item):
+    return item['name']
+```
+
 ## 进一步学习
 
 - [Python 编程风格](https://docs.python-guide.org/writing/style/)

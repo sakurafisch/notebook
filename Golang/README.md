@@ -1,5 +1,7 @@
 # Golang 笔记
 
+[Uber 编码规范](https://github.com/xxjwxc/uber_go_guide_cn)
+
 ## 在本地启动文档
 
 通过运行 `godoc -http :8000`，可以在本地启动文档。
