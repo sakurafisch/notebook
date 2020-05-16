@@ -1,0 +1,31 @@
+name: Build Github Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v1
+      - name: Set up Python 3.7
+        with:
+          python-version: 3.7
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pygments pymdown-extensions
+          pip install mkdocs mkdocs-material
+          pip install mkdocs-minify-plugin mkdocs-git-date-localized-plugin
+      - name: Build Site
+        run: mkdocs build
+      - name: add CNAME file
+        run: sh ./add-CNAME file
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@2.0.0
+        env: 
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: github-pages
+          FOLDER: site
