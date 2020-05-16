@@ -19,7 +19,7 @@ jobs:
         pip install --upgrade pip
         pip install pygments pymdown-extensions
         pip install mkdocs mkdocs-material
-        pip install mkdocs-minify-plugin mkdocs-git-date-localized-plugin
+        pip install mkdocs-minify-plugin mkdocs-git-revision-date-localized-plugin
     - name: Build Site
       run: mkdocs build
     - name: add CNAME file
