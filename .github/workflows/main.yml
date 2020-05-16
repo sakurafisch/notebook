@@ -28,5 +28,5 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@2.0.0
       env: 
         ACCESS_TOKEN: ${{ secrets.notebook_action_access }}
-        BRANCH: github-pages
+        BRANCH: gh-pages
         FOLDER: site
