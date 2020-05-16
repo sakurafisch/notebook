@@ -23,7 +23,7 @@ jobs:
     - name: Build Site
       run: mkdocs build
     - name: add CNAME file
-      run: sh ./add-CNAME file
+      run: sh ./add-CNAME.sh
     - name: Deploy to Github Pages
       uses: JamesIves/github-pages-deploy-action@2.0.0
       env: 
