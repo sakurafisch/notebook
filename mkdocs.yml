@@ -37,5 +37,3 @@ markdown_extensions:
   - footnotes
   - meta
 
-nav:
-  - Home: index.md
