@@ -3,7 +3,7 @@ name: Build Github Pages
 on:
   push:
     branches:
-      - master
+    - master
 
 jobs:
   build:
