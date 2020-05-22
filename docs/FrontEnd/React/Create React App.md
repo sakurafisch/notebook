@@ -5,18 +5,25 @@
 ## 新建工程
 
 ```bash
-npx create-react-app my-app --template typescript
-# or
 yarn create react-app my-app --template typescript
 cd my-app
-npm start
+yarn start
+```
+
+## 常用命令
+
+```shell
+yarn test
+yarn build
 ```
 
 ## 引入webpack
 
 ```shell
-npm install --save-dev webpack webpack-cli # 引入 webpack
+yarn add --dev webpack webpack-cli webpack-dev-server # 引入 webpack
 ```
+
+[更多配置](https://blog.envylabs.com/getting-started-with-webpack-2-ed2b86c68783)
 
 ## 引入antd
 
@@ -27,7 +34,7 @@ yarn add antd # 引入 antd
 ## 引入mobx
 
 ```shell
-npm install --save mobx mobx-react # 引入 mobx
+yarn add mobx mobx-react # 引入 mobx
 ```
 
 要启用 ESNext 的装饰器 (可选), 参见下面。
@@ -38,8 +45,14 @@ CDN:
 - https://cdnjs.com/libraries/mobx
 
 ```shell
-npm install --save-dev @babel/plugin-proposal-decorators
-npm install --save-dev @babel/plugin-proposal-class-properties
+yarn add --dev @babel/plugin-proposal-decorators
+yarn add --dev @babel/plugin-proposal-class-properties
 # 还需要额外的配置
+```
+
+## 引入Less
+
+```shell
+yarn add --dev less
 ```
 
