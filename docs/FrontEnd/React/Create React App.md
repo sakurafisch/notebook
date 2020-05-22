@@ -1,6 +1,8 @@
 # Create React App
 
-[参考文档](https://create-react-app.dev/docs/getting-started)
+[Create React App](https://create-react-app.dev/docs/getting-started)
+
+[yarn cli](https://classic.yarnpkg.com/zh-Hans/docs/cli/remove)
 
 ## 新建工程
 
@@ -17,7 +19,9 @@ yarn test
 yarn build
 ```
 
-## 引入webpack
+## 引入webpack（不建议）
+
+由于yarn会自动安装webpack依赖，若手动再安装一个，可能引起版本冲突。
 
 ```shell
 yarn add --dev webpack webpack-cli webpack-dev-server # 引入 webpack
