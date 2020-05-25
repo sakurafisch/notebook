@@ -8,6 +8,10 @@
 
 [Android API reference](https://developer.android.com/reference)
 
+[try kotlinlang](https://try.kotlinlang.org/#/Examples/Hello,%20world!/Simplest%20version/Simplest%20version.kt)
+
+## Kotlin的发展史
+
 [2015年6月，InfoQ推断Kotlin可能替代Java在Android的地位。](https://www.infoq.cn/article/2015/06/Android-JVM-JetBrains-Kotlin/)
 
 [2017年5月，谷歌支持使用 Kotlin 开发安卓应用。](https://techcrunch.com/2017/05/17/google-makes-kotlin-a-first-class-language-for-writing-android-apps/)当时，Google在随后的主题演讲中指出，这只是一种附加语言，不能替代其现有的Java和C ++支持。
