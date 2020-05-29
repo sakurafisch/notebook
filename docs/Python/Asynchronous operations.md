@@ -72,5 +72,5 @@ if __name__ == "__main__":
 
 ```
 
-
+在上文用到的`aiohttp`可参考[这里](https://docs.aiohttp.org/en/stable/client_quickstart.html#response-content-and-status-code)
 
