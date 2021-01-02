@@ -24,6 +24,11 @@
 
 [Scaling Out With Docker and Nginx](https://codeburst.io/scaling-out-with-docker-and-nginx-8eda9fb1654c)
 
+## 有待了解的重要知识
+
+Kubernetes，CoreDNS，KNative，Istio，Linkered
+
 ## 看过并且推荐的书
 
 https://codegangsta.gitbooks.io/building-web-apps-with-go/content/
+
