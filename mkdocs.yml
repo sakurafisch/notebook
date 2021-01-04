@@ -6,6 +6,16 @@ theme:
     - instant
     - tabs
 
+nav:
+  - Home: index.md
+  - Common: Common
+  - DataBase: DataBase
+  - FE: FE
+  - Golang: Golang
+  - Java: Java
+  - Network: Network
+  - Python: Python
+
 plugins:
   - search
   - minify:
