@@ -6,16 +6,6 @@ theme:
     - instant
     - tabs
 
-nav:
-  - Home: index.md
-  - Common: Common/README.md
-  - DataBase: DataBase/README.md
-  - FE: FE/README.md
-  - Golang: Golang/README.md
-  - Java: Java/README.md
-  - Python: Python/README.md
-  - Network: Network/README.md
-
 plugins:
   - search
   - minify:
