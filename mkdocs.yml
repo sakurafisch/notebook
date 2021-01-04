@@ -6,6 +6,16 @@ theme:
     - instant
     - tabs
 
+pages:
+ - ['index.md', 'Introduction']
+ - ['Common/README.md', 'Common' ]
+ - ['DataBase/README.md', 'DataBase']
+ - ['FE/README.md', 'FE']
+ - ['Golang/README.md', 'Golang']
+ - ['Java/README.md', 'Java']
+ - ['Network/README.md', 'Network']
+ - ['Python/README.md', 'Python']
+
 plugins:
   - search
   - minify:
