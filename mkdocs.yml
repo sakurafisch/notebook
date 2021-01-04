@@ -6,15 +6,15 @@ theme:
     - instant
     - tabs
 
-pages:
- - ['index.md', 'Introduction']
- - ['Common/README.md', 'Common' ]
- - ['DataBase/README.md', 'DataBase']
- - ['FE/README.md', 'FE']
- - ['Golang/README.md', 'Golang']
- - ['Java/README.md', 'Java']
- - ['Network/README.md', 'Network']
- - ['Python/README.md', 'Python']
+nav:
+  - Home: index.md
+  - Common: Common/README.md
+  - DataBase: DataBase/README.md
+  - FE: FE/README.md
+  - Golang: Golang/README.md
+  - Java: Java/README.md
+  - Python: Python/README.md
+  - Network: Network/README.md
 
 plugins:
   - search
