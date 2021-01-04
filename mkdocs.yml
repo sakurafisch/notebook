@@ -4,11 +4,7 @@ theme:
   name: 'material'
   features:
     - navigation.instant
-    - navigation.sections
     - navigation.tabs
-  hide:
-  - navigation # Hide navigation
-  - toc        # Hide table of contents
 
 plugins:
   - search
