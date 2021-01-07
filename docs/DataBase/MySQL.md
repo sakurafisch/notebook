@@ -917,3 +917,17 @@ set global transaction isolation level <隔离级别字符串>;
 ```
 
 注意：当改变数据库的事务隔离级别后，要重新登录才能生效。
+
+## 存入视频格式文件
+
+创建一个测试表test，使用longblob或者mediumblob
+
+```mysql
+CREATE TABLE test (id  INTEGER NOT NULL PRIMARY KEY, name VARCHAR (20), movie LONGBLOB);
+```
+
+然后把视频文件导入
+
+```mysql
+INSERT INTO test  VALUES(1, 'titanic', LOAD_FILE("/tmp/good.mp4"));
+```
