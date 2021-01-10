@@ -135,6 +135,22 @@ if (saveInstanceState != null) {
 }
 ```
 
+Activity 的优先级可以分为三级：
+
+- 前台 Activity：可见并可交互，优先级最高
+- 可见非前台 Activity：当 Activity 被弹窗遮盖时
+- 后台 Activity：已经暂停的 Activity，优先级最低，系统内存不足时优先回收此类 Activity
+
+如果不想在系统配置发生变化时，销毁并重新创建 Activity，可以在 `AndroidManifest.xml` 中配置该 Activity 的属性,从 Android 3.2（API 级别 13）开始，当设备在纵向和横向之间切换时，**屏幕尺寸**也会发生变化。因此，在开发针对 API 级别 13 或更高版本的应用时，若要避免由于设备方向改变而导致运行时重启，则除了 "orientation" 值以外，您还必须添加 "screenSize" 值：
+
+```xml
+<activity android:name="Activity"
+            android:configChanges="orientation|screenSize">
+</activity>
+```
+
+
+
 ## TextView文本视图
 
 TextView是不可编辑的文本视图。

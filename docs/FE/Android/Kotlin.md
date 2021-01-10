@@ -50,6 +50,10 @@ The rest of the procedure works in exactly the same way as in Java.
 
 [代码转换为可 null 性](https://developer.android.com/kotlin/add-kotlin#conversion-and-nullability)
 
+## ORM框架Exposed
+
+[Exposed](https://github.com/JetBrains/Exposed) 是 Kotlin 的ORM框架 。
+
 ## 变量声明
 
 Kotlin 使用两个不同的关键字（即 `val` 和 `var`）来声明变量。
