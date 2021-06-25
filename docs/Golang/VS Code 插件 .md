@@ -47,6 +47,7 @@ go env -w GOPRIVATE=*.corp.example.com
 echo on
 code --install-extension ms-vscode.go
 cd %GOPATH%
+go get -u -v golang.org/x/tools/gopls@latest
 go get -u -v github.com/mdempsky/gocode
 go get -u -v github.com/uudashr/gopkgs/cmd/gopkgs
 go get -u -v github.com/ramya-rao-a/go-outline
