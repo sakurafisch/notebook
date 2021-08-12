@@ -52,7 +52,7 @@ systemctl restart docker
 RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 ```
 
-其他修改 alpine 源的
+其他修改 alpine 源的方法请参阅 [Docker和alpine镜像内国内源配置](https://blog.csdn.net/shuizhongmose/article/details/108992380)
 
 ## Install kubernates
 
