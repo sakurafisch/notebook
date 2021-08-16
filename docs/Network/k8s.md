@@ -93,3 +93,16 @@ kubectl get pod
 minikube service hello-minikube --url
 ```
 
+#### 服务扩容
+
+```bash
+kubectl scale deployment hello-minikube --replicas=3
+kubectl get pods
+```
+
+#### 关闭 minikube
+
+```bash
+minikube stop
+```
+
