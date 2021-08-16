@@ -100,9 +100,24 @@ kubectl scale deployment hello-minikube --replicas=3
 kubectl get pods
 ```
 
-#### 关闭 minikube
+#### Clean Up
+
+Now you can clean up the resources you created in your cluster:
+
+```bash
+kubectl delete service hello-minikube
+kubectl delete deployment hello-minikube
+```
+
+Optionally, stop the Minikube virtual machine (VM):
 
 ```bash
 minikube stop
+```
+
+Optionally, delete the Minikube VM:
+
+```bash
+minikube delete
 ```
 
