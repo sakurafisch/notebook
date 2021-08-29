@@ -1,6 +1,6 @@
 # Quarkus
 
-与 `Micronaut` 相比，`Quarkus` 的社区更活跃。（2021 年 8 月 29 日）
+与 `Micronaut` 和 `Helidon` 相比，`Quarkus` 的社区更活跃。（2021 年 8 月 29 日）
 
 [Starter](https://code.quarkus.io/)
 
@@ -15,6 +15,10 @@ ORM 可以考虑使用 Hibernate
 [开始使用](https://quarkus.io/get-started/)
 
 [Guides](https://quarkus.io/guides/)
+
+## Dev UI
+
+默认链接为 http://localhost:8080/q/dev/
 
 ## WIN 10 排错指北
 
