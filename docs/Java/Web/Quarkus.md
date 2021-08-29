@@ -16,6 +16,10 @@ ORM 可以考虑使用 Hibernate
 
 [Guides](https://quarkus.io/guides/)
 
+## WIN 10 排错指北
+
+[quarkus 2.1.4 - mvnw quarkus:dev not working on windows 10](https://stackoverflow.com/questions/68958241/quarkus-2-1-4-mvnw-quarkusdev-not-working-on-windows-10)
+
 ## Tips
 
 [Hutool](https://hutool.cn/docs/#/) 是个不错的工具，请使用它帮助你的开发。视频教程可以参考 [这里](https://www.bilibili.com/video/BV1bQ4y1M7d9?zw)
