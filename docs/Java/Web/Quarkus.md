@@ -85,11 +85,12 @@ Mandrel 是 GraalVM 的一个定制版，专为 Quarkus 设计。它删去了多
 
 ## Reactive
 
-[参考文档](https://quarkus.io/guides/quarkus-reactive-architecture)
-
-Thanks to hints in your code (such as the `@Blocking` and `@NonBlocking` annotations), Quarkus extensions can decide when the application logic is blocking or non-blocking.
+- [参考文档 1: QUARKUS REACTIVE ARCHITECTURE](https://quarkus.io/guides/quarkus-reactive-architecture) 
+- [参考文档 2: MUTINY - ASYNC FOR BARE MORTAL](https://quarkus.io/guides/mutiny-primer)
 
 在 [此仓库](https://github.com/quarkiverse) 中寻找插件
+
+### 数据库 Reactive
 
 请在定义实体类时使用父类 `io.quarkus.hibernate.reactive.panache.PanacheEntity`，举个例子：
 
@@ -111,6 +112,15 @@ public class Fruit extends PanacheEntity {
 
 }
 ```
+
+### HTTP endpoint Reactive
+
+Thanks to hints in your code (such as the `@Blocking` and `@NonBlocking` annotations), Quarkus extensions can decide when the application logic is blocking or non-blocking.
+
+Mutiny offers two types that are both event-driven and lazy:
+
+- A `Uni` emits a single event (an item or a failure). Unis are convenient to represent asynchronous actions that return 0 or 1 result. A good example is the result of sending a message to a message broker queue.
+- A `Multi` emits multiple events (n items, 1 failure or 1 completion). Multis can represent streams of items, potentially unbounded. A good example is receiving messages from a message broker queue.
 
 请在定义 HTTP endpoint 时以 `Uni` 对象作为返回值，比如下面代码中的`Uni<List<Fruit>>`：
 
@@ -153,4 +163,26 @@ The test code can be found in [FruitsEndpointTest.java](https://github.com/quark
   --data '{"name":"peach"}' \
   http://localhost:8080/fruits
 ```
+
+### Observing events
+
+You can observe the various kind of events using:
+
+```java
+on{event}().invoke(ev → System.out.println(ev));
+```
+
+For example, for items use: `onItem().invoke(item → …);`
+
+For failure, use: `onFailure().invoke(failure → …)`
+
+The `invoke` method is synchronous. Sometimes you need to execute an asynchronous action. In this case use `call`, as in: `onItem().call(item → someAsyncAction(item))`. Note that `call` does not change the item, it just calls an asynchronous action, and when this one completes, it emits the original item downstream.
+
+在 Quarkus 中，vert.x api 被转换为 multiny api，参考[这篇博文](https://quarkus.io/blog/mutiny-vertx/)。
+
+## Build
+
+[Build Native Image](https://quarkus.io/guides/building-native-image)
+
+[Enable SSL](https://quarkus.io/guides/native-and-ssl)
 
