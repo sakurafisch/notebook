@@ -9,3 +9,16 @@
 A Compiler for Web Components and High Performance Web Apps.
 
 Ionic 采用 Web Component 提供与框架无关的 UI 组件。
+
+## 起步
+
+```zsh
+npm install -g @ionic/cli
+ionic start
+cd <myAppName>
+ionic serve
+ionic capacitor add
+ionic capacitor copy android
+ionic capacitor run android
+```
+

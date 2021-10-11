@@ -46,14 +46,29 @@ Project: a planned undertaking that has a beginning and end and that produces so
 - Formal or informal
 - Requires knowledge of systems analysis and system design tools and techniques
 
-System development methodology: the actual approach used to develop a particular information system
+### six core processes
 
-- E.g., Unified process(UP), Extreme programming(XP), Scrum, among others
-- Agile development: an information system development process that emphasises flexibility to anticipate new requirements during development
-  - Fast on feet
-  - responsive to change
-- Iterative development: an approach to system development in which the system is "grown" piece by piece through multiple iterations
-  - Complete small part of system(mini-project), then repeat processes to refine and add more, then repeat to refine and add more, until done.
+1. identify the problem or need and obtain approval
+2. Plan and monitor the project
+3. Discover and understand the details of the problem or need
+4. Design the system components that solve the problem
+5. Build, test, and integrate system componts
+6. Complete system tests and then deploy the solution
+
+### System development methodology
+
+The actual approach used to develop a particular information system
+
+E.g., Unified process(UP), Extreme programming(XP), Scrum, among others
+
+**Agile development**: an information system development process that emphasises flexibility to anticipate new requirements during development
+
+- Fast on feet
+- responsive to change
+
+**Iterative development**: an approach to system development in which the system is "grown" piece by piece through multiple iterations
+
+- Complete small part of system(mini-project), then repeat processes to refine and add more, then repeat to refine and add more, until done.
 
 ## Systems Analysis and Desing in SDLC
 
