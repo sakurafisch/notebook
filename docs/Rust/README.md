@@ -405,7 +405,7 @@ fn main() {
 }
 ```
 
-### The ? operator
+### The `?` operator
 
 for `Result` type:
 
