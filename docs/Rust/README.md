@@ -1,5 +1,7 @@
 # Rust
 
+可在 https://crates.io/ 查找要用的 crate.
+
 ## Variable
 
 Unused variable raise warning. If that is intentional, prefix the variable name with an underscore `_` .
@@ -417,9 +419,9 @@ for `Option` type:
 1.  Returns a value is with the `Some` variant
 2. Returns nothing for the `None` variant
 
-## if 和 else
+## if 和 else if 和 else
 
-`if` blocks return a Boolean type, acting as expressions.
+`if` 、 `else if` 、 `else` block can return value, acting as expressions.
 
 ```rust
 let formal = true;
@@ -790,6 +792,8 @@ pub fn first_line(string: String) -> String {
 
 ## Collection
 
+请查看文档：[std::collections](https://doc.rust-lang.org/stable/std/collections/)
+
 ### `Vec<T>`
 
 `Vec<T>` memory consists of three parts
@@ -805,6 +809,8 @@ let v = vec![1u8, 2, 3];
 如果使用 `v[index]` 来访问其中的元素，当 `index` 越界时，程序崩溃。
 
 如果使用 `v.get(index)` 来访问其中的元素，它返回 `Option` type，当 `index` 越界时，返回 `Option::None`
+
+一个只读的例子：
 
 ```rust
 fn main() {
@@ -825,6 +831,15 @@ fn main() {
 #[derive(PartialEq, Eq)]
 struct Student {
     name: String
+}
+```
+
+一个更新元素值的例子：
+
+```rust
+let mut v = vec![100, 32, 57];
+for i in &mut v {
+    *i += 50;
 }
 ```
 
@@ -884,6 +899,21 @@ Rust 面向对象编程：把 Data 定义在 `enum` type 或者 `struct` type, �
 在 `trait` 中声明方法，然后再分别为不同的数据类型实现这个 `trait` .
 
 在 `trait` 中定义的方法可以有默认实现。
+
+可以通过 `where` 简化 trait bound，以避免使用泛型时函数签名难以阅读。
+
+```rust
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
+```
+
+可以用 `where` 简化为
+
+```rust
+fn some_function<T, U>(t: T, u: U) -> i32
+    where T: Display + Clone,
+          U: Clone + Debug
+{
+```
 
 一个例子：
 
@@ -1027,5 +1057,68 @@ fn main() {
 Captain Marvel was directed by Anna Boden and Ryan Fleck through Marvel studios
 Elantris was written by Brandon Sanderson and published by Tor Books
 We need more information about this type of media
+```
+
+## crate 和 module
+
+练手代码可参考 [这里](https://github.com/sakurafisch/restaurant-demo)
+
+- **Packages:** A Cargo feature that lets you build, test, and share crates
+- **Crates:** A tree of modules that produces a library or executable
+- **Modules** and **use:** Let you control the organization, scope, and privacy of paths
+- **Paths:** A way of naming an item, such as a struct, function, or module
+
+可以使用绝对路径或相对路径来寻找方法。
+
+### pub
+
+当在 struct 前标注 pub，这个 struct 内的字段依然是 private 的，还要单独对需要公开的字段标注 pub。
+
+当在 enum 前标注 pub，这个 enum 内的字段全部也为 pub。
+
+### use
+
+使用 `use` 引入 `crate`。
+
+可以使用 `pub use` 重导出名称。（我对此仍不完全理解。）
+
+可以嵌套路径来消除大量的 `use` 行
+
+```rust
+// use std::cmp::Ordering;
+// use std::io;
+use std::{cmp::Ordering, io};
+```
+
+```rust
+// use std::io;
+// use std::io::Write;
+use std::io::{self, Write};
+```
+
+如果希望将一个路径下 **所有** 公有项引入作用域，可以指定路径后跟 `*`，glob 运算符：
+
+```rust
+use std::collections::*;
+```
+
+### Using External Packages
+
+可在 https://crates.io/ 查找要用的 crate.
+
+To use `rand` in our project, we added this line to *Cargo.toml*:
+
+```rust
+rand = "0.8.3"
+```
+
+Then we can use rand crate in src/main.rs
+
+```rust
+use rand::Rng;
+
+fn main() {
+    let secret_number = rand::thread_rng().gen_range(1..101);
+}
 ```
 

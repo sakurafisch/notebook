@@ -33,12 +33,21 @@ go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 ```shell
 go env -w GO111MODULE=on
 go env -w GOPROXY=https://goproxy.io,direct
+# or
+go env -w GOPROXY=https://goproxy.cn,https://gocenter.io,https://goproxy.io,direct
+
 
 # 设置不走 proxy 的私有仓库，多个用逗号相隔（可选）
 go env -w GOPRIVATE=*.corp.example.com
 ```
 
 设置完上面几个环境变量后，您的 `go` 命令将从公共代理镜像中快速拉取您所需的依赖代码了。[私有库的支持请看这里](https://goproxy.io/zh/docs/goproxyio-private.html)。
+
+如果网络还是有问题，试试清空 module 缓存
+
+```bash
+go clean --modcache
+```
 
 ## 一键安装脚本
 
