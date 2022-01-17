@@ -1,4 +1,4 @@
-# cout 精度
+# cout
 
 默认输出浮点数时，采取保留 6 位有效数字的策略。
 
@@ -19,13 +19,21 @@ cout.precision(2); // 精度调到小数点后 2 位
 
 ## 设置科学记数法
 
+使用科学记数法
+
 ```c++
 cout << scientific;
 ```
 
-恢复默认格式
+不使用科学记数法
 
 ```c++
-cout << defaultfloat
+cout.setf(ios::fixed, ios::floatfield);
+```
+
+恢复默认格式（仅对大数使用科学记数法）
+
+```c++
+cout << defaultfloat;
 ```
 
