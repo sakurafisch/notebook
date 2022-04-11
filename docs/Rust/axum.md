@@ -1,6 +1,7 @@
 # axum
 
 [参考文档](https://docs.rs/axum/latest/axum/)
+[第三方教程](https://programatik29.github.io/axum-tutorial/#/)
 
 ## 依赖
 
