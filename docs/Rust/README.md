@@ -2,6 +2,8 @@
 
 可在 https://crates.io/ 查找要用的 crate.
 
+[async-std](https://github.com/async-rs/async-std):  Async version of the Rust standard library. ([crate doc](https://docs.rs/async-std/latest/async_std/))
+
 ## Variable
 
 Unused variable raise warning. If that is intentional, prefix the variable name with an underscore `_` .
