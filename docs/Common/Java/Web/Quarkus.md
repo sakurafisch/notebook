@@ -14,6 +14,10 @@
 
 目前 `Spring Native` 已经进入 beta 状态，可以配合着`Spring Web Flux` 和 `Spring R2DBC`一起用。但用起来还是不太顺手。(2021年8月29日)
 
+## 互补产品
+
+[Kogito](https://kogito.kie.org/) is an open source, end-to-end business process automation(BPA) technology designed to develop, deploy, and execute process- and rules-based cloud-native applications on a modern container platform.
+
 ## 环境配置
 
 请使用 `OpenJDK 11` 或 `GraalVM`，不建议使用 `OpenJDK 8` (Plz refer to [Why Dropping Java 8](https://github.com/quarkusio/quarkus/wiki/Why-Dropping-Java-8) for more info)
