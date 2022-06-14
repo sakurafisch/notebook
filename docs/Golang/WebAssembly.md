@@ -34,3 +34,8 @@ JavaScript values referenced from Go via `js.Value` objects can now be garbage c
 
 `js.Value` now has `IsUndefined`, `IsNull`, and `IsNaN` methods.
 
+## Go 1.18 Release Notes
+
+[net/http](https://go.dev/pkg/net/http/)
+
+On WebAssembly targets, the `Dial`, `DialContext`, `DialTLS` and `DialTLSContext` method fields in [`Transport`](https://go.dev/pkg/net/http/#Transport) will now be correctly used, if specified, for making HTTP requests.
