@@ -1,8 +1,18 @@
 # Rust
 
+## 备忘
+
 可在 https://crates.io/ 查找要用的 crate.
 
 [async-std](https://github.com/async-rs/async-std):  Async version of the Rust standard library. ([crate doc](https://docs.rs/async-std/latest/async_std/))
+
+## 版本历史
+
+Rust 1.0 于 2015 年 5 月 15 日。
+
+[Announcing Rust 1.0](https://blog.rust-lang.org/2015/05/15/Rust-1.0.html)
+
+[Github 版本历史](https://github.com/rust-lang/rust/blob/master/RELEASES.md)
 
 ## Variable
 
