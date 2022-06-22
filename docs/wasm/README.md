@@ -34,3 +34,14 @@
 [Graal wasm](https://www.graalvm.org/22.1/reference-manual/wasm/) 官方实现，但截止写笔记时还不支持 `wasi`。(2022年6月22日)
 
 [Truffle Wasm](https://www.research.manchester.ac.uk/portal/files/160212054/salim_TruffleWasm_vee_2020_authorversion.pdf) 第三方实现，首次支持 `wasi`。
+
+## runtime
+
+[wasmer](https://github.com/wasmerio/wasmer) 🚀 The leading WebAssembly Runtime supporting WASI and Emscripten.
+
+我比较看好这个运行时。
+
+[wasmtime](https://github.com/bytecodealliance/wasmtime) Standalone JIT-style runtime for WebAssembly, using Cranelift
+
+我不看好这个运行时。既然都 JIT 了，那还不如只用 JavaScript。
+
