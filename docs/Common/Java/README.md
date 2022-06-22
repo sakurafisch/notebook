@@ -1,5 +1,15 @@
 # Java 笔记
 
+## 类型擦除
+
+参见 [Type Erasure](https://docs.oracle.com/javase/tutorial/java/generics/erasure.html)
+
+另见 [此贴](https://stackoverflow.com/a/17578894)
+
+There are no type checks at runtime except for the erased upper bounds. Java Generics is all about compiler checking.
+
+On the other hand, maybe your question is only about how can the compiler do its checks if the type parameter information is gone from the bytecode. The answer to that is that it is not gone from the classfile as a whole: it is attached as meta-data, available to the compiler (as well as the Reflection API), but irrelevant to the executing code.
+
 ## 修饰符和访问权限
 
 访问级别修饰符确定其他类是否可以使用特定字段或调用特定方法。
