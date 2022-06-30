@@ -35,3 +35,13 @@ A powerful, pragmatic, and extremely fast web framework for Rust.
 [substrate](https://substrate.io) 跨链
 
 [solana](https://solana.com) 吞吐量大的公链
+
+## UI
+
+[yew](https://github.com/yewstack/yew) Rust / Wasm framework for building client web apps
+
+[iced](https://github.com/iced-rs/iced) A cross-platform GUI library for Rust, inspired by Elm
+
+
+
+
