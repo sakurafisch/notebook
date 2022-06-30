@@ -42,6 +42,14 @@ A powerful, pragmatic, and extremely fast web framework for Rust.
 
 [iced](https://github.com/iced-rs/iced) A cross-platform GUI library for Rust, inspired by Elm
 
+# FFI
+
+[rust-bindgen](https://github.com/rust-lang/rust-bindgen) Automatically generates Rust FFI bindings to C (and some C++) libraries.
+
+[cbindgen](https://github.com/eqrion/cbindgen) A project for generating C bindings from Rust code.
+
+[android-ndk-rs](Rust bindings to the Android NDK)
+
 
 
 
