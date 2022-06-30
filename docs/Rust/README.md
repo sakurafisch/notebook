@@ -8,6 +8,12 @@ Crate [std](https://doc.rust-lang.org/std/index.html#)
 
 [async-std](https://github.com/async-rs/async-std):  Async version of the Rust standard library. ([crate doc](https://docs.rs/async-std/latest/async_std/))
 
+### Debugging macro code
+
+[参考资料](https://web.mit.edu/rust-lang_v1.25/arch/amd64_ubuntu1404/share/doc/rust/html/book/first-edition/macros.html#debugging-macro-code)
+
+To see the results of expanding macros, run `rustc --pretty expanded`.
+
 ## 版本历史
 
 Rust 1.0 于 2015 年 5 月 15 日。
@@ -928,6 +934,11 @@ fn some_function<T, U>(t: T, u: U) -> i32
           U: Clone + Debug
 {
 ```
+
+### unimplemented!
+
+The `unimplemented!` macro can be used when you’re trying to get your functions to typecheck, and don’t want to worry about writing out the body of the function. One example of this situation is implementing a trait with multiple required methods, where you want to tackle one at a time. Define the others as `unimplemented!` until you’re ready to write them.
+
 
 一个例子：
 
