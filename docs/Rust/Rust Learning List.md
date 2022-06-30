@@ -1,5 +1,9 @@
 # Rust Learning List
 
+## LeetCode
+
+[zhangyuan 的仓库](https://github.com/zhangyuang/leetcode)
+
 ## 异步编程
 
 [Asynchronous Programming in Rust](https://rust-lang.github.io/async-book/) 
