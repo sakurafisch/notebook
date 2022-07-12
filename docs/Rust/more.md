@@ -1,4 +1,4 @@
-# Rust Learning List
+# More
 
 ## LeetCode
 
@@ -11,6 +11,10 @@
 [async-std](https://book.async.rs/) 
 
 [tokio](https://tokio.rs/) 
+
+## 并行编程
+
+[rayon](https://github.com/rayon-rs/rayon) Rayon: A data parallelism library for Rust
 
 ## 网络编程
 
@@ -50,6 +54,8 @@ A powerful, pragmatic, and extremely fast web framework for Rust.
 
 [android-ndk-rs](Rust bindings to the Android NDK)
 
+[deno_bindgen](https://github.com/littledivy/deno_bindgen) is an external tool to simplify glue code generation of Deno FFI libraries written in Rust.
 
+[wasm_bindgen](https://github.com/rustwasm/wasm-bindgen) Import JavaScript things into Rust and export Rust things to JavaScript.
 
-
+[node_bindgen](https://github.com/infinyon/node-bindgen) Easy way to write Node.js module using Rust
