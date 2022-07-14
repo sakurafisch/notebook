@@ -1,5 +1,9 @@
 # More
 
+## 黑魔法
+
+[nomicon](https://doc.rust-lang.org/nightly/nomicon/) 编写 unsafe Rust 所需要注意的问题。
+
 ## LeetCode
 
 [zhangyuan 的仓库](https://github.com/zhangyuang/leetcode)
