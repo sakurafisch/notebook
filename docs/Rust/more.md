@@ -1,5 +1,9 @@
 # More
 
+## Rust By Example
+
+[Rust By Example](https://doc.rust-lang.org/rust-by-example/)
+
 ## 黑魔法
 
 [nomicon](https://doc.rust-lang.org/nightly/nomicon/) 编写 unsafe Rust 所需要注意的问题。
