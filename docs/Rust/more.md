@@ -50,6 +50,8 @@ A powerful, pragmatic, and extremely fast web framework for Rust.
 
 ## UI
 
+[tauri](https://tauri.app/) Build an optimized, secure, and frontend-independent application for multi-platform deployment.
+
 [yew](https://github.com/yewstack/yew) Rust / Wasm framework for building client web apps
 
 [iced](https://github.com/iced-rs/iced) A cross-platform GUI library for Rust, inspired by Elm
