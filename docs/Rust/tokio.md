@@ -13,3 +13,9 @@
 - broadcast，多生产者，多消费者，其中每一条发送的消息都可以被所有接收者收到，因此是广播
 
 - watch，单生产者，多消费者，只保存一条最新的消息，因此接收者只能看到最近的一条消息，例如，这种模式适用于配置文件变化的监听
+
+## 文件io
+
+Module tokio::[io](https://docs.rs/tokio/latest/tokio/io/index.html)
+
+
