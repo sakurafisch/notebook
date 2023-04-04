@@ -35,7 +35,7 @@ virtualenv <folder_name>  # OSX/Linux (bash)
 ```
 
 ```bash
-<folder_name>/bin/activate  # OSX/Linux (bash)
+source <folder_name>/bin/activate  # OSX/Linux (bash)
 ```
 
 ## 把包安装在virtual environment中
