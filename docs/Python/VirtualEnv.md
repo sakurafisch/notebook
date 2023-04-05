@@ -56,3 +56,9 @@ pip install -r requirments.txt  # Install from a list of packages
 ```cmd
 pip install colorma -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
+
+## 导出依赖
+
+```cmd
+pip freeze > requirements.txt
+```
