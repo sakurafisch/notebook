@@ -6,6 +6,8 @@ Crate [std](https://doc.rust-lang.org/std/index.html#)
 
 可在 https://crates.io/ 查找要用的 crate.
 
+Rust 新特性 [Change Log](https://github.com/rust-lang/rust/blob/master/RELEASES.md)
+
 [async-std](https://github.com/async-rs/async-std):  Async version of the Rust standard library. ([crate doc](https://docs.rs/async-std/latest/async_std/))
 
 ### Debugging macro code
