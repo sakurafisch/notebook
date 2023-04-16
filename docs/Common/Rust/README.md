@@ -8,6 +8,12 @@ Crate [std](https://doc.rust-lang.org/std/index.html#)
 
 Rust 新特性 [Change Log](https://github.com/rust-lang/rust/blob/master/RELEASES.md)
 
+从 Rust 1.58 Stable 开始可以使用字符串插值。
+
+从 Rust 1.62 Stable 开始可以使用 `cargo add` 命令。
+
+从 Rust 1.66 Stable 开始可以使用 `cargo remove` 命令。
+
 [async-std](https://github.com/async-rs/async-std):  Async version of the Rust standard library. ([crate doc](https://docs.rs/async-std/latest/async_std/))
 
 ### Debugging macro code
