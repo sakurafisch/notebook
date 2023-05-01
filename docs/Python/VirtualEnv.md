@@ -62,3 +62,9 @@ pip install colorma -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```cmd
 pip freeze > requirements.txt
 ```
+
+## 内存不足
+
+使用 `pip install` 命令时，如果内存不足（比如报 `Memory Error` 错误），请加上 `--no-cache-dir` 以禁用缓存。
+
+可以参考文档 [Disabling caching](https://pip.pypa.io/en/stable/topics/caching/#disabling-caching)
