@@ -12,6 +12,8 @@
 
 [知乎曲sir-B端设计系统合集](https://github.com/sakurafisch/notebook)
 
-## System Design Articles
+## System Design
 
-[链接](https://awesome-architecture.com/systems-design/systems-design/#articles)
+[Articles](https://awesome-architecture.com/systems-design/systems-design/#articles)
+
+[Concepts](https://github.com/ashishps1/awesome-system-design-resources)
