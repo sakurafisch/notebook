@@ -11,7 +11,7 @@ In algebraic terms, the model would be defined as y=mx+b, where
 
 In ML, we write the equation for a linear regression model as follows:
 
-y′=b+w1x1
+$$ y′=b+w_1x_1 $$
 
 where:
 
@@ -116,5 +116,3 @@ The following table describes how batch size and epochs relate to the number of 
 | Full batch                             | After the model looks at all the examples in the dataset. For instance, if a dataset contains 1,000 examples and the model trains for 20 epochs, the model updates the weights and bias 20 times, once per epoch. |
 | Stochastic gradient descent            | After the model looks at a single example from the dataset. For instance, if a dataset contains 1,000 examples and trains for 20 epochs, the model updates the weights and bias 20,000 times. |
 | Mini-batch stochastic gradient descent | After the model looks at the examples in each batch. For instance, if a dataset contains 1,000 examples, and the batch size is 100, and the model trains for 20 epochs, the model updates the weights and bias 200 times. |
-
-### 
