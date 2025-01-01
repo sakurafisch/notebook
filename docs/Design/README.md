@@ -1,16 +1,12 @@
 # DESIGN
 
-## Figma
+## User Interface Design
 
 [awesome figma](https://github.com/react-figma/awesome-figma)
 
-## Open Source Alternative To Figma
-
 [penpot](https://github.com/penpot/penpot)
 
-## 设计资源
-
-[知乎曲sir-B端设计系统合集](https://github.com/sakurafisch/notebook)
+[设计资源-知乎曲sir-B端设计系统合集](https://zhuanlan.zhihu.com/p/473968657)
 
 ## System Design
 
