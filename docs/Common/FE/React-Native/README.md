@@ -15,3 +15,6 @@ npx react-native-macos-init --overwrite
 npx react-native run-macos
 ```
 
+## Expo
+
+[expo](https://expo.dev/)
