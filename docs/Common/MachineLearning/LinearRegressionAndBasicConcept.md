@@ -1,4 +1,4 @@
-# Linear Regression
+# Linear Regression and Basic Concept
 
 ## Linear regression equation
 
