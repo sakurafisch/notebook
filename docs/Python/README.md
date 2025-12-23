@@ -18,7 +18,7 @@ Python 是在 OSI 开放源代码许可证下获得许可的，并根据需求�
 - [IronPython](https://ironpython.net/) 是基于 .NET 运行时构建的 Python 的开放源代码实现。
 - [Jupyter 笔记本](https://jupyter.org/)是基于 Web 的交互式编程环境，支持包括 Python 在内的各种编程语言。 
 
-**Tips: WIN10用户可以在WIN10商店一键安装Python 3.8。**
+**Tips: WIN10用户可以在WIN10商店一键安装Python install manager。**
 
 ## 变量和基本数据类型
 
