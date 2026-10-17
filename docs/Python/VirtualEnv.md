@@ -2,6 +2,10 @@
 
 > Virtual environment is nothing but a folder.
 
+## Tips
+
+你可能还需要了解：[uv](https://github.com/astral-sh/uv)
+
 ## 安装
 
 ```cmd

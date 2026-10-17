@@ -6,3 +6,4 @@
 
 [Payments 2.0, Scheduled Voice Chats, New Web Versions](https://telegram.org/blog/payments-2-0-scheduled-voice-chats#payments-2-0)
 
+[Telegram Stars](https://telegram.org/blog/telegram-stars)
